@@ -1,4 +1,7 @@
 ElamapIslands::Application.routes.draw do
+  resources :islands
+  resources :map
+
   #root :to => 'welcome#index'
   # The priority is based upon order of creation:
   # first created -> highest priority.
