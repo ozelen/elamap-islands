@@ -1,0 +1,31 @@
+<h1>Listing islands</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Size</th>
+    <th>Genre</th>
+    <th>Grade</th>
+    <th>Begin</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @islands.each do |island| %>
+  <tr>
+    <td><%= island.name %></td>
+    <td><%= island.size %></td>
+    <td><%= island.genre %></td>
+    <td><%= island.grade %></td>
+    <td><%= island.begin %></td>
+    <td><%= link_to 'Show', island %></td>
+    <td><%= link_to 'Edit', edit_island_path(island) %></td>
+    <td><%= link_to 'Destroy', island, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Island', new_island_path %>

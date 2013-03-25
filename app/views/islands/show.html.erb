@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @island.name %>
+</p>
+
+<p>
+  <b>Size:</b>
+  <%= @island.size %>
+</p>
+
+<p>
+  <b>Genre:</b>
+  <%= @island.genre %>
+</p>
+
+<p>
+  <b>Grade:</b>
+  <%= @island.grade %>
+</p>
+
+<p>
+  <b>Begin:</b>
+  <%= @island.begin %>
+</p>
+
+
+<%= link_to 'Edit', edit_island_path(@island) %> |
+<%= link_to 'Back', islands_path %>
