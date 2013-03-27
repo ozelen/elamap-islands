@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="dfb17b40-eab5-43ee-b395-a202100cfe22" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/assets/javascripts/map.js.coffee" afterPath="$PROJECT_DIR$/app/assets/javascripts/map.js.coffee" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="elamap-islands.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -13,7 +14,7 @@
     <file path="/map.html.erb" changelist="dfb17b40-eab5-43ee-b395-a202100cfe22" time="1364217878819" ignored="false" />
     <file path="/map_controller.rb" changelist="dfb17b40-eab5-43ee-b395-a202100cfe22" time="1364215841323" ignored="false" />
     <file path="/application.html.erb" changelist="dfb17b40-eab5-43ee-b395-a202100cfe22" time="1364217323222" ignored="false" />
-    <file path="/map.js.coffee" changelist="dfb17b40-eab5-43ee-b395-a202100cfe22" time="1364391851932" ignored="false" />
+    <file path="/map.js.coffee" changelist="dfb17b40-eab5-43ee-b395-a202100cfe22" time="1364400316309" ignored="false" />
     <file path="/application.css" changelist="dfb17b40-eab5-43ee-b395-a202100cfe22" time="1364218395974" ignored="false" />
     <file path="/map.css.scss" changelist="dfb17b40-eab5-43ee-b395-a202100cfe22" time="1364373859161" ignored="false" />
     <file path="/leaflet.css" changelist="dfb17b40-eab5-43ee-b395-a202100cfe22" time="1364323389029" ignored="false" />
@@ -54,7 +55,7 @@
       <file leaf-file-name="map.js.coffee" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/assets/javascripts/map.js.coffee">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="111" column="22" selection-start="6603" selection-end="6603" vertical-scroll-proportion="0.74242425">
+            <state line="82" column="41" selection-start="5896" selection-end="5896" vertical-scroll-proportion="0.62794614">
               <folding />
             </state>
           </provider>
@@ -791,7 +792,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/assets/javascripts/map.js.coffee">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="111" column="22" selection-start="6603" selection-end="6603" vertical-scroll-proportion="0.74242425">
+        <state line="82" column="41" selection-start="5896" selection-end="5896" vertical-scroll-proportion="0.62794614">
           <folding />
         </state>
       </provider>
