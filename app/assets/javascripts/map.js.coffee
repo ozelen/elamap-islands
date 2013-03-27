@@ -11,7 +11,6 @@ points = [
   {name: "Demystifying the Adolescent...", author: "Laurence Steinberg", val: "1410", color: "yellow", latlng: [-0.14306640625, 0.1893310546875]      },
   {name: "Music on the Mind ", author: "Sharon Begley", val: "1160", color: "green", latlng: [-0.1802978515625, 0.1964111328125]    },
   {name: "Train Your Brain: How...", author: "Katie Hart", val: "1450", color: "green", latlng: [-0.139404296875, 0.203369140625]      },
-
   {name: "Phineas Gage: A Gruesome...", author: "John Fleischmann", val: "1030", color: "yellow", latlng: [-0.1951904296875, 0.213623046875]      },
   {name: "Phineas Gage: Unravelling...", author: "John Fleischmann", val: "990", color: "yellow", latlng: [-0.20361328125, 0.2352294921875]     },
   {name: "Success is Counted Sweetest ", author: "Emily Dickinson", val: "N/A", color: "yellow", latlng: [-0.23193359375, 0.2672119140625]      },
@@ -74,19 +73,23 @@ icons = {
               }
 
   white: {
-    iconUrl: '/assets/icons/white.png',
-    iconRetinaUrl: '/assets/icons/white@2x.png',
-    iconSize: [22, 22],
-    iconAnchor: [11, 11],
-    popupAnchor: [0, -11],
-    shadowUrl: '/assets/icons/shadow.png',
-    shadowRetinaUrl: '/assets/icons/white@2x.png',
-    shadowSize: [30, 33],
-    shadowAnchor: [15, 15],
-    riseOnHover: true
-  }
-
+              iconUrl: '/assets/icons/white.png',
+              iconRetinaUrl: '/assets/icons/white@2x.png',
+              iconSize: [22, 22],
+              iconAnchor: [11, 11],
+              popupAnchor: [0, -11],
+              shadowUrl: '/assets/icons/shadow.png',
+              shadowRetinaUrl: '/assets/icons/white@2x.png',
+              shadowSize: [30, 33],
+              shadowAnchor: [15, 15],
+              riseOnHover: true
+              }
 }
+
+
+myPath = [{"type": "LineString","coordinates": [points[0].latlng, points[1].latlng, points[2].latlng]}, {"type": "LineString", "coordinates": [points[3].latlng, points[4].latlng, points[5].latlng]}];
+myStyle = {"color": "red", "weight": 2, "opacity": 0.65};
+
 jQuery ->
   #  [40.712, -74.227]
   #  lat = 40.712216
@@ -124,10 +127,18 @@ jQuery ->
 
 
   L.imageOverlay(imageUrl, imageBounds).addTo(map);
+
   L.marker(marker.latlng,
     icon: new L.icon(icons[marker.color])
   ).addTo(map).bindPopup(markerPopupMessage marker) for marker in points
 
-  L.MultiPolyline([[-0.1949462890625, 0.05712890625], [-0.193603515625, 0.076171875]])
+  #polyline = L.Polyline([points[7].latlng, points[10].latlng], {color: 'red'}).addTo(map)
+  for marker, i in points
+    L.polyline([marker.latlng, points[i+1].latlng], {color: '#000', opacity: 0.3}).addTo(map) if points[i+1]
+
+  L.geoJson(myPath, {
+    style: myStyle
+  }).addTo(map)
+
 
   #map.on 'click', checkPoints
