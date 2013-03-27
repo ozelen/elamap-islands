@@ -27,6 +27,7 @@ points = [
   {name: "Notes on the State of Virginia", author: "Thomas Jefferson", val: "1310", color: "yellow", latlng: [-0.1292724609375, 0.44189453125]      },
   {name: "Narrative of the Life of FD", author: "Frederick Douglass", val: "1080", color: "green", latlng: [-0.1495361328125, 0.450439453125]     },
   {name: "Incidents in the Life of a Slave...", author: "Harriet Jacobs", val: "1080", color: "green", latlng: [-0.1943359375, 0.48828125]            },
+  {name: "Train Your Brain: How...", author: "Katie Hart", val: "1450", color: "green", latlng: [-0.205322265625, 0.51806640625]            },
   {name: "Runaway Notice for Harriet...", author: "James Norcum", val: "1420", color: "yellow", latlng: [-0.142822265625, 0.5216064453125]     },
   {name: "No Witchcraft for Sale", author: "Doris Lessing", val: "890", color: "yellow", latlng: [-0.2322998046875, 0.5284423828125]    },
   {name: "Tom Sawyer", author: "Mark Twain", val: "750", color: "green", latlng: [-0.2564697265625, 0.580078125]        },
@@ -104,10 +105,14 @@ jQuery ->
       .openOn(map)
 
 
+  markerPopupMessage = (marker) -> "<b>" + marker.name + "</b><br><i>" + marker.author + "</i> <br>[" +marker.val+ "]"
+
 
   L.imageOverlay(imageUrl, imageBounds).addTo(map);
-  L.marker(marker.latlng, {icon: new L.icon(icons[marker.color])}).addTo(map).bindPopup("<b>" + marker.name + "</b><br><i>" + marker.author + "</i> <br>[" +marker.val+ "]") for marker in points
+  L.marker(marker.latlng,
+    icon: new L.icon(icons[marker.color])
+  ).addTo(map).bindPopup(markerPopupMessage marker) for marker in points
 
   L.MultiPolyline([[-0.1949462890625, 0.05712890625], [-0.193603515625, 0.076171875]])
 
-#  map.on 'click', checkPoints
+  #map.on 'click', checkPoints

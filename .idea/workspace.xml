@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="dfb17b40-eab5-43ee-b395-a202100cfe22" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/assets/images/island-geomap.jpg" afterPath="$PROJECT_DIR$/app/assets/images/island-geomap.jpg" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/vendor/assets/stylesheets/leaflet.css" afterPath="$PROJECT_DIR$/vendor/assets/stylesheets/leaflet.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/assets/stylesheets/map.css.scss" afterPath="$PROJECT_DIR$/app/assets/stylesheets/map.css.scss" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/assets/javascripts/map.js.coffee" afterPath="$PROJECT_DIR$/app/assets/javascripts/map.js.coffee" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="elamap-islands.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -17,7 +13,7 @@
     <file path="/map.html.erb" changelist="dfb17b40-eab5-43ee-b395-a202100cfe22" time="1364217878819" ignored="false" />
     <file path="/map_controller.rb" changelist="dfb17b40-eab5-43ee-b395-a202100cfe22" time="1364215841323" ignored="false" />
     <file path="/application.html.erb" changelist="dfb17b40-eab5-43ee-b395-a202100cfe22" time="1364217323222" ignored="false" />
-    <file path="/map.js.coffee" changelist="dfb17b40-eab5-43ee-b395-a202100cfe22" time="1364389466434" ignored="false" />
+    <file path="/map.js.coffee" changelist="dfb17b40-eab5-43ee-b395-a202100cfe22" time="1364391851932" ignored="false" />
     <file path="/application.css" changelist="dfb17b40-eab5-43ee-b395-a202100cfe22" time="1364218395974" ignored="false" />
     <file path="/map.css.scss" changelist="dfb17b40-eab5-43ee-b395-a202100cfe22" time="1364373859161" ignored="false" />
     <file path="/leaflet.css" changelist="dfb17b40-eab5-43ee-b395-a202100cfe22" time="1364323389029" ignored="false" />
@@ -49,34 +45,7 @@
       <file leaf-file-name="routes.rb" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/config/routes.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="2" column="16" selection-start="79" selection-end="79" vertical-scroll-proportion="-1.36">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="0" selection-start="0" selection-end="94" vertical-scroll-proportion="-3.2692308">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="leaflet.css" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/vendor/assets/stylesheets/leaflet.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="168" column="20" selection-start="3438" selection-end="3438" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="index.html.erb" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/views/map/index.html.erb">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="20" selection-start="20" selection-end="20" vertical-scroll-proportion="-0.0">
+            <state line="6" column="16" selection-start="178" selection-end="178" vertical-scroll-proportion="0.04">
               <folding />
             </state>
           </provider>
@@ -85,7 +54,7 @@
       <file leaf-file-name="map.js.coffee" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/assets/javascripts/map.js.coffee">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="30" column="86" selection-start="3801" selection-end="3801" vertical-scroll-proportion="-0.94224423">
+            <state line="111" column="22" selection-start="6603" selection-end="6603" vertical-scroll-proportion="0.74242425">
               <folding />
             </state>
           </provider>
@@ -755,57 +724,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Gemfile">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="31" column="9" selection-start="604" selection-end="604" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/controllers/map_controller.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="0" selection-start="56" selection-end="56" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/assets/javascripts/application.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="11" selection-start="653" selection-end="653" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config/routes.rb">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="16" selection-start="79" selection-end="79" vertical-scroll-proportion="-1.36">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="0" selection-start="0" selection-end="94" vertical-scroll-proportion="-3.2692308">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/assets/stylesheets/map.css.scss">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="32" selection-start="251" selection-end="251" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/assets/stylesheets/leaflet.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="168" column="20" selection-start="3438" selection-end="3438" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/views/layouts/application.html.erb">
       <provider selected="true" editor-type-id="text-editor">
         <state line="3" column="18" selection-start="48" selection-end="48" vertical-scroll-proportion="-1.9615384">
@@ -820,9 +738,60 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/assets/stylesheets/leaflet.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="168" column="20" selection-start="3438" selection-end="3438" vertical-scroll-proportion="0.49434572">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="35" selection-start="73" selection-end="73" vertical-scroll-proportion="0.08600337">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/routes.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="16" selection-start="178" selection-end="178" vertical-scroll-proportion="0.04">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/controllers/map_controller.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="0" selection-start="56" selection-end="56" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/assets/stylesheets/map.css.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="32" selection-start="251" selection-end="251" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/assets/javascripts/application.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="11" selection-start="653" selection-end="653" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Gemfile">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="31" column="9" selection-start="604" selection-end="604" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/assets/javascripts/map.js.coffee">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="86" selection-start="3801" selection-end="3801" vertical-scroll-proportion="-0.94224423">
+        <state line="111" column="22" selection-start="6603" selection-end="6603" vertical-scroll-proportion="0.74242425">
           <folding />
         </state>
       </provider>
