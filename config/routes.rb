@@ -1,4 +1,10 @@
 ElamapIslands::Application.routes.draw do
+  resources :units
+
+
+  resources :texts
+
+
   resources :islands
   resources :map
 

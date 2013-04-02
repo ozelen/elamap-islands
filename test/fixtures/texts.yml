@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  author: MyString
+  lessons: 1
+  lexiles: 1
+  genre: 1.5
+
+two:
+  name: MyString
+  author: MyString
+  lessons: 1
+  lexiles: 1
+  genre: 1.5

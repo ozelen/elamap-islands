@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @text.name %>
+</p>
+
+<p>
+  <b>Author:</b>
+  <%= @text.author %>
+</p>
+
+<p>
+  <b>Lessons:</b>
+  <%= @text.lessons %>
+</p>
+
+<p>
+  <b>Lexiles:</b>
+  <%= @text.lexiles %>
+</p>
+
+<p>
+  <b>Genre:</b>
+  <%= @text.genre %>
+</p>
+
+
+<%= link_to 'Edit', edit_text_path(@text) %> |
+<%= link_to 'Back', texts_path %>
