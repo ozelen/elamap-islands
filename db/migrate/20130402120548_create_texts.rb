@@ -12,4 +12,9 @@ class CreateTexts < ActiveRecord::Migration
       t.timestamps
     end
   end
+
+  def down
+    drop_table texts
+  end
+
 end

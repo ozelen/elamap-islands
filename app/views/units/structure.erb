@@ -1,0 +1,25 @@
+<h1>Units</h1>
+
+<table style="width:100%">
+
+  <% @units.each do |unit| %>
+      <tr>
+        <th><%= unit.name %></th>
+        <th><%= link_to 'Show', unit %></th>
+        <th><%= link_to 'Edit', edit_unit_path(unit) %></th>
+        <th><%= link_to 'Destroy', unit, method: :delete, data: { confirm: 'Are you sure?' } %></th>
+      </tr>
+      <% unit.texts.each do |text| %>
+          <tr>
+            <td><%= text.name %></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+      <% end %>
+  <% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Unit', new_unit_path %>

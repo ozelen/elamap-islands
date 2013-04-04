@@ -24,19 +24,21 @@ ActiveRecord::Schema.define(:version => 20130402151534) do
   end
 
   create_table "texts", :force => true do |t|
+    t.integer  "unit_id"
     t.string   "name"
     t.string   "author"
     t.integer  "lessons"
     t.integer  "lexiles"
+    t.float    "sequence"
     t.float    "genre"
     t.integer  "performance"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
-    t.float    "sequence"
   end
 
   create_table "units", :force => true do |t|
     t.string   "name"
+    t.string   "letter"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end

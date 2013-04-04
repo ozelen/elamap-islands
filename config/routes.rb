@@ -1,5 +1,9 @@
 ElamapIslands::Application.routes.draw do
-  resources :units
+  resources :units do
+    collection do
+      get "structure"
+    end
+  end
 
 
   resources :texts

@@ -10,6 +10,15 @@ class UnitsController < ApplicationController
     end
   end
 
+  def structure
+    @units = Unit.all
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @units }
+    end
+    #@texts = Text.all
+  end
+
   # GET /units/1
   # GET /units/1.json
   def show
