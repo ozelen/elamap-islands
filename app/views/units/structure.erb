@@ -1,22 +1,33 @@
-<h1>Units</h1>
+<h1 xmlns="http://www.w3.org/1999/html">Curriculum structure</h1>
 
-<table style="width:100%">
-
+<table class="tdata">
+  <% i=0 %>
+  <tr>
+    <td>#</td>
+    <td>Name</td>
+    <td>Sequence</td>
+    <td>Genre</td>
+    <td>Lessons</td>
+    <td>Lexiles</td>
+    <td>Performance</td>
+  </tr>
   <% @units.each do |unit| %>
       <tr>
-        <th><%= unit.name %></th>
-        <th><%= link_to 'Show', unit %></th>
-        <th><%= link_to 'Edit', edit_unit_path(unit) %></th>
-        <th><%= link_to 'Destroy', unit, method: :delete, data: { confirm: 'Are you sure?' } %></th>
+        <th><%= unit.letter %></th>
+        <th colspan="4"><%= unit.name %></th>
       </tr>
-      <% unit.texts.each do |text| %>
-          <tr>
-            <td><%= text.name %></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-      <% end %>
+          <% unit.texts.each do |text| %>
+              <tr>
+                <td><%= i+=1 %></td>
+                <td><%= text.name %></td>
+                <td><%= text.sequence %></td>
+                <td><%= text.genre %></td>
+                <td><%= text.lessons %></td>
+                <td><%= text.lexiles %></td>
+                <td><%= text.performance %></td>
+              </tr>
+              <!-- Text,Time,Sequence,Genre,Lessons,Lexiles,Performance,Unit -->
+          <% end %>
   <% end %>
 </table>
 

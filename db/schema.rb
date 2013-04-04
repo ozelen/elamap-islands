@@ -11,7 +11,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130402151534) do
+ActiveRecord::Schema.define(:version => 20130402195644) do
+
+  create_table "children", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "islands", :force => true do |t|
     t.string   "name"
@@ -19,6 +25,12 @@ ActiveRecord::Schema.define(:version => 20130402151534) do
     t.integer  "genre"
     t.integer  "grade"
     t.integer  "begin"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "parents", :force => true do |t|
+    t.string   "name"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
