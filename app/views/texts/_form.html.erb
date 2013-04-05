@@ -1,37 +1,56 @@
-<%= form_for(@text) do |f| %>
-  <% if @text.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@text.errors.count, "error") %> prohibited this text from being saved:</h2>
-
-      <ul>
-      <% @text.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
+<%= form_for @text, :html => { :class => 'form-horizontal' } do |f| %>
+  <div class="control-group">
+    <%= f.label :unit_id, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.select :unit_id, @units.collect {|unit| [ unit.letter + ' - ' + unit.name, unit.id ] } %>
     </div>
-  <% end %>
+  </div>
+  <div class="control-group">
+    <%= f.label :name, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :name, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :author, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :author, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :lessons, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.number_field :lessons, :class => 'number_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :lexiles, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.number_field :lexiles, :class => 'number_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :sequence, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :sequence, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :genre, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :genre, :class => 'text_field' %>
+    </div>
+  </div>
+  <div class="control-group">
+    <%= f.label :performance, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_field :performance, :class => 'text_field' %>
+    </div>
+  </div>
 
-  <div class="field">
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
-  </div>
-  <div class="field">
-    <%= f.label :author %><br />
-    <%= f.text_field :author %>
-  </div>
-  <div class="field">
-    <%= f.label :lessons %><br />
-    <%= f.number_field :lessons %>
-  </div>
-  <div class="field">
-    <%= f.label :lexiles %><br />
-    <%= f.number_field :lexiles %>
-  </div>
-  <div class="field">
-    <%= f.label :genre %><br />
-    <%= f.text_field :genre %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                texts_path, :class => 'btn' %>
   </div>
 <% end %>

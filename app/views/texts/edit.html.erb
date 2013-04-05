@@ -1,6 +1,5 @@
-<h1>Editing text</h1>
-
-<%= render 'form' %>
-
-<%= link_to 'Show', @text %> |
-<%= link_to 'Back', texts_path %>
+<%- model_class = Text -%>
+<div class="page-header">
+  <h1>Edit: <%= @text.name %></h1>
+</div>
+<%= render :partial => 'form' %>

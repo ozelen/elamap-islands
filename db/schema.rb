@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130402195644) do
+ActiveRecord::Schema.define(:version => 20130404163016) do
 
   create_table "children", :force => true do |t|
     t.string   "name"
@@ -35,6 +35,25 @@ ActiveRecord::Schema.define(:version => 20130402195644) do
     t.datetime "updated_at", :null => false
   end
 
+  create_table "sessions", :force => true do |t|
+    t.string   "name"
+    t.date     "start"
+    t.date     "end"
+    t.integer  "student_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "students", :force => true do |t|
+    t.string   "username"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "email"
+    t.integer  "group_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "texts", :force => true do |t|
     t.integer  "unit_id"
     t.string   "name"
@@ -43,7 +62,7 @@ ActiveRecord::Schema.define(:version => 20130402195644) do
     t.integer  "lexiles"
     t.float    "sequence"
     t.float    "genre"
-    t.integer  "performance"
+    t.float    "performance"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
   end

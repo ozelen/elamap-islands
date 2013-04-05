@@ -8,7 +8,7 @@ class CreateTexts < ActiveRecord::Migration
       t.integer :lexiles
       t.float :sequence
       t.float :genre
-      t.integer :performance
+      t.float :performance
       t.timestamps
     end
   end

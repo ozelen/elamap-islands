@@ -1,4 +1,12 @@
 ElamapIslands::Application.routes.draw do
+  root :to => 'map#index'
+
+  resources :students
+
+
+  resources :sessions
+
+
   resources :units do
     collection do
       get "structure"
@@ -11,6 +19,7 @@ ElamapIslands::Application.routes.draw do
 
   resources :islands
   resources :map
+
 
   #root :to => 'welcome#index'
   # The priority is based upon order of creation:

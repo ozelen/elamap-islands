@@ -25,6 +25,7 @@ class TextsController < ApplicationController
   # GET /texts/new.json
   def new
     @text = Text.new
+    @units = Unit.all
 
     respond_to do |format|
       format.html # new.html.erb
@@ -34,6 +35,7 @@ class TextsController < ApplicationController
 
   # GET /texts/1/edit
   def edit
+    @units = Unit.all
     @text = Text.find(params[:id])
   end
 
