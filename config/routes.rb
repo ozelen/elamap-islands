@@ -11,6 +11,7 @@ ElamapIslands::Application.routes.draw do
     collection do
       get "structure"
     end
+    resources :texts
   end
 
 

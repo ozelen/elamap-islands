@@ -1,11 +1,16 @@
 <%- model_class = Text -%>
+<%
+   unit_name = @unit.letter + ' - ' + @unit.name
+%>
 <div class="page-header">
-  <h1><%=t @text.name %></h1>
+  <h1><%= @text.name %></h1>
 </div>
 
 <dl class="dl-horizontal">
   <dt><strong>Name:</strong></dt>
   <dd><%= @text.name %></dd>
+  <dt><strong>Unit:</strong></dt>
+  <dd><%= unit_name %></dd>
   <dt><strong>Author:</strong></dt>
   <dd><%= @text.author %></dd>
   <dt><strong>Lessons:</strong></dt>
@@ -21,8 +26,8 @@
 </dl>
 
 <div class="form-actions">
-  <%= link_to t('.back', :default => t("helpers.links.back")),
-              texts_path, :class => 'btn'  %>
+  <%= link_to 'Back to ' + unit_name,
+              @text.unit, :class => 'btn'  %>
   <%= link_to t('.edit', :default => t("helpers.links.edit")),
               edit_text_path(@text), :class => 'btn' %>
   <%= link_to t('.destroy', :default => t("helpers.links.destroy")),

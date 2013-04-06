@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(:version => 20130404163016) do
   end
 
   create_table "units", :force => true do |t|
+    t.integer  "session_id"
     t.string   "name"
     t.string   "letter"
     t.datetime "created_at", :null => false

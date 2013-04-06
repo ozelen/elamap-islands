@@ -14,6 +14,8 @@
                 text_path(text),
                 :method => :delete,
                 :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
-                :class => 'btn btn-mini btn-danger' %>
+                :class => 'btn btn-mini btn-danger'#,
+                #:remote => true
+    %>
   </td>
 </tr>

@@ -1,3 +1,5 @@
 class Session < ActiveRecord::Base
-  attr_accessible :end, :name, :start, :student_id
+  has_many :units, :dependent => :destroy
+  belongs_to :student
+  attr_accessible :end, :name, :start, :student_id, :student
 end

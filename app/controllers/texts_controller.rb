@@ -2,7 +2,7 @@ class TextsController < ApplicationController
   # GET /texts
   # GET /texts.json
   def index
-    @texts = Text.all
+    @texts = params[:unit_id] ? Text.where(:unit_id => params[:unit_id]) : Text.all
 
     respond_to do |format|
       format.html # index.html.erb
@@ -14,7 +14,7 @@ class TextsController < ApplicationController
   # GET /texts/1.json
   def show
     @text = Text.find(params[:id])
-
+    @unit = @text.unit
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @text }
@@ -25,6 +25,7 @@ class TextsController < ApplicationController
   # GET /texts/new.json
   def new
     @text = Text.new
+    @text.unit_id = params[:unit_id] if params[:unit_id]
     @units = Unit.all
 
     respond_to do |format|
@@ -46,7 +47,7 @@ class TextsController < ApplicationController
 
     respond_to do |format|
       if @text.save
-        format.html { redirect_to @text, notice: 'Text was successfully created.' }
+        format.html { redirect_to unit_path(@text.unit), notice: 'Text was successfully created.' }
         format.json { render json: @text, status: :created, location: @text }
       else
         format.html { render action: "new" }
@@ -78,7 +79,7 @@ class TextsController < ApplicationController
     @text.destroy
 
     respond_to do |format|
-      format.html { redirect_to texts_url }
+      format.html { redirect_to unit_url(@text.unit) }
       format.json { head :no_content }
     end
   end
