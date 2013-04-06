@@ -11,21 +11,7 @@
     </tr>
   </thead>
   <tbody>
-    <% @units.each do |unit| %>
-      <tr>
-        <td><%= unit.letter %></td>
-        <td><%= unit.name %></td>
-        <td class="action">
-          <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                      edit_unit_path(unit), :class => 'btn btn-mini' %>
-          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-                      unit_path(unit),
-                      :method => :delete,
-                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
-                      :class => 'btn btn-mini btn-danger' %>
-        </td>
-      </tr>
-    <% end %>
+    <%= render @units %>
   </tbody>
 </table>
 

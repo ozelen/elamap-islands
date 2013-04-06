@@ -90,7 +90,7 @@ icons = {
 myPath = [{"type": "LineString","coordinates": [points[0].latlng, points[1].latlng, points[2].latlng]}, {"type": "LineString", "coordinates": [points[3].latlng, points[4].latlng, points[5].latlng]}];
 myStyle = {"color": "red", "weight": 2, "opacity": 0.65};
 
-jQuery ->
+initMap = () ->
   #  [40.712, -74.227]
   #  lat = 40.712216
   #  lng = -74.22655
@@ -142,3 +142,6 @@ jQuery ->
 
 
   #map.on 'click', checkPoints
+
+jQuery ->
+  initMap() if $("div#map").length

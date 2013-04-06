@@ -1,23 +1,45 @@
 <%- model_class = Unit -%>
 <div class="page-header">
-  <h1><%=t '.title', :default => model_class.model_name.human %></h1>
+  <h1>Unit <%= @unit.letter %> - <%= @unit.name %></h1>
 </div>
 
-<dl class="dl-horizontal">
-  <dt><strong><%= model_class.human_attribute_name(:name) %>:</strong></dt>
-  <dd><%= @unit.name %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:letter) %>:</strong></dt>
-  <dd><%= @unit.letter %></dd>
-</dl>
 
-<div class="form-actions">
-  <%= link_to t('.back', :default => t("helpers.links.back")),
-              units_path, :class => 'btn'  %>
-  <%= link_to t('.edit', :default => t("helpers.links.edit")),
-              edit_unit_path(@unit), :class => 'btn' %>
-  <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-              unit_path(@unit),
-              :method => 'delete',
-              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
-              :class => 'btn btn-danger' %>
-</div>
+    <canvas id="island" style="width:auto; height: 400px"></canvas>
+
+    <div class="form-actions row-fluid show-grid">
+      <div class="span2"><button class="btn btn-primary" id="renderIslandButton">Render Island</button></div>
+      <div style="float: right">
+        <%= link_to 'Back to Unit list',
+                    units_path, :class => 'btn'  %>
+        <%= link_to 'Edit Unit',
+                    edit_unit_path(@unit), :class => 'btn' %>
+        <%= link_to 'Delete Unit',
+                    unit_path(@unit),
+                    :method => 'delete',
+                    :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                    :class => 'btn btn-danger' %>
+      </div>
+      </div>
+
+
+
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th>Text</th>
+    <th>Unit</th>
+    <th>Author</th>
+    <th>Lessons</th>
+    <th>Lexiles</th>
+    <th>Sequence</th>
+    <th>Genre</th>
+    <th>Performance</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+    <%= render @unit.texts %>
+  </tbody>
+</table>
+
+

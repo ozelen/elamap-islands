@@ -1,0 +1,19 @@
+<tr>
+  <td><%= link_to text.name, text_path(text) %></td>
+  <td><%= text.unit.letter %></td>
+  <td><%= text.author %></td>
+  <td><%= text.lessons %></td>
+  <td><%= text.lexiles %></td>
+  <td><%= text.sequence %></td>
+  <td><%= text.genre %></td>
+  <td><%= text.performance %></td>
+  <td>
+    <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                edit_text_path(text), :class => 'btn btn-mini' %>
+    <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                text_path(text),
+                :method => :delete,
+                :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                :class => 'btn btn-mini btn-danger' %>
+  </td>
+</tr>
