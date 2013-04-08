@@ -17,7 +17,8 @@ class SessionsController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render json: @session }
+      format.json { render json: @session.to_json(:include => {:units => {:include => :texts} } ) }
+      # format.json { render json: @unit.to_json(:include => :texts) }
     end
   end
 
@@ -35,7 +36,6 @@ class SessionsController < ApplicationController
   # GET /sessions/1/edit
   def edit
     @session = Session.find(params[:id])
-    @students = Student.all
   end
 
   # POST /sessions

@@ -3,7 +3,9 @@
   <h1><%= @session.name %></h1>
 </div>
 
-<dl class="dl-horizontal">
+<canvas id="island"></canvas>
+
+<dl class="dl-horizontal" style="float: right">
   <dt><strong><%= model_class.human_attribute_name(:name) %>:</strong></dt>
   <dd><%= @session.name %></dd>
   <dt><strong><%= model_class.human_attribute_name(:start) %>:</strong></dt>
@@ -14,7 +16,9 @@
 
 <div class="form-actions">
   <div style="float: left">
-    <button class="btn btn-primary" id="renderIslandButton">Render Map</button>
+    <%= link_to 'Render Map',
+                session_path(@session, :format => 'json'), :class => 'btn btn-primary', :id => 'renderIslandButton'  %>
+
     <%= link_to 'Session Structure',
                 session_structure_path(@session), :class => 'btn'  %>
   </div>
@@ -34,6 +38,7 @@
     </div>
 </div>
 
+<h3>Units:</h3>
 
 <table class="table table-striped">
   <thead>
