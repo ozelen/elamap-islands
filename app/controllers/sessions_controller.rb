@@ -25,7 +25,7 @@ class SessionsController < ApplicationController
   # GET /sessions/new.json
   def new
     @session = Session.new
-
+    @students = Student.all
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @session }
@@ -35,6 +35,7 @@ class SessionsController < ApplicationController
   # GET /sessions/1/edit
   def edit
     @session = Session.find(params[:id])
+    @students = Student.all
   end
 
   # POST /sessions

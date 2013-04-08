@@ -45,6 +45,9 @@ class UnitsController < ApplicationController
   # GET /units/1/edit
   def edit
     @unit = Unit.find(params[:id])
+    @session = @unit.session
+    @student = @session.student
+    @sessions = @student.sessions
   end
 
   # POST /units
@@ -54,7 +57,7 @@ class UnitsController < ApplicationController
 
     respond_to do |format|
       if @unit.save
-        format.html { redirect_to @unit, notice: 'Unit was successfully created.' }
+        format.html { redirect_to session_url(@unit.session), notice: 'Unit was successfully created.' }
         format.json { render json: @unit, status: :created, location: @unit }
       else
         format.html { render action: "new" }
@@ -86,7 +89,7 @@ class UnitsController < ApplicationController
     @unit.destroy
 
     respond_to do |format|
-      format.html { redirect_to units_url }
+      format.html { redirect_to session_url(@unit.session) }
       format.json { head :no_content }
     end
   end

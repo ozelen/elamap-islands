@@ -20,7 +20,7 @@
   <div class="control-group">
     <%= f.label :student_id, :class => 'control-label' %>
     <div class="controls">
-      <%= f.number_field :student_id, :class => 'number_field' %>
+      <%= f.select :student_id, @students.collect {|s| [ s.first_name + ' ' + s.last_name, s.id ] } %>
     </div>
   </div>
 
