@@ -26,7 +26,9 @@ class TextsController < ApplicationController
   def new
     @text = Text.new
     @text.unit_id = params[:unit_id] if params[:unit_id]
-    @units = Unit.all
+    @unit = Unit.find(@text.unit_id)
+    @session = @unit.session;
+    @units = @session.units
 
     respond_to do |format|
       format.html # new.html.erb
@@ -36,8 +38,10 @@ class TextsController < ApplicationController
 
   # GET /texts/1/edit
   def edit
-    @units = Unit.all
     @text = Text.find(params[:id])
+    @unit = Unit.find(@text.unit_id)
+    @session = @unit.session;
+    @units = @session.units
   end
 
   # POST /texts

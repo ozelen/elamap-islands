@@ -13,8 +13,8 @@
                     new_unit_text_path(@unit),
                     :class => 'btn btn-primary' %>
 
-        <%= link_to 'Back to Unit list',
-                    units_path, :class => 'btn'  %>
+        <%= link_to 'Back to ' + @session.name,
+                    @session, :class => 'btn'  %>
         <%= link_to 'Edit Unit',
                     edit_unit_path(@unit), :class => 'btn' %>
         <%= link_to 'Delete Unit',

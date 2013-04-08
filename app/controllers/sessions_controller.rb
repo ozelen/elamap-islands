@@ -80,4 +80,14 @@ class SessionsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def structure
+    @session = Session.find(params[:session_id])
+    @units = Unit.scoped_by_session_id(params[:session_id])
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @units }
+    end
+  end
+
 end

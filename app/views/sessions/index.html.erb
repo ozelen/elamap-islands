@@ -5,24 +5,18 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th><%= model_class.human_attribute_name(:id) %></th>
       <th><%= model_class.human_attribute_name(:name) %></th>
       <th><%= model_class.human_attribute_name(:start) %></th>
       <th><%= model_class.human_attribute_name(:end) %></th>
-      <th><%= model_class.human_attribute_name(:student_id) %></th>
-      <th><%= model_class.human_attribute_name(:created_at) %></th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
   <tbody>
     <% @sessions.each do |session| %>
       <tr>
-        <td><%= link_to session.id, session_path(session) %></td>
-        <td><%= session.name %></td>
+        <td><%= link_to session.name, session_path(session) %></td>
         <td><%= session.start %></td>
         <td><%= session.end %></td>
-        <td><%= session.student_id %></td>
-        <td><%=l session.created_at %></td>
         <td>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
                       edit_session_path(session), :class => 'btn btn-mini' %>

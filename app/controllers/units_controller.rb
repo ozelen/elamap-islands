@@ -2,7 +2,7 @@ class UnitsController < ApplicationController
   # GET /units
   # GET /units.json
   def index
-    @units = Unit.all
+    @units = params[:session_id] ? Unit.where(:session_id => params[:session_id]) : Unit.all
 
     respond_to do |format|
       format.html # index.html.erb
@@ -23,7 +23,7 @@ class UnitsController < ApplicationController
   # GET /units/1.json
   def show
     @unit = Unit.find(params[:id])
-
+    @session = @unit.session
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @unit.to_json(:include => :texts) }
@@ -34,7 +34,8 @@ class UnitsController < ApplicationController
   # GET /units/new.json
   def new
     @unit = Unit.new
-
+    @unit.session_id = params[:session_id] if params[:session_id]
+    @sessions = Session.all
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @unit }

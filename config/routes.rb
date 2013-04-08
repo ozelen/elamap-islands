@@ -4,7 +4,10 @@ ElamapIslands::Application.routes.draw do
   resources :students
 
 
-  resources :sessions
+  resources :sessions do
+    resources :units
+    match 'structure'
+  end
 
 
   resources :units do
