@@ -14,10 +14,22 @@ class SessionsController < ApplicationController
   # GET /sessions/1.json
   def show
     @session = Session.find(params[:id])
+    lessons = 0
+    @session.units.each { |unit| unit.texts.each { |text| lessons+=text.lessons } }
+    @session['lessons'] = lessons
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render json: @session.to_json(:include => {:units => {:include => :texts} } ) }
+      format.json {
+        render json: @session.to_json(
+            :include => {
+              :units => {
+                  :include => :texts
+              }
+            }
+        )
+      }
+
       # format.json { render json: @unit.to_json(:include => :texts) }
     end
   end

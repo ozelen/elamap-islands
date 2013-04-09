@@ -3,30 +3,20 @@
   <h1><%= @session.name %></h1>
 </div>
 
-<canvas id="island"></canvas>
 
-<dl class="dl-horizontal" style="float: right">
-  <dt><strong><%= model_class.human_attribute_name(:name) %>:</strong></dt>
-  <dd><%= @session.name %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:start) %>:</strong></dt>
-  <dd><%= @session.start %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:end) %>:</strong></dt>
-  <dd><%= @session.end %></dd>
-</dl>
+<canvas id="island" src="<%= session_path(@session, :format => 'json') %>"></canvas>
 
 <div class="form-actions">
-  <div style="float: left">
-    <%= link_to 'Render Map',
-                session_path(@session, :format => 'json'), :class => 'btn btn-primary', :id => 'renderIslandButton'  %>
 
-    <%= link_to 'Session Structure',
-                session_structure_path(@session), :class => 'btn'  %>
-  </div>
-  <div style="float: right">
+
+
     <%= link_to 'Add Unit',
                 new_session_unit_path(@session),
                 :class => 'btn btn-primary' %>
-    <%= link_to 'Back to Session list',
+    <%= link_to 'Session Structure',
+                session_structure_path(@session), :class => 'btn'  %>
+
+    <%= link_to 'Session list',
                 sessions_path, :class => 'btn'  %>
     <%= link_to 'Edit Session',
                 edit_session_path(@session), :class => 'btn' %>
@@ -35,7 +25,7 @@
                 :method => 'delete',
                 :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
                 :class => 'btn btn-danger' %>
-    </div>
+
 </div>
 
 <h3>Units:</h3>
@@ -52,7 +42,3 @@
   <%= render @session.units %>
   </tbody>
 </table>
-
-<%= link_to t('.new', :default => t("helpers.links.new")),
-            new_unit_path,
-            :class => 'btn btn-primary' %>
