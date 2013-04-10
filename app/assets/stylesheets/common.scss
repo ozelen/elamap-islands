@@ -1,0 +1,14 @@
+div#canvas_container {
+  width: 1170px;
+  height: 400px;
+  cursor: point;
+  & > div {
+    width: 1170px;
+    height: 400px;
+    overflow:hidden;
+    position:absolute;
+    canvas {
+      position:absolute;
+    }
+  }
+}
