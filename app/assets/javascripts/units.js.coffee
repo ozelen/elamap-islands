@@ -2,13 +2,54 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
+class Point
+  x: 0
+  y: 0
+  constructor: (x, y) ->
+    this.set(x, y)
+
+  set: (x, y) ->
+    this.x = x
+    this.y = y
+
+class Square
+  sq = this
+  vertices:
+    top:
+      left   : new Point(0,0)
+      right  : new Point(0,0)
+    bottom   :
+      left   : new Point(0,0)
+      right  : new Point(0,0)
+
+  edges      :
+    top      : null
+    right    : null
+    bottom   : null
+    left     : null
+
+  constructor: (w, h) ->
+    v = this.vertices
+    e = this.edges
+    e.top      = (val=null) -> if val then v.top.left.y    = val; v.top.right.y    = val else v.top.right.y
+    e.right    = (val=null) -> if val then v.top.right.x   = val; v.bottom.right.x = val else v.top.right.x
+    e.bottom   = (val=null) -> if val then v.bottom.left.y = val; v.bottom.right.y = val else v.bottom.left.y
+    e.left     = (val=null) -> if val then v.top.left.x    = val; v.bottom.left.x  = val else v.bottom.left.x
+
+    this.edges.bottom(h)
+    this.edges.right(w)
+
+  height    : -> this.dist(this.edges.top(), this.edges.bottom())
+  dist      : (a, b) -> -a + b
+
 measure =
   x           : 5
-  y           : 8
+  y           : 7
   w           : 1170
   h           : 400
   unit_space  : 20
   unit        : null
+  map         : new Square(this.w, this.h)
 
 draw =
   c : null  # canvas context - shouf be defined before using object
@@ -52,6 +93,19 @@ draw =
     c.strokeStyle = "#ccc"
     c.strokeRect(x1,y1,w,h)
 
+  scale : ->
+    c = this.c
+    line = (num) ->
+      y = Math.round( num * measure.h / measure.y )
+      c.strokeStyle = "#ccc"
+      c.outlineWidth = 1
+      c.beginPath()
+      c.moveTo(0,y)
+      c.lineTo(measure.w, y)
+      c.closePath()
+      c.stroke()
+    line num for num in [1..measure.h]
+
   unit : (unit, x=0) ->
     x_left = x
     prev_r = 0
@@ -65,7 +119,7 @@ draw =
 
     push = (text) ->
       r = text.lessons * measure.x / 2
-      y = text.genre * measure.h / measure.y
+      y = measure.h - text.genre * measure.h / measure.y
       y_bot  = y + r if y_bot < y + r
       y_top  = y - r if y_top > y - r
       x += r + prev_r
@@ -82,9 +136,16 @@ draw =
     unit.y = y_top
     unit.w = x_right - unit.x
     unit.h = y_bot - unit.y
+    edge = measure.map.edges
+    edge.bottom(y_bot)  if y_bot   > edge.bottom()
+    edge.right(x_right) if x_right > edge.right()
+    edge.left(x_left)   if x_left  < edge.left()
+    edge.top(y_top)     if y_top   < edge.top()
     x_right # return end point of island
 
+
   session : (session) ->
+    this.scale()
     whitespace = measure.unit_space
     whitespaces = (session.units.length - 1) * whitespace
     x = -whitespace # start x point in pixels
@@ -169,6 +230,13 @@ $ ->
     session = new Session data, $canvas, parseInt( $canvas.attr("unit") )
     session.zoom 2 if session.current
     draw.session data
+    if measure.h < measure.map.height()
+      measure.h = canvas.height = measure.map.height()
+      draw.session data
+      #console.log measure.h == 400
+      #measure.h = measure.map.height
+      #canvas.height = 400 # measure.map.height()
+      #draw.session data
 
   if canvas
     canvas.width = measure.w
