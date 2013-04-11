@@ -15,7 +15,7 @@ class SessionsController < ApplicationController
   def show
     @session = Session.find(params[:id])
     lessons = 0
-    @session.units.each { |unit| unit.texts.each { |text| lessons+=text.lessons } }
+    @session.units.each { |unit| unit.texts.each { |text| lessons+=text.lessons if text.lessons } if unit.texts } if @session.units
     @session['lessons'] = lessons
 
     respond_to do |format|
