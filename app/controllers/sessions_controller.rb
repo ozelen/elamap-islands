@@ -48,6 +48,7 @@ class SessionsController < ApplicationController
   # GET /sessions/1/edit
   def edit
     @session = Session.find(params[:id])
+    @students = Student.all
   end
 
   # POST /sessions
