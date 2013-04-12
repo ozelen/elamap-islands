@@ -1,52 +1,101 @@
 <%= form_for @text, :html => { :class => 'form-horizontal' } do |f| %>
-  <div class="control-group">
-    <%= f.label :unit_id, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.select :unit_id, @units.collect {|unit| [ unit.letter + ' - ' + unit.name, unit.id ] } %>
+    <div class="row">
+      <div class="span5">
+        <div class="control-group">
+          <%= f.label :unit_id, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.select :unit_id, @units.collect {|unit| [ unit.letter + ' - ' + unit.name, unit.id ] } %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :name, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.text_field :name, :class => 'text_field' %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :author, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.text_field :author, :class => 'text_field' %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :lessons, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.number_field :lessons, :class => 'number_field' %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :lexiles, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.number_field :lexiles, :class => 'number_field' %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :sequence, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.text_field :sequence, :class => 'text_field' %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :genre, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.text_field :genre, :class => 'text_field', :id => 'genre-field' %>
+          </div>
+        </div>
+        <div class="control-group">
+          <%= f.label :performance, :class => 'control-label' %>
+          <div class="controls">
+            <%= f.text_field :performance, :class => 'text_field' %>
+          </div>
+        </div>
+      </div>
+
+      <div class="span5 row">
+
+        <table id="genre-scale">
+          <tr>
+            <td>
+              <div id="genre-slider"></div>
+            </td>
+            <td>
+              <table class="scale">
+                <tr>
+                  <td>6</td>
+                  <td>Poetry</td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>Drama</td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>Story</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>Non Fiction</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Historical S.</td>
+                </tr>
+                <tr>
+                  <td>1</td>
+                  <td>Science & Tech</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+
+      </div>
+
+
     </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :name, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :name, :class => 'text_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :author, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :author, :class => 'text_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :lessons, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.number_field :lessons, :class => 'number_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :lexiles, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.number_field :lexiles, :class => 'number_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :sequence, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :sequence, :class => 'text_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :genre, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :genre, :class => 'text_field' %>
-    </div>
-  </div>
-  <div class="control-group">
-    <%= f.label :performance, :class => 'control-label' %>
-    <div class="controls">
-      <%= f.text_field :performance, :class => 'text_field' %>
-    </div>
-  </div>
+
+
+
 
   <div class="form-actions">
     <%= f.submit nil, :class => 'btn btn-primary' %>
