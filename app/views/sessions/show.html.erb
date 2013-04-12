@@ -4,7 +4,11 @@
 </div>
 
 
-<canvas id="island" src="<%= session_path(@session, :format => 'json') %>"></canvas>
+<div id="canvas_container">
+  <div>
+    <canvas id="island" src="<%= session_path(@session, :format => 'json') %>"></canvas>
+  </div>
+</div>
 
 <div class="form-actions">
 
