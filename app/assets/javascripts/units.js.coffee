@@ -144,14 +144,6 @@ draw =
     x_right # return end point of island
 
 
-  session : (session) ->
-    this.scale()
-    whitespace = measure.unit_space
-    whitespaces = (session.units.length - 1) * whitespace
-    x = -whitespace # start x point in pixels
-    measure.x = (measure.w - whitespaces ) / session.lessons
-    x = this.unit unit, x+whitespace for unit in session.units
-
   clear : ->
     this.c.clearRect( 0, 0, measure.w, measure.h )
 
@@ -174,32 +166,54 @@ json =
       callback(data)
     json.data
 
+
+class Text
+  data = {}
+  constructor: (text) ->
+    data = text
+
+
+
+
 class Unit
   texts = []
+  data = {}
   constructor: (unit) ->
+    data = unit
+    texts.push(new Text) for text in data.texts
+
+  draw: ->
+
 
 
 class Session
   units   = []
-  data    = null
+  data    = {}
   $canvas = null
   canvas  = null
   container = null
   current: null
   constructor: (session, canv, selected_unit_id = null) ->
-    units = session.units
     data = session
     this.session = session
     $canvas = canv
     canvas = canv[0]
     container = $('div#canvas_container')
-
+    units.push(new Unit(unit)) for unit in data.units
     this.current = this.find(selected_unit_id) if selected_unit_id
 
   find: (id) ->
     result = null
-    (result = unit if unit.id == id) for unit in units
+    (result = unit if unit.id == id) for unit in data.units
     result
+
+  draw: ->
+    draw.scale()
+    whitespace = measure.unit_space
+    whitespaces = (data.units.length - 1) * whitespace
+    x = -whitespace # start x point in pixels
+    measure.x = (measure.w - whitespaces ) / data.lessons
+    x = draw.unit unit, x+whitespace for unit in data.units
 
   zoom: (p) ->
     m = measure
@@ -212,7 +226,7 @@ class Session
     canvas.width = measure.w
     canvas.height = measure.h
     draw.clear()
-    draw.session data
+    this.draw()
     unit = this.current
     c_pos = $canvas.offset()
     new_left = c_pos.left - unit.x + container.width()  / 2 - unit.w / 2
@@ -229,7 +243,7 @@ $ ->
   init = (data) ->
     session = new Session data, $canvas, parseInt( $canvas.attr("unit") )
     session.zoom 2 if session.current
-    draw.session data
+    session.draw()
     if measure.h < measure.map.height()
       measure.h = canvas.height = measure.map.height()
       draw.session data
