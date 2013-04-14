@@ -107,41 +107,7 @@ draw =
     line num for num in [1..measure.h]
 
   unit : (unit, x=0) ->
-    x_left = x
-    prev_r = 0
-    y_top  = measure.h
-    y_bot  = 0
-
-    if measure.unit
-      color = if unit.id == measure.unit then '#095' else '#ccc'
-    else
-      color = this.rnd_color()
-
-    push = (text) ->
-      r = text.lessons * measure.x / 2
-      y = measure.h - text.genre * measure.h / measure.y
-      y_bot  = y + r if y_bot < y + r
-      y_top  = y - r if y_top > y - r
-      x += r + prev_r
-      prev_r = r
-      draw.circle(x, y, r, color)
-      draw.lexiles(x, y, text.lexiles)
-
-    push text for text in unit.texts
-    x_right = x+prev_r
-    x_mid = x_left + (x_right - x_left) / 2
-    draw.label(unit.name, x_mid, y_bot + 10)
-    #draw.frame(x_left, y_top, x_right, y_bot)
-    unit.x = x_left
-    unit.y = y_top
-    unit.w = x_right - unit.x
-    unit.h = y_bot - unit.y
-    edge = measure.map.edges
-    edge.bottom(y_bot)  if y_bot   > edge.bottom()
-    edge.right(x_right) if x_right > edge.right()
-    edge.left(x_left)   if x_left  < edge.left()
-    edge.top(y_top)     if y_top   < edge.top()
-    x_right # return end point of island
+    nil
 
 
   clear : ->
@@ -177,13 +143,51 @@ class Text
 
 class Unit
   texts = []
-  data = {}
-  constructor: (unit) ->
+  data: []
+  id: 0
+  constructor: (unit, id) ->
+    this.id = id
+    this.data = unit
     data = unit
     texts.push(new Text) for text in data.texts
 
-  draw: ->
+  draw: (x) ->
+    x_left = x
+    prev_r = 0
+    y_top  = measure.h
+    y_bot  = 0
 
+    if measure.unit
+      color = if unit.id == measure.unit then '#095' else '#ccc'
+    else
+      color = draw.rnd_color()
+
+    push = (text) ->
+      r = text.lessons * measure.x / 2
+      y = measure.h - text.genre * measure.h / measure.y
+      y_bot  = y + r if y_bot < y + r
+      y_top  = y - r if y_top > y - r
+      x += r + prev_r
+      prev_r = r
+      draw.circle(x, y, r, color)
+      draw.lexiles(x, y, text.lexiles)
+
+    push text for text in this.data.texts
+
+    x_right = x+prev_r
+    x_mid = x_left + (x_right - x_left) / 2
+    draw.label(this.data.name, x_mid, y_bot + 10)
+    # draw.frame(x_left, y_top, x_right, y_bot)
+    this.data.x = x_left
+    this.data.y = y_top
+    this.data.w = x_right - this.data.x
+    this.data.h = y_bot - this.data.y
+    edge = measure.map.edges
+    edge.bottom(y_bot)  if y_bot   > edge.bottom()
+    edge.right(x_right) if x_right > edge.right()
+    edge.left(x_left)   if x_left  < edge.left()
+    edge.top(y_top)     if y_top   < edge.top()
+    x_right # return end point of island
 
 
 class Session
@@ -199,8 +203,11 @@ class Session
     $canvas = canv
     canvas = canv[0]
     container = $('div#canvas_container')
-    units.push(new Unit(unit)) for unit in data.units
+    units.push new Unit(unit) for unit in data.units
     this.current = this.find(selected_unit_id) if selected_unit_id
+
+  unit_data: (id) ->
+    -> data.units[id]
 
   find: (id) ->
     result = null
@@ -213,7 +220,7 @@ class Session
     whitespaces = (data.units.length - 1) * whitespace
     x = -whitespace # start x point in pixels
     measure.x = (measure.w - whitespaces ) / data.lessons
-    x = draw.unit unit, x+whitespace for unit in data.units
+    x = unit.draw x+whitespace for unit in units
 
   zoom: (p) ->
     m = measure
