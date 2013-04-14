@@ -158,7 +158,7 @@ class Unit
     y_bot  = 0
 
     if measure.unit
-      color = if unit.id == measure.unit then '#095' else '#ccc'
+      color = if this.data.id == measure.unit then '#095' else '#ccc'
     else
       color = draw.rnd_color()
 
@@ -240,6 +240,14 @@ class Session
     new_top  = c_pos.top  - unit.y + container.height() / 2 - unit.h / 2
     $canvas.offset({left: new_left, top: new_top } )
 
+  upload: ->
+    canvas_data = canvas.toDataURL "image/png"
+    ajax = new XMLHttpRequest()
+    ajax.open "POST", '/session/upload', false
+    ajax.setRequestHeader 'Content-Type', 'application/upload'
+    ajax.send canvas_data
+
+
 $ ->
   # initial objects and settings
   container = $('div#canvas_container')
@@ -267,6 +275,8 @@ $ ->
     draw.c = canvas.getContext('2d')
     json.url = $canvas.attr "src"
     json.get ( (data) -> init (data) )
+
+
 
 
 
