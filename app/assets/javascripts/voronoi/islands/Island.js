@@ -273,13 +273,16 @@ Island.prototype.cellStyle = function(altitude){
         m = 200/this.map.cellStyles.length,
         p = Math.round(altitude/m);
     ;
-    return p;
+
+    p = p < this.map.cellStyles.length ? p : this.map.cellStyles.length - 1
+
+    return this.map.cellStyles[p];
 };
 
 Island.prototype.drawCells = function(chosen){
     var cells = this.map.cells;
     for(var i in chosen){
         var cc = cells[chosen[i]];
-        this.drawCell(cells[chosen[i]], this.map.cellStyles[this.cellStyle(cc.altitude)]);
+        this.drawCell(cells[chosen[i]], this.cellStyle(cc.altitude));
     }
 };

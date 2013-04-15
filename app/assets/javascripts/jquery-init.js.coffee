@@ -18,5 +18,4 @@ $ ->
       $('session-map').html('Image doesn\'t exist')
       $(this).remove();
     )
-
   )

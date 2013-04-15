@@ -2,15 +2,26 @@
 <div class="page-header">
   <h1>Unit <%= @unit.letter %> - <%= @unit.name %></h1>
 </div>
-    <div id="canvas_container">
+
+<ul class="nav nav-tabs">
+  <li><a href="#canvas_container" data-toggle="tab">Scheme</a></li>
+  <li><a href="#rendered_island" data-toggle="tab" id="island_tab">Island</a></li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane" id="canvas_container">
         <div>
             <canvas id="island" src="<%= session_path(@session, :format => 'json') %>" unit="<%= @unit.id %>"></canvas>
         </div>
     </div>
+    <div class="tab-pane" id="rendered_island">
+      <canvas id="c"></canvas>
+    </div>
+</div>
 
     <div class="form-actions">
 
-      <button id="draw_unit" class="btn btn-success">Render Island</button>
+      <button id="render_island" class="btn btn-success">Render Island</button>
 
         <%= link_to 'Add text',
                     new_unit_text_path(@unit),

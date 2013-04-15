@@ -169,6 +169,11 @@ class Unit
       y_top  = y - r if y_top > y - r
       x += r + prev_r
       prev_r = r
+
+      text.x = x
+      text.y = y
+      text.r = r
+
       draw.circle(x, y, r, color)
       draw.lexiles(x, y, text.lexiles)
 
@@ -276,6 +281,19 @@ $ ->
       $('#map_tab').addClass('hidden')
       session.upload(btn_upload.attr 'href')
 
+    $('#render_island').click( (e) ->
+      factory = new IslandFactory("c", {cells:1000, naturalize:10, width: session.current.w + 200, height: session.current.h + 200})
+
+      unit = session.current
+      island = (text) ->
+        factory.add(
+          x: text.x - unit.x + 100,
+          y: text.y - unit.y + 100,
+          r: text.r + 25
+        )
+
+      island text for text in unit.texts
+    )
 
   if canvas
     canvas.width = measure.w
