@@ -18,6 +18,8 @@ class SessionsController < ApplicationController
     lessons = 0
     @session.units.each { |unit| unit.texts.each { |text| lessons+=text.lessons if text.lessons } if unit.texts } if @session.units
     @session['lessons'] = lessons
+    filename = 'public/images/upload/session_' + @session.id.to_s + '.png'
+    @session['img'] = File.exist?(filename) ? filename : nil
 
     respond_to do |format|
       format.html # show.html.erb

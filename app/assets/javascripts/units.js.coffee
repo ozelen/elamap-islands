@@ -272,7 +272,9 @@ $ ->
       #measure.h = measure.map.height
       #canvas.height = 400 # measure.map.height()
       #draw.session data
-    btn_upload.click -> session.upload(btn_upload.attr 'href')
+    btn_upload.click ->
+      $('#map_tab').addClass('hidden')
+      session.upload(btn_upload.attr 'href')
 
 
   if canvas
