@@ -235,17 +235,22 @@ class Session
     draw.clear()
     this.draw()
     unit = this.current
-    c_pos = $canvas.offset()
-    new_left = c_pos.left - unit.x + container.width()  / 2 - unit.w / 2
-    new_top  = c_pos.top  - unit.y + container.height() / 2 - unit.h / 2
-    $canvas.offset({left: new_left, top: new_top } )
+    if unit
+      c_pos = $canvas.offset()
+      new_left = c_pos.left - unit.x + container.width()  / 2 - unit.w / 2
+      new_top  = c_pos.top  - unit.y + container.height() / 2 - unit.h / 2
+      $canvas.offset({left: new_left, top: new_top } )
 
-  upload: ->
+  upload: (url) ->
+    w = 5100
+    h = 3300
+    k = h/measure.h
+    #window.sessionmap = {x:}
+    this.zoom(k)
     canvas_data = canvas.toDataURL "image/png"
-    ajax = new XMLHttpRequest()
-    ajax.open "POST", '/session/upload', false
-    ajax.setRequestHeader 'Content-Type', 'application/upload'
-    ajax.send canvas_data
+    base64 = canvas_data.replace /^data:image\/(png|jpg);base64,/, ""
+    $.post url, {data:base64}
+    false
 
 
 $ ->
@@ -254,6 +259,7 @@ $ ->
   $canvas = $('canvas#island')
   canvas = $canvas[0]
   btn_unit = $('button#draw_unit')
+  btn_upload = $ '#upload_session_scheme'
 
   init = (data) ->
     session = new Session data, $canvas, parseInt( $canvas.attr("unit") )
@@ -266,6 +272,8 @@ $ ->
       #measure.h = measure.map.height
       #canvas.height = 400 # measure.map.height()
       #draw.session data
+    btn_upload.click -> session.upload(btn_upload.attr 'href')
+
 
   if canvas
     canvas.width = measure.w

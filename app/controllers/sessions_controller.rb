@@ -1,3 +1,4 @@
+require 'base64'
 class SessionsController < ApplicationController
   # GET /sessions
   # GET /sessions.json
@@ -101,6 +102,19 @@ class SessionsController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @units }
+    end
+  end
+
+  def upload
+    @session = Session.find(params[:session_id])
+    @image = params[:data]
+    directory = "public/images/upload"
+    path = File.join(directory, "session_"+@session.id.to_s+".png")
+    File.open(path, "wb") { |f| f.write(Base64.decode64(@image)) }
+    flash[:notice] = "File uploaded"
+
+    respond_to do |format|
+      format.js
     end
   end
 

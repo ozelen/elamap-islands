@@ -3,14 +3,27 @@
   <h1><%= @session.name %></h1>
 </div>
 
+<ul class="nav nav-tabs">
+  <li><a href="#canvas_container" data-toggle="tab">Scheme</a></li>
+  <li><a href="#rendered_map" id="map_tab" data-toggle="tab" url="/images/upload/session_<%= @session.id %>.png">Map</a></li>
+</ul>
 
-<div id="canvas_container">
-  <div>
-    <canvas id="island" src="<%= session_path(@session, :format => 'json') %>"></canvas>
-  </div>
+<div class="tab-content">
+    <div class="tab-pane" id="canvas_container">
+      <div>
+        <canvas id="island" src="<%= session_path(@session, :format => 'json') %>"></canvas>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="rendered_map">
+        <div id="session-map" style="height: 400px"></div>
+    </div>
 </div>
 
+
 <div class="form-actions">
+  <button href="<%= session_upload_path(@session) %>" id="upload_session_scheme" class="btn btn-success">Upload</button>
+
 
     <%= link_to 'Add Unit',
                 new_session_unit_path(@session),

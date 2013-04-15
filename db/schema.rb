@@ -11,68 +11,72 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130404163016) do
+ActiveRecord::Schema.define(:version => 20130415074507) do
 
   create_table "children", :force => true do |t|
-    t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.string    "name"
+    t.timestamp "created_at", :null => false
+    t.timestamp "updated_at", :null => false
   end
 
   create_table "islands", :force => true do |t|
-    t.string   "name"
-    t.integer  "size"
-    t.integer  "genre"
-    t.integer  "grade"
-    t.integer  "begin"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.string    "name"
+    t.integer   "size"
+    t.integer   "genre"
+    t.integer   "grade"
+    t.integer   "begin"
+    t.timestamp "created_at", :null => false
+    t.timestamp "updated_at", :null => false
   end
 
   create_table "parents", :force => true do |t|
-    t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.string    "name"
+    t.timestamp "created_at", :null => false
+    t.timestamp "updated_at", :null => false
   end
 
   create_table "sessions", :force => true do |t|
-    t.string   "name"
-    t.date     "start"
-    t.date     "end"
-    t.integer  "student_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.string    "name"
+    t.date      "start"
+    t.date      "end"
+    t.integer   "student_id"
+    t.timestamp "created_at",         :null => false
+    t.timestamp "updated_at",         :null => false
+    t.string    "image_file_name"
+    t.string    "image_content_type"
+    t.integer   "image_file_size"
+    t.datetime  "image_updated_at"
   end
 
   create_table "students", :force => true do |t|
-    t.string   "username"
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "email"
-    t.integer  "group_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.string    "username"
+    t.string    "first_name"
+    t.string    "last_name"
+    t.string    "email"
+    t.integer   "group_id"
+    t.timestamp "created_at", :null => false
+    t.timestamp "updated_at", :null => false
   end
 
   create_table "texts", :force => true do |t|
-    t.integer  "unit_id"
-    t.string   "name"
-    t.string   "author"
-    t.integer  "lessons"
-    t.integer  "lexiles"
-    t.float    "sequence"
-    t.float    "genre"
-    t.float    "performance"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.integer   "unit_id"
+    t.string    "name"
+    t.string    "author"
+    t.integer   "lessons"
+    t.integer   "lexiles"
+    t.float     "sequence"
+    t.float     "genre"
+    t.float     "performance"
+    t.timestamp "created_at",  :null => false
+    t.timestamp "updated_at",  :null => false
   end
 
   create_table "units", :force => true do |t|
-    t.integer  "session_id"
-    t.string   "name"
-    t.string   "letter"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.integer   "session_id"
+    t.string    "name"
+    t.string    "letter"
+    t.timestamp "created_at", :null => false
+    t.timestamp "updated_at", :null => false
   end
 
 end

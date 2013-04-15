@@ -2,7 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
-points = [
+SamplePoints = [
   {name: "Boy", author: "Roald Dahl", val: "1090", color: "green", latlng: [-0.1949462890625, 0.05712890625]      },
   {name: "My Life on the Mississippi", author: "Mark Twain", val: "", color: "red", latlng: [-0.193603515625, 0.076171875]         },
   {name: "Raisin in the Sun", author: "Lorraine Hansberry", val: "N/A", color: "yellow", latlng: [-0.2152099609375, 0.125]              },
@@ -86,25 +86,12 @@ icons = {
               }
 }
 
-
-myPath = [{"type": "LineString","coordinates": [points[0].latlng, points[1].latlng, points[2].latlng]}, {"type": "LineString", "coordinates": [points[3].latlng, points[4].latlng, points[5].latlng]}];
-myStyle = {"color": "red", "weight": 2, "opacity": 0.65};
-
-initMap = () ->
-  #  [40.712, -74.227]
-  #  lat = 40.712216
-  #  lng = -74.22655
-  #  imageBounds = [[lat, lng], [40.773941, -74.12544]];
-
-  width = 5100
-  height = 3300
-
-  map = L.map('map', {maxZoom:13, crs: L.CRS.Simple}).setView([0,0], 13)
-
+initMap = (id, image_url, width, height, points = null) ->
+  map = L.map(id, {maxZoom:13, crs: L.CRS.Simple}).setView([0,0], 13)
   s1 = map.unproject(new L.Point(0, 0))
   s2 = map.unproject(new L.Point(width, height))
 
-  imageUrl = '/assets/island-geomap.jpg'
+  imageUrl = image_url
   imageBounds = [[s1.lat, s1.lng],[s2.lat, s2.lng]]
   map
     .setMaxBounds(imageBounds)
@@ -122,26 +109,18 @@ initMap = () ->
       .setContent(arr.join(",<br>\n"))
       .openOn(map)
 
-
   markerPopupMessage = (marker) -> "<b>" + marker.name + "</b><br><i>" + marker.author + "</i> <br>[" +marker.val+ "]"
-
 
   L.imageOverlay(imageUrl, imageBounds).addTo(map);
 
-  L.marker(marker.latlng,
-    icon: new L.icon(icons[marker.color])
-  ).addTo(map).bindPopup(markerPopupMessage marker) for marker in points
+  if points
+    L.marker(marker.latlng,
+      icon: new L.icon(icons[marker.color])
+    ).addTo(map).bindPopup(markerPopupMessage marker) for marker in points
 
-  #polyline = L.Polyline([points[7].latlng, points[10].latlng], {color: 'red'}).addTo(map)
-  for marker, i in points
-    L.polyline([marker.latlng, points[i+1].latlng], {color: '#000', opacity: 0.3}).addTo(map) if points[i+1]
-
-  L.geoJson(myPath, {
-    style: myStyle
-  }).addTo(map)
-
-
-  #map.on 'click', checkPoints
+    for marker, i in points
+      L.polyline([marker.latlng, points[i+1].latlng], {color: '#000', opacity: 0.3}).addTo(map) if points[i+1]
 
 jQuery ->
-  initMap() if $("div#map").length
+  window.initMap = initMap
+  initMap('map', '/assets/island-geomap.jpg', 5100, 3300, SamplePoints) if $("div#map").length

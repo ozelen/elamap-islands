@@ -7,6 +7,7 @@ ElamapIslands::Application.routes.draw do
   resources :sessions do
     resources :units
     match 'structure'
+    match 'upload'
   end
 
 
