@@ -38,11 +38,26 @@ function IslandFactory (canvas_id, settings) {
                 },
 
                 {
+                    name        : 'LIGHT GRASSLAND',
+                    lineWidth   : 4,
+                    strokeStyle : '#cadaaf',
+                    fillStyle   : '#cadaaf'
+                },
+
+                {
                     name        : 'TUNDRA',
                     lineWidth   : 4,
                     strokeStyle : '#ddddbb',
                     fillStyle   : '#ddddbb'
-                }
+                },
+
+                {
+                    name        : 'LIGHT TUNDRA',
+                    lineWidth   : 4,
+                    strokeStyle : '#dfdfbd',
+                    fillStyle   : '#dfdfbd'
+                },
+
             ]
         },
 
