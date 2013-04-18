@@ -4,13 +4,16 @@ function IslandFactory (canvas_id, settings) {
 
         pointsImprove = settings.naturalize || 10,
         debugMode = settings.debug || false,
+        context = canvas.getContext("2d"),
+        trace = new TraceVoronoi(context),
 
         MAP = this.map = {
             canvas          : document.getElementById(canvas_id),
             voronoi         : new Voronoi(),
-            context         : canvas.getContext("2d"),
+            context         : context,
             width           : canvas.width = settings.width || 500,
             height          : canvas.height = settings.height || 500,
+            max_lexile      : settings.max_lexiles || 1000,
             colors          : [],
             points          : [],
             cells           : [],
@@ -18,7 +21,7 @@ function IslandFactory (canvas_id, settings) {
             verticesIndex   : [],
             cellsNumber     : settings.cells || 100,
             islands         : [],
-            trace           : this.trace,
+            trace           : trace,
             cellStyles      : [
                 {
                     name        : 'TROPICAL SEASONAL FOREST',

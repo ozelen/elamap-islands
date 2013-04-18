@@ -5,9 +5,9 @@
  * Time: 12:20
  * To change this template use File | Settings | File Templates.
  */
-IslandFactory.prototype.trace = (function(c){
+TraceVoronoi = function(c){
+    // this.context = c
     var
-        c = this.context,
         traceOrder = function(i){
             i = i || 0 ;
             var cc;
@@ -99,4 +99,4 @@ IslandFactory.prototype.trace = (function(c){
             order       : traceOrder,
             cell        : traceCell
         };
-})();
+};

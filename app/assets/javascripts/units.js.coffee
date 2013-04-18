@@ -50,6 +50,7 @@ measure =
   unit_space  : 20
   unit        : null
   map         : new Square(this.w, this.h)
+  max_lexiles : 0
 
 draw =
   c : null  # canvas context - shouf be defined before using object
@@ -174,6 +175,8 @@ class Unit
       text.y = y
       text.r = r
 
+      measure.max_lexiles = text.lexiles if text.lexiles > measure.max_lexiles
+
       draw.circle(x, y, r, color)
       draw.lexiles(x, y, text.lexiles)
 
@@ -282,14 +285,21 @@ $ ->
       session.upload(btn_upload.attr 'href')
 
     $('#render_island').click( (e) ->
-      factory = new IslandFactory("c", {cells:1000, naturalize:10, width: session.current.w + 200, height: session.current.h + 200})
+      factory = new IslandFactory("c", {
+        cells:1000,
+        naturalize:10,
+        width: session.current.w + 200,
+        height: session.current.h + 200,
+        max_lexile: measure.max_lexiles
+      })
 
       unit = session.current
       island = (text) ->
         factory.add(
           x: text.x - unit.x + 100,
           y: text.y - unit.y + 100,
-          r: text.r + 25
+          r: text.r + 25,
+          lexile: text.lexiles
         )
 
       island text for text in unit.texts

@@ -10,7 +10,7 @@ function Island(map, settings) {
     this.map = map;
     this.settings = settings;
     this.cells = [];
-    this.chosen = this.defineLand(settings);
+    this.chosen = this.defineLand();
     this.handleElements(this.chosen);
     this.drawCells(this.chosen);
     this.strokeCoastline();
@@ -18,25 +18,25 @@ function Island(map, settings) {
 }
 
 
-Island.prototype.defineLand = function(settings){
+Island.prototype.defineLand = function(){
     var
         chosen = [],
-        center = new Point(settings.x, settings.y),
-        j=0
+        center = new Point(this.settings.x, this.settings.y),
+        j = 0,
+        k = this.settings.lexile/this.settings.r // value defines height/radius dependency
         ;
     // choose polygons within measures
     for(var i in this.map.cells) {
         var cell = this.map.cells[i];
-        if(settings.r > center.distanceTo(cell.centroid)){
+        if(this.settings.r > center.distanceTo(cell.centroid)){
             chosen[j++] = i;
             this.cells.push(cell);
         }
     }
-
+    console.log(this.map.max_lexile + '/' + this.settings.r + ' = ' + k)
     for (i in chosen){
-        // linear approach setting altitude, the closer to the center the higher
         cell = this.map.cells[chosen[i]];
-        cell.altitude = Math.round(settings.r - center.distanceTo(cell.centroid));
+        cell.altitude = Math.round( (this.settings.r - center.distanceTo(cell.centroid)) * k  );
         cell.type = 'land';
     }
 
@@ -270,7 +270,7 @@ Island.prototype.strokeCoastline = function() {
 
 Island.prototype.cellStyle = function(altitude){
     var
-        m = 200/this.map.cellStyles.length,
+        m = this.map.max_lexile/this.map.cellStyles.length,
         p = Math.round(altitude/m);
     ;
 
@@ -283,6 +283,7 @@ Island.prototype.drawCells = function(chosen){
     var cells = this.map.cells;
     for(var i in chosen){
         var cc = cells[chosen[i]];
-        this.drawCell(cells[chosen[i]], this.cellStyle(cc.altitude));
+        this.drawCell(cc, this.cellStyle(cc.altitude));
+        //this.map.trace.text(cc.altitude, cc.centroid.x, cc.centroid.y)
     }
 };
