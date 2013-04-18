@@ -2,6 +2,11 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
+COLORS = [
+  '#1560BD', '#89CFF0', '#40E0D0', '#DE3163', '#702963', '#29AB87', '#8C92AC', '#6699CC', '#FACA16', '#CD5700'
+  '#DF73FF', '#1E90FF', '#7DF9FF', '#003153', '#C9A0DC', '#00FF7F', '#228B22', '#3EB489', '#E4D00A', '#8A3324'
+]
+
 class Point
   x: 0
   y: 0
@@ -161,7 +166,7 @@ class Unit
     if measure.unit
       color = if this.data.id == measure.unit then '#095' else '#ccc'
     else
-      color = draw.rnd_color()
+      color = COLORS.shift() || draw.rnd_color()
 
     push = (text) ->
       r = text.lessons * measure.x / 2
