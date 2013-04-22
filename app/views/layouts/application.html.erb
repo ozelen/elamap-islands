@@ -33,6 +33,25 @@
           <li><a href="/map">Map Mock-up</a></li>
           <li><a href="http://23.20.177.14/island-gen/" target="_blank">Voronoi generator</a></li>
         </ul>
+
+        <% if user_signed_in? %>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= current_user.email %> <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><%= link_to 'Profile', edit_user_registration_path %></li>
+                <li><%= link_to 'Sign out', destroy_user_session_path, method: :delete %></li>
+              </ul>
+            </li>
+        <% else %>
+            <div class="navbar-form pull-right">
+              <%= link_to 'Sign up', new_user_registration_path, class: 'btn' %>
+            </div>
+            <form class="navbar-form pull-right">
+              <input class="span2" type="text" placeholder="Email">
+              <input class="span2" type="password" placeholder="Password">
+              <button type="submit" class="btn">Sign in</button>
+            </form>
+        <% end %>
       </div><!-- /.nav-collapse -->
     </div>
   </div><!-- /navbar-inner -->
