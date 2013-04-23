@@ -65,10 +65,13 @@ draw =
     text = text || ''
     c = this.c
     c.fillStyle = color
+    c.lineWidth = 2
+    c.strokeStyle = "#fff"
     c.beginPath()
     c.arc(x, y, r, 0, Math.PI*2, true)
     c.closePath()
     c.fill()
+    c.stroke()
     #this.text(text, x, y, '#fff') if text
 
   lexiles : (x, y, lexiles) ->
@@ -214,7 +217,7 @@ class Unit
 
 
 class Session
-  units   = []
+  units   : []
   data    = {}
   $canvas = null
   canvas  = null
@@ -226,8 +229,9 @@ class Session
     $canvas = canv
     canvas = canv[0]
     container = $('div#canvas_container')
-    units.push new Unit(unit) for unit in data.units
+    this.units.push new Unit(unit) for unit in data.units
     this.current = this.find(selected_unit_id) if selected_unit_id
+    this.set_units()
 
   unit_data: (id) ->
     -> data.units[id]
@@ -237,14 +241,17 @@ class Session
     (result = unit if unit.id == id) for unit in data.units
     result
 
-  draw: ->
-    draw.scale()
+  set_units: ->
     whitespace = measure.unit_space
     whitespaces = (data.units.length - 1) * whitespace
     x = -whitespace # start x point in pixels
     measure.x = (measure.w - whitespaces ) / data.lessons
-    x = unit.set x+whitespace for unit in units
-    unit.draw() for unit in units
+    x = unit.set x+whitespace for unit in this.units
+
+
+  draw: ->
+    draw.scale()
+    unit.draw() for unit in this.units
 
   zoom: (p) ->
     m = measure
@@ -256,6 +263,7 @@ class Session
     #m.y*=p
     canvas.width = measure.w
     canvas.height = measure.h
+    this.set_units()
     draw.clear()
     this.draw()
     unit = this.current
