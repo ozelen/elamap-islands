@@ -5,7 +5,7 @@
 
 <ul class="nav nav-tabs">
   <li><a href="#canvas_container" data-toggle="tab">Scheme</a></li>
-  <li><a href="#rendered_map" class="<%= 'hidden' if !@session.img %>" id="map_tab" data-toggle="tab" url="/images/upload/session_<%= @session.id %>.png">Map</a></li>
+  <li id="map_tab" style="display: none"><a href="#rendered_map" data-toggle="tab" url="https://s3.amazonaws.com/elamap-islands/session_<%= @session.id %>.png">Map</a></li>
 </ul>
 
 <div class="tab-content">

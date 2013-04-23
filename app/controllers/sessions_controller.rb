@@ -1,4 +1,7 @@
 require 'base64'
+require 'rubygems'
+require 'fog'
+
 class SessionsController < ApplicationController
   # GET /sessions
   # GET /sessions.json
@@ -111,8 +114,38 @@ class SessionsController < ApplicationController
     @session = Session.find(params[:session_id])
     @image = params[:data]
     directory = "public/images/upload"
-    path = File.join(directory, "session_"+@session.id.to_s+".png")
-    File.open(path, "wb") { |f| f.write(Base64.decode64(@image)) }
+    fname = "session_"+@session.id.to_s+".png"
+    path = File.join(directory, fname)
+
+    #
+
+
+# create a connection
+    connection = Fog::Storage.new({
+                                      :provider                 => 'AWS',
+                                      :aws_access_key_id        => 'AKIAJ6ESJRHGRTWVBXJQ',
+                                      :aws_secret_access_key    => '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'
+                                  })
+
+# First, a place to contain the glorious details
+    directory = connection.directories.create(
+        :key    => "elamap-islands", # globally unique name
+        :public => true
+    )
+
+# list directories
+    p connection.directories
+
+# upload that resume
+    file = directory.files.create(
+        :key    => fname,
+        :body   => Base64.decode64(@image),
+        :public => true
+    )
+    file.save
+    #
+
+
     flash[:notice] = "File uploaded"
 
     respond_to do |format|

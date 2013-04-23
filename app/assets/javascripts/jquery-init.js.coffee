@@ -5,17 +5,22 @@ $ ->
   )
   $('.nav-tabs a:first').tab('show')
 
+  map_image = $('.nav-tabs #map_tab a').attr('url')
 
-  $('.nav-tabs a#map_tab').click( (e) ->
+  $('<img src="' + map_image + '">')
+  .load ->
+    $('#map_tab').show()
+  .error ->
+    false
+
+  $('.nav-tabs #map_tab a').click (e) ->
     e.preventDefault()
-    $(this).tab('show')
     url = $(this).attr('url')
 
-    $('<img src="' + url + '">').load( ->
-      console.log this.height
+    $('<img src="' + url + '">')
+    .load  ->
       initMap('session-map', url, this.width, this.height)
-    ).error( ->
-      $('session-map').html('Image doesn\'t exist')
+    .error ->
+      $('session-map').html('Image not found')
       $(this).remove();
-    )
-  )
+
