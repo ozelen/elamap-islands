@@ -140,24 +140,38 @@ json =
 
 
 class Text
-  data = {}
+  data : {}
+  x    : null
+  y    : null
+  r    : null
+  color: null
   constructor: (text) ->
-    data = text
+    this.data = text
 
+  draw : ->
+    draw.circle(this.x, this.y, this.r, this.color)
+    draw.lexiles(this.x, this.y, this.data.lexiles)
 
+  set : (x,y,r,color) ->
+    this.x = this.data.x = x
+    this.y = this.data.y = y
+    this.r = this.data.r = r
+    this.color = color
+    measure.max_lexiles = this.data.lexiles if this.data.lexiles > measure.max_lexiles
 
 
 class Unit
-  texts = []
+  this.texts = []
   data: []
   id: 0
   constructor: (unit, id) ->
     this.id = id
     this.data = unit
-    data = unit
-    texts.push(new Text) for text in data.texts
+    texts = []
+    texts.push(new Text(text)) for text in unit.texts
+    this.texts = texts
 
-  draw: (x) ->
+  set: (x) ->
     x_left = x
     prev_r = 0
     y_top  = measure.h
@@ -169,23 +183,16 @@ class Unit
       color = COLORS.shift() || draw.rnd_color()
 
     push = (text) ->
-      r = text.lessons * measure.x / 2
-      y = measure.h - text.genre * measure.h / measure.y
+      r = text.data.lessons * measure.x / 2
+      y = measure.h - text.data.genre * measure.h / measure.y
       y_bot  = y + r if y_bot < y + r
       y_top  = y - r if y_top > y - r
       x += r + prev_r
       prev_r = r
 
-      text.x = x
-      text.y = y
-      text.r = r
+      text.set(x,y,r,color)
 
-      measure.max_lexiles = text.lexiles if text.lexiles > measure.max_lexiles
-
-      draw.circle(x, y, r, color)
-      draw.lexiles(x, y, text.lexiles)
-
-    push text for text in this.data.texts
+    push text for text in this.texts
 
     x_right = x+prev_r
     x_mid = x_left + (x_right - x_left) / 2
@@ -201,6 +208,9 @@ class Unit
     edge.left(x_left)   if x_left  < edge.left()
     edge.top(y_top)     if y_top   < edge.top()
     x_right # return end point of island
+
+  draw: ->
+    text.draw() for text in this.texts
 
 
 class Session
@@ -233,7 +243,8 @@ class Session
     whitespaces = (data.units.length - 1) * whitespace
     x = -whitespace # start x point in pixels
     measure.x = (measure.w - whitespaces ) / data.lessons
-    x = unit.draw x+whitespace for unit in units
+    x = unit.set x+whitespace for unit in units
+    unit.draw() for unit in units
 
   zoom: (p) ->
     m = measure
