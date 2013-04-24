@@ -30,9 +30,6 @@ ElamapIslands::Application.configure do
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
 
-  # Use a different logger for distributed setups
-  config.logger = SyslogLogger.new
-
   # See everything in the log (default is :info)
   config.log_level = :debug
 
