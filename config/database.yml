@@ -19,7 +19,11 @@ test:
   timeout: 5000
 
 production:
-  adapter: sqlite3
-  database: db/production.sqlite3
+  adapter: postgresql
+  encoding: unicode
+  database: elamaps_islands_production
   pool: 5
+  host: localhost
+  username: ladm
+  password: Abcd1234
   timeout: 5000
