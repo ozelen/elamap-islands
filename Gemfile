@@ -11,6 +11,8 @@ gem 'thin'
 group :development, :test do
   gem 'sqlite3'
   gem 'rvm'
+  gem 'pg'
+  gem 'activerecord-postgresql-adapter'
 end
 
 group :production do
