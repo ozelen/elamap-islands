@@ -24,6 +24,6 @@ production:
   database: elamaps_islands_production
   pool: 5
   host: localhost
-  username: ladm
+  username: elamaps
   password: Abcd1234
   timeout: 5000
