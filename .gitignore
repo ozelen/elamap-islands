@@ -17,3 +17,5 @@
 .idea/*
 
 public/images/upload/*
+
+config/database.yml
