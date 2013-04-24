@@ -4,7 +4,7 @@ server "192.168.71.27", :web, :app, :db, primary: true
 
 set :application, "elamap-islands"
 set :user, "ladm"
-set :deploy_to, "/home/#{user}/dev/mo/#{application}"
+set :deploy_to, "/home/#{user}/apps/#{application}"
 set :deploy_via, :remote_cache
 set :use_sudo, false
 

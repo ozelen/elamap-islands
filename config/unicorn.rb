@@ -1,4 +1,4 @@
-root = "/home/ladm/dev/mo/elamap-islands/current"
+root = "/home/ladm/apps/elamap-islands/current"
 working_directory root
 pid "#{root}/tmp/pids/unicorn.pid"
 stderr_path "#{root}/log/unicorn.log"
