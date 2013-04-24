@@ -223,15 +223,24 @@ class Session
   canvas  = null
   container = null
   current: null
+  selected_unit: null
+  selected_unit_id : null
+
   constructor: (session, canv, selected_unit_id = null) ->
     data = session
     this.session = session
     $canvas = canv
     canvas = canv[0]
     container = $('div#canvas_container')
-    this.units.push new Unit(unit) for unit in data.units
+    this.create_unit(unit) for unit in data.units
     this.current = this.find(selected_unit_id) if selected_unit_id
     this.set_units()
+
+  create_unit : (unit_data) ->
+    unit = new Unit(unit_data)
+    this.units.push unit
+    sel_id = this.selected_unit_id
+    this.selected_unit = unit if sel_id and unit_data.id == sel_id
 
   unit_data: (id) ->
     -> data.units[id]
