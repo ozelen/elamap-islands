@@ -279,8 +279,8 @@ Island.prototype.cellStyle = function(altitude){
     return {
         name        : h.name,
         lineWidth   : 4,
-        strokeStyle : h.color,
-        fillStyle   : h.color
+        strokeStyle : '#' + h.color,
+        fillStyle   : '#' + h.color
     };
 };
 
