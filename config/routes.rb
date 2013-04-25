@@ -1,4 +1,7 @@
 ElamapIslands::Application.routes.draw do
+  resources :hypsometries
+
+
   root :to => 'map#index'
 
   resources :students

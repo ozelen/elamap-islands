@@ -22,6 +22,7 @@ function IslandFactory (canvas_id, settings) {
             cellsNumber     : settings.cells || 100,
             islands         : [],
             trace           : trace,
+            hypsometry      : settings.hypsometry,
             cellStyles      : [
                 {
                     name        : 'TROPICAL SEASONAL FOREST',
@@ -110,7 +111,7 @@ function IslandFactory (canvas_id, settings) {
         },
 
         redraw = function(params){
-            MAP.context.fillStyle = "#343a5e";
+            MAP.context.fillStyle = "#93bdb9";
             MAP.context.fillRect (0, 0, MAP.width, MAP.height);
         },
 

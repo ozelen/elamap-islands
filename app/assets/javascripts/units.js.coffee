@@ -323,7 +323,8 @@ $ ->
         naturalize:10,
         width: session.current.w + 200,
         height: session.current.h + 200,
-        max_lexile: measure.max_lexiles
+        max_lexile: measure.max_lexiles,
+        hypsometry: data.hypsometry
       })
 
       unit = session.current

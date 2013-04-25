@@ -270,13 +270,18 @@ Island.prototype.strokeCoastline = function() {
 
 Island.prototype.cellStyle = function(altitude){
     var
-        m = this.map.max_lexile/this.map.cellStyles.length,
+        m = this.map.max_lexile/this.map.hypsometry.length,
         p = Math.round(altitude/m);
     ;
 
-    p = p < this.map.cellStyles.length ? p : this.map.cellStyles.length - 1
-
-    return this.map.cellStyles[p];
+    p = p < this.map.hypsometry.length ? p : this.map.hypsometry.length - 1
+    var h = this.map.hypsometry[p]
+    return {
+        name        : h.name,
+        lineWidth   : 4,
+        strokeStyle : h.color,
+        fillStyle   : h.color
+    };
 };
 
 Island.prototype.drawCells = function(chosen){
