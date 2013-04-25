@@ -1,6 +1,4 @@
 ElamapIslands::Application.routes.draw do
-  devise_for :users
-
   root :to => 'map#index'
 
   resources :students
