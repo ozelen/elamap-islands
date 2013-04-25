@@ -111,8 +111,9 @@ function IslandFactory (canvas_id, settings) {
         },
 
         redraw = function(params){
-            MAP.context.fillStyle = "#93bdb9";
-            MAP.context.fillRect (0, 0, MAP.width, MAP.height);
+            canvas.width = canvas.width;
+            //MAP.context.fillStyle = "#93bdb9";
+            //MAP.context.fillRect (0, 0, MAP.width, MAP.height);
         },
 
         improvePoints = function(){
