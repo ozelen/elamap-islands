@@ -11,6 +11,8 @@ gem 'thin'
 group :development, :test do
   gem 'sqlite3'
   gem 'rvm'
+  gem 'pg'
+  gem 'activerecord-postgresql-adapter'
 end
 
 group :production do
@@ -31,6 +33,8 @@ group :assets do
   gem 'jquery-ui-rails'
 end
 
+gem 'yaml_db' # back up db
+
 gem 'jquery-rails'
 
 gem "therubyracer"
@@ -48,10 +52,10 @@ gem 'fog'
 # gem 'jbuilder'
 
 # Use unicorn as the app server
-# gem 'unicorn'
+ gem 'unicorn'
 
 # Deploy with Capistrano
-# gem 'capistrano'
+ gem 'capistrano'
 
 # To use debugger
 # gem 'debugger'

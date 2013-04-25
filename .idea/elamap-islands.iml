@@ -23,7 +23,6 @@
     <orderEntry type="library" scope="PROVIDED" name="activeresource (v3.2.13, Remote:ruby-1.9.3-p392) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="activesupport (v3.2.13, Remote:ruby-1.9.3-p392) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="arel (v3.0.2, Remote:ruby-1.9.3-p392) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="bcrypt-ruby (v3.0.1, Remote:ruby-1.9.3-p392) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="builder (v3.0.4, Remote:ruby-1.9.3-p392) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="climate_control (v0.0.3, Remote:ruby-1.9.3-p392) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="cocaine (v0.5.1, Remote:ruby-1.9.3-p392) [gem]" level="application" />
@@ -32,7 +31,6 @@
     <orderEntry type="library" scope="PROVIDED" name="coffee-script-source (v1.6.2, Remote:ruby-1.9.3-p392) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="commonjs (v0.2.6, Remote:ruby-1.9.3-p392) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="daemons (v1.1.9, Remote:ruby-1.9.3-p392) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="devise (v2.2.3, Remote:ruby-1.9.3-p392) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="erubis (v2.7.0, Remote:ruby-1.9.3-p392) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="eventmachine (v1.0.3, Remote:ruby-1.9.3-p392) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="execjs (v1.4.0, Remote:ruby-1.9.3-p392) [gem]" level="application" />
@@ -48,7 +46,6 @@
     <orderEntry type="library" scope="PROVIDED" name="mail (v2.5.3, Remote:ruby-1.9.3-p392) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="mime-types (v1.21, Remote:ruby-1.9.3-p392) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="multi_json (v1.7.2, Remote:ruby-1.9.3-p392) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="orm_adapter (v0.4.0, Remote:ruby-1.9.3-p392) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="paperclip (v3.4.1, Remote:ruby-1.9.3-p392) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="polyglot (v0.3.3, Remote:ruby-1.9.3-p392) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rack (v1.4.5, Remote:ruby-1.9.3-p392) [gem]" level="application" />
@@ -72,7 +69,6 @@
     <orderEntry type="library" scope="PROVIDED" name="twitter-bootstrap-rails (v2.2.6, Remote:ruby-1.9.3-p392) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="tzinfo (v0.3.37, Remote:ruby-1.9.3-p392) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="uglifier (v1.3.0, Remote:ruby-1.9.3-p392) [gem]" level="application" />
-    <orderEntry type="library" scope="PROVIDED" name="warden (v1.2.1, Remote:ruby-1.9.3-p392) [gem]" level="application" />
   </component>
   <component name="RModuleSettingsStorage">
     <LOAD_PATH number="0" />
