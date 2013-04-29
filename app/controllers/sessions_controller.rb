@@ -114,38 +114,33 @@ class SessionsController < ApplicationController
   def upload
     @session = Session.find(params[:session_id])
     @image = params[:data]
-    directory = "public/images/upload"
-    fname = "session_"+@session.id.to_s+".png"
-    path = File.join(directory, fname)
 
-    #
+    fname = @session.id.to_s+".png"
+    dir = params[:dir]
 
-
-# create a connection
+    # create a connection
     connection = Fog::Storage.new({
                                       :provider                 => 'AWS',
                                       :aws_access_key_id        => 'AKIAJ6ESJRHGRTWVBXJQ',
                                       :aws_secret_access_key    => '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'
                                   })
 
-# First, a place to contain the glorious details
+    # First, a place to contain the glorious details
     directory = connection.directories.create(
-        :key    => "elamap-islands", # globally unique name
+        :key    => "elamap-islands/" + dir , # globally unique name
         :public => true
     )
 
-# list directories
+    # list directories
     p connection.directories
 
-# upload that resume
+    # upload that resume
     file = directory.files.create(
         :key    => fname,
         :body   => Base64.decode64(@image),
         :public => true
     )
     file.save
-    #
-
 
     flash[:notice] = "File uploaded"
 

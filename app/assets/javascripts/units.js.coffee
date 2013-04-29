@@ -143,13 +143,15 @@ json =
 
 
 class Text
-  data : {}
-  x    : null
-  y    : null
-  r    : null
-  color: null
-  constructor: (text) ->
+  data    : {}
+  x       : null
+  y       : null
+  r       : null
+  color   : null
+  measure : {}
+  constructor: (text, measure) ->
     this.data = text
+    this.measure = measure
 
   draw : ->
     draw.circle(this.x, this.y, this.r, this.color)
@@ -160,28 +162,30 @@ class Text
     this.y = this.data.y = y
     this.r = this.data.r = r
     this.color = color
-    measure.max_lexiles = this.data.lexiles if this.data.lexiles > measure.max_lexiles
+    this.measure.max_lexiles = this.data.lexiles if this.data.lexiles > this.measure.max_lexiles
 
 
 class Unit
-  this.texts = []
-  data: []
-  id: 0
-  constructor: (unit, id) ->
-    this.id = id
+  texts   : []
+  data    : []
+  measure : {}
+  id      : 0
+  constructor: (unit, measure) ->
     this.data = unit
+    this.measure = measure
     texts = []
-    texts.push(new Text(text)) for text in unit.texts
+    texts.push(new Text(text, this.measure)) for text in unit.texts
     this.texts = texts
 
   set: (x) ->
     x_left = x
     prev_r = 0
-    y_top  = measure.h
+    y_top  = this.measure.h
     y_bot  = 0
+    measure = this.measure
 
-    if measure.unit
-      color = if this.data.id == measure.unit then '#095' else '#ccc'
+    if this.measure.unit
+      color = if this.data.id == this.measure.unit then '#095' else '#ccc'
     else
       color = COLORS.shift() || draw.rnd_color()
 
@@ -205,7 +209,7 @@ class Unit
     this.data.y = y_top
     this.data.w = x_right - this.data.x
     this.data.h = y_bot - this.data.y
-    edge = measure.map.edges
+    edge = this.measure.map.edges
     edge.bottom(y_bot)  if y_bot   > edge.bottom()
     edge.right(x_right) if x_right > edge.right()
     edge.left(x_left)   if x_left  < edge.left()
@@ -218,43 +222,41 @@ class Unit
 
 class Session
   units   : []
-  data    = {}
-  $canvas = null
-  canvas  = null
+  measure : {}
+  data    : {}
   container = null
   current: null
   selected_unit: null
   selected_unit_id : null
 
-  constructor: (session, canv, selected_unit_id = null) ->
-    data = session
+  constructor: (session, measure, selected_unit_id = null) ->
+    this.data = session
     this.session = session
-    $canvas = canv
-    canvas = canv[0]
+    this.measure = measure
     container = $('div#canvas_container')
-    this.create_unit(unit) for unit in data.units
+    this.create_unit(unit) for unit in this.data.units
     this.current = this.find(selected_unit_id) if selected_unit_id
     this.set_units()
 
   create_unit : (unit_data) ->
-    unit = new Unit(unit_data)
+    unit = new Unit(unit_data, this.measure)
     this.units.push unit
     sel_id = this.selected_unit_id
     this.selected_unit = unit if sel_id and unit_data.id == sel_id
 
   unit_data: (id) ->
-    -> data.units[id]
+    -> this.data.units[id]
 
   find: (id) ->
     result = null
-    (result = unit if unit.id == id) for unit in data.units
+    (result = unit if unit.id == id) for unit in this.data.units
     result
 
   set_units: ->
     whitespace = measure.unit_space
-    whitespaces = (data.units.length - 1) * whitespace
+    whitespaces = (this.data.units.length - 1) * whitespace
     x = -whitespace # start x point in pixels
-    measure.x = (measure.w - whitespaces ) / data.lessons
+    measure.x = (measure.w - whitespaces ) / this.data.lessons
     x = unit.set x+whitespace for unit in this.units
 
 
@@ -262,7 +264,7 @@ class Session
     draw.scale()
     unit.draw() for unit in this.units
 
-  zoom: (p) ->
+  zoom: (p, canvas) ->
     m = measure
     p = 3
     m.w*=p
@@ -270,62 +272,73 @@ class Session
     m.x*=p
     m.unit_space*=p
     #m.y*=p
-    canvas.width = measure.w
-    canvas.height = measure.h
+    canvas.el.width = measure.w
+    canvas.el.height = measure.h
     this.set_units()
     draw.clear()
     this.draw()
     unit = this.current
     if unit
-      c_pos = $canvas.offset()
+      c_pos = canvas.$.offset()
       new_left = c_pos.left - unit.x + container.width()  / 2 - unit.w / 2
       new_top  = c_pos.top  - unit.y + container.height() / 2 - unit.h / 2
-      $canvas.offset({left: new_left, top: new_top } )
+      canvas.$.offset({left: new_left, top: new_top } )
 
-  upload: (url) ->
+  upload: (url, canvas) ->
     w = 5100
     h = 3300
     k = h/measure.h
     #window.sessionmap = {x:}
-    this.zoom(k)
-    canvas_data = canvas.toDataURL "image/png"
+    this.zoom k, canvas
+    canvas_data = canvas.el.toDataURL "image/png"
     base64 = canvas_data.replace /^data:image\/(png|jpg);base64,/, ""
-    $.post url, {data:base64}
+    $.post url, {data:base64, dir: 'sessions'}
     false
 
+class Canvas
+  this.$  = null # jQuery object
+  this.el = null # canvas html element
+  constructor: (canvas) ->
+    this.$  = canvas
+    this.el = canvas[0]
+
+  store: (bucket) ->
+    canvas_data = this.canvas.toDataURL "image/png"
+    base64 = canvas_data.replace /^data:image\/(png|jpg);base64,/, ""
+    $.post url, {dir: 'blabla', data:base64}
 
 $ ->
   # initial objects and settings
   container = $('div#canvas_container')
   $canvas = $('canvas#island')
   canvas = $canvas[0]
+
+  canvas_scheme = new Canvas( $('canvas#island') )
+
   btn_unit = $('button#draw_unit')
   btn_upload = $ '#upload_session_scheme'
 
   init = (data) ->
-    session = new Session data, $canvas, parseInt( $canvas.attr("unit") )
-    session.zoom 2 if session.current
+    session = new Session data, measure, parseInt( $canvas.attr("unit") )
+    session.zoom 2, canvas_scheme if session.current
     session.draw()
+
     if measure.h < measure.map.height()
       measure.h = canvas.height = measure.map.height()
       draw.session data
-      #console.log measure.h == 400
-      #measure.h = measure.map.height
-      #canvas.height = 400 # measure.map.height()
-      #draw.session data
+
     btn_upload.click ->
       $('#map_tab').addClass('hidden')
       session.upload(btn_upload.attr 'href')
 
-    $('#render_island').click( (e) ->
-      factory = new IslandFactory("c", {
-        cells:1000,
-        naturalize:10,
-        width: session.current.w + 200,
-        height: session.current.h + 200,
-        max_lexile: measure.max_lexiles,
-        hypsometry: data.hypsometry
-      })
+    $('#render_island').click (e) ->
+      factory = new IslandFactory "c",
+        cells       : 1000,
+        naturalize  : 10,
+        width       : session.current.w + 200,
+        height      : session.current.h + 200,
+        max_lexile  : measure.max_lexiles,
+        hypsometry  : data.hypsometry
 
       unit = session.current
       island = (text) ->
@@ -337,7 +350,7 @@ $ ->
         )
 
       island text for text in unit.texts
-    )
+
 
   if canvas
     canvas.width = measure.w
