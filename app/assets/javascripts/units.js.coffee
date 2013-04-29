@@ -47,19 +47,9 @@ class Square
   height    : -> this.dist(this.edges.top(), this.edges.bottom())
   dist      : (a, b) -> -a + b
 
-measure =
-  x           : 5
-  y           : 7
-  w           : 1170
-  h           : 400
-  unit_space  : 20
-  unit        : null
-  map         : new Square(this.w, this.h)
-  max_lexiles : 0
-
-draw =
-  c : null  # canvas context - shouf be defined before using object
-
+TRACE =
+  c       : null  # canvas context - shouf be defined before using object
+  measure : null
   # trace circle (x, y, radius, inner text)
   circle : (x, y, r, color) ->
     text = text || ''
@@ -104,29 +94,27 @@ draw =
 
   scale : ->
     c = this.c
+    m = this.measure
     line = (num) ->
-      y = Math.round( num * measure.h / measure.y )
+      y = Math.round( num * m.h / m.y )
       c.strokeStyle = "#ccc"
       c.outlineWidth = 1
       c.beginPath()
       c.moveTo(0,y)
-      c.lineTo(measure.w, y)
+      c.lineTo(m.w, y)
       c.closePath()
       c.stroke()
-    line num for num in [1..measure.h]
-
-  unit : (unit, x=0) ->
-    nil
-
+    line num for num in [1..m.h]
 
   clear : ->
-    this.c.clearRect( 0, 0, measure.w, measure.h )
+    this.c.clearRect( 0, 0, this.measure.w, this.measure.h )
 
   rnd_color : ->
     letters = '0123456789ABCDEF'.split ''
     color = '#'
     color += letters[Math.round(Math.random() * 15)] for i in [0..5]
     color
+
 json =
   url : null
   data : null
@@ -154,8 +142,8 @@ class Text
     this.measure = measure
 
   draw : ->
-    draw.circle(this.x, this.y, this.r, this.color)
-    draw.lexiles(this.x, this.y, this.data.lexiles)
+    TRACE.circle(this.x, this.y, this.r, this.color)
+    TRACE.lexiles(this.x, this.y, this.data.lexiles)
 
   set : (x,y,r,color) ->
     this.x = this.data.x = x
@@ -184,10 +172,10 @@ class Unit
     y_bot  = 0
     measure = this.measure
 
-    if this.measure.unit
-      color = if this.data.id == this.measure.unit then '#095' else '#ccc'
+    if measure.unit
+      color = if this.data.id == measure.unit then '#095' else '#ccc'
     else
-      color = COLORS.shift() || draw.rnd_color()
+      color = COLORS.shift() || TRACE.rnd_color()
 
     push = (text) ->
       r = text.data.lessons * measure.x / 2
@@ -203,13 +191,13 @@ class Unit
 
     x_right = x+prev_r
     x_mid = x_left + (x_right - x_left) / 2
-    draw.label(this.data.name, x_mid, y_bot + 10)
-    # draw.frame(x_left, y_top, x_right, y_bot)
+    TRACE.label(this.data.name, x_mid, y_bot + 10)
+    # TRACE.frame(x_left, y_top, x_right, y_bot)
     this.data.x = x_left
     this.data.y = y_top
     this.data.w = x_right - this.data.x
     this.data.h = y_bot - this.data.y
-    edge = this.measure.map.edges
+    edge = measure.map.edges
     edge.bottom(y_bot)  if y_bot   > edge.bottom()
     edge.right(x_right) if x_right > edge.right()
     edge.left(x_left)   if x_left  < edge.left()
@@ -253,29 +241,29 @@ class Session
     result
 
   set_units: ->
-    whitespace = measure.unit_space
+    whitespace = this.measure.unit_space
     whitespaces = (this.data.units.length - 1) * whitespace
     x = -whitespace # start x point in pixels
-    measure.x = (measure.w - whitespaces ) / this.data.lessons
+    this.measure.x = (this.measure.w - whitespaces ) / this.data.lessons
     x = unit.set x+whitespace for unit in this.units
 
 
   draw: ->
-    draw.scale()
+    TRACE.scale()
     unit.draw() for unit in this.units
 
   zoom: (p, canvas) ->
-    m = measure
+    m = this.measure
     p = 3
     m.w*=p
     m.h*=p
     m.x*=p
     m.unit_space*=p
     #m.y*=p
-    canvas.el.width = measure.w
-    canvas.el.height = measure.h
+    canvas.el.width = m.w
+    canvas.el.height = m.h
     this.set_units()
-    draw.clear()
+    TRACE.clear()
     this.draw()
     unit = this.current
     if unit
@@ -287,7 +275,7 @@ class Session
   upload: (url, canvas) ->
     w = 5100
     h = 3300
-    k = h/measure.h
+    k = h/this.measure.h
     #window.sessionmap = {x:}
     this.zoom k, canvas
     canvas_data = canvas.el.toDataURL "image/png"
@@ -296,22 +284,39 @@ class Session
     false
 
 class Canvas
-  this.$  = null # jQuery object
-  this.el = null # canvas html element
+  $       : null # jQuery object
+  el      : null # canvas html element
+  context : null
   constructor: (canvas) ->
     this.$  = canvas
     this.el = canvas[0]
+    this.context = canvas[0].getContext('2d')
+
 
   store: (bucket) ->
     canvas_data = this.canvas.toDataURL "image/png"
     base64 = canvas_data.replace /^data:image\/(png|jpg);base64,/, ""
     $.post url, {dir: 'blabla', data:base64}
 
+  clear: ->
+    this.el.width = this.el.width
+
 $ ->
+
+  measure =
+    x           : 5
+    y           : 7
+    w           : 1170
+    h           : 400
+    unit_space  : 20
+    unit        : null
+    map         : new Square(this.w, this.h)
+    max_lexiles : 0
+
+  TRACE.measure = measure
+
   # initial objects and settings
   container = $('div#canvas_container')
-  $canvas = $('canvas#island')
-  canvas = $canvas[0]
 
   canvas_scheme = new Canvas( $('canvas#island') )
 
@@ -319,13 +324,13 @@ $ ->
   btn_upload = $ '#upload_session_scheme'
 
   init = (data) ->
-    session = new Session data, measure, parseInt( $canvas.attr("unit") )
+    session = new Session data, measure, parseInt( canvas_scheme.$.attr("unit") )
     session.zoom 2, canvas_scheme if session.current
     session.draw()
 
     if measure.h < measure.map.height()
       measure.h = canvas.height = measure.map.height()
-      draw.session data
+      TRACE.session data
 
     btn_upload.click ->
       $('#map_tab').addClass('hidden')
@@ -352,13 +357,13 @@ $ ->
       island text for text in unit.texts
 
 
-  if canvas
-    canvas.width = measure.w
-    canvas.height = measure.h
-    $canvas.draggable({cursor: 'move'})
-    measure.unit = parseInt( $canvas.attr("unit") )
-    draw.c = canvas.getContext('2d')
-    json.url = $canvas.attr "src"
+  if canvas_scheme
+    canvas_scheme.el.width = measure.w
+    canvas_scheme.el.height = measure.h
+    canvas_scheme.$.draggable({cursor: 'move'})
+    measure.unit = parseInt( canvas_scheme.$.attr("unit") )
+    TRACE.c = canvas_scheme.el.getContext('2d')
+    json.url = canvas_scheme.$.attr "src"
     json.get ( (data) -> init (data) )
 
 
