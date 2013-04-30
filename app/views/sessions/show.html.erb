@@ -5,6 +5,7 @@
 
 <ul class="nav nav-tabs">
   <li><a href="#canvas_container" data-toggle="tab">Scheme</a></li>
+  <li><a href="#map_gatherer" data-toggle="tab">Render</a></li>
   <li id="map_tab" style="display: none"><a href="#rendered_map" data-toggle="tab" url="https://s3.amazonaws.com/elamap-islands/session_<%= @session.id %>.png">Map</a></li>
 </ul>
 
@@ -14,6 +15,12 @@
         <canvas id="island" src="<%= session_path(@session, :format => 'json') %>"></canvas>
       </div>
     </div>
+
+  <div class="tab-pane" id="map_gatherer">
+    <div class="canvas">
+      <canvas id="render_session" s3url="<%= session_upload_path(@session) %>" s3bucket="sessions" s3fname="<%= @session.id %>"></canvas>
+    </div>
+  </div>
 
     <div class="tab-pane" id="rendered_map">
         <div id="session-map" style="height: 400px"></div>

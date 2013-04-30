@@ -160,6 +160,7 @@ class Unit
   id      : 0
   constructor: (unit, measure) ->
     this.data = unit
+    this.id = unit.id
     this.measure = measure
     texts = []
     texts.push(new Text(text, this.measure)) for text in unit.texts
@@ -286,17 +287,24 @@ class Session
 class Canvas
   $       : null # jQuery object
   el      : null # canvas html element
+  s3      :
+    url   : null
+    bucket: null
+    fname : null
   context : null
   constructor: (canvas) ->
     this.$  = canvas
     this.el = canvas[0]
     this.context = canvas[0].getContext('2d')
+    this.s3.url = canvas.attr 's3url'
+    this.s3.bucket = canvas.attr 's3bucket'
+    this.s3.fname = canvas.attr 's3fname'
 
-
-  store: (bucket) ->
-    canvas_data = this.canvas.toDataURL "image/png"
+  store: () ->
+    canvas_data = this.el.toDataURL "image/png"
     base64 = canvas_data.replace /^data:image\/(png|jpg);base64,/, ""
-    $.post url, {dir: 'blabla', data:base64}
+    s3 = this.s3
+    $.post s3.url, {dir: s3.bucket, fname: s3.fname, data:base64}
 
   clear: ->
     this.el.width = this.el.width
@@ -318,7 +326,8 @@ $ ->
   # initial objects and settings
   container = $('div#canvas_container')
 
-  canvas_scheme = new Canvas( $('canvas#island') )
+  canvas_scheme = new Canvas( $('canvas#island') ) if $('canvas#island')[0]
+  canvas_render = new Canvas( $('canvas#c') )      if $('canvas#c')[0]
 
   btn_unit = $('button#draw_unit')
   btn_upload = $ '#upload_session_scheme'
@@ -355,6 +364,7 @@ $ ->
         )
 
       island text for text in unit.texts
+      canvas_render.store()
 
 
   if canvas_scheme

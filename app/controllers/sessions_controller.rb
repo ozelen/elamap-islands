@@ -115,7 +115,7 @@ class SessionsController < ApplicationController
     @session = Session.find(params[:session_id])
     @image = params[:data]
 
-    fname = @session.id.to_s+".png"
+    fname = params[:fname]+".png"
     dir = params[:dir]
 
     # create a connection
