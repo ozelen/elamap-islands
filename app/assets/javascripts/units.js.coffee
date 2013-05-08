@@ -329,17 +329,22 @@ class Canvas
 class MapGatherer
   canvas  : null
   session : null
+  images  : null
   constructor : (session, canvas) ->
     this.session = session
     this.canvas = canvas
+    this.images = []
     this.gather()
+    console.log this.images
 
   gather : ->
     mg = this
     place = (unit) ->
       img = new Image()
       img.src = "https://s3.amazonaws.com/elamap-islands/units/" + unit.id + ".png"
-      mg.canvas.img img, unit.x_left, unit.y_top
+      $(img).load  ->
+        mg.canvas.img img, unit.x_left, unit.y_top
+        mg.images.push img
 
     place unit for unit in this.session.units
 
@@ -358,8 +363,8 @@ $ ->
     max_lexiles : 0
 
   full_measure =
-    x           : 20
-    y           : 28
+    x           : 5
+    y           : 7
     w           : 5100
     h           : 3300
     unit_space  : 100
