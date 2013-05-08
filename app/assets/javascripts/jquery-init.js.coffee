@@ -13,6 +13,7 @@ $ ->
   .error ->
     false
 
+
   $('.nav-tabs #map_tab a').click (e) ->
     e.preventDefault()
     url = $(this).attr('url')

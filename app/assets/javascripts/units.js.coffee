@@ -41,14 +41,21 @@ class Square
     e.bottom   = (val=null) -> if val then v.bottom.left.y = val; v.bottom.right.y = val else v.bottom.left.y
     e.left     = (val=null) -> if val then v.top.left.x    = val; v.bottom.left.x  = val else v.bottom.left.x
 
-    this.edges.bottom(h)
-    this.edges.right(w)
+    e.bottom(h)
+    e.right(w)
 
   height    : -> this.dist(this.edges.top(), this.edges.bottom())
-  dist      : (a, b) -> -a + b
+  dist      : (a, b) -> -a + b # find difference (distance) between values on axis
+  set       : (x_left, y_top, x_right, y_bottom) ->
+    v = this.vertices
+    v.top.left.x     = v.bottom.left.x  = x_left
+    v.top.left.y     = v.top.right.y    = y_top
+    v.top.right.x    = v.bottom.right.x = x_right
+    v.bottom.left.y  = v.bottom.right.y = y_bottom
+
 
 TRACE =
-  c       : null  # canvas context - shouf be defined before using object
+  c       : null  # canvas context - must be defined before using object
   measure : null
   # trace circle (x, y, radius, inner text)
   circle : (x, y, r, color) ->
@@ -158,6 +165,7 @@ class Unit
   data    : []
   measure : {}
   id      : 0
+  frame   : null
   constructor: (unit, measure) ->
     this.data = unit
     this.id = unit.id
@@ -165,13 +173,16 @@ class Unit
     texts = []
     texts.push(new Text(text, this.measure)) for text in unit.texts
     this.texts = texts
+    this.frame = new Square(0,0)
 
   set: (x) ->
-    x_left = x
+    this.x_left  = x
+    this.y_top   = this.measure.h
+    this.y_bot   = 0
+    this.y_right = 0
     prev_r = 0
-    y_top  = this.measure.h
-    y_bot  = 0
     measure = this.measure
+    un = this
 
     if measure.unit
       color = if this.data.id == measure.unit then '#095' else '#ccc'
@@ -181,8 +192,8 @@ class Unit
     push = (text) ->
       r = text.data.lessons * measure.x / 2
       y = measure.h - text.data.genre * measure.h / measure.y
-      y_bot  = y + r if y_bot < y + r
-      y_top  = y - r if y_top > y - r
+      un.y_bot  = y + r if un.y_bot < y + r
+      un.y_top  = y - r if un.y_top > y - r
       x += r + prev_r
       prev_r = r
 
@@ -190,27 +201,28 @@ class Unit
 
     push text for text in this.texts
 
-    x_right = x+prev_r
-    x_mid = x_left + (x_right - x_left) / 2
-    TRACE.label(this.data.name, x_mid, y_bot + 10)
+    this.x_right = x+prev_r
+    x_mid = this.x_left + (this.x_right - this.x_left) / 2
+    TRACE.label(this.data.name, x_mid, this.y_bot + 10)
     # TRACE.frame(x_left, y_top, x_right, y_bot)
-    this.data.x = x_left
-    this.data.y = y_top
-    this.data.w = x_right - this.data.x
-    this.data.h = y_bot - this.data.y
+    this.data.x = this.x_left
+    this.data.y = this.y_top
+    this.data.w = this.x_right - this.data.x
+    this.data.h = this.y_bot - this.data.y
     edge = measure.map.edges
-    edge.bottom(y_bot)  if y_bot   > edge.bottom()
-    edge.right(x_right) if x_right > edge.right()
-    edge.left(x_left)   if x_left  < edge.left()
-    edge.top(y_top)     if y_top   < edge.top()
-    x_right # return end point of island
+    edge.bottom(this.y_bot)  if this.y_bot   > edge.bottom()
+    edge.right(this.x_right) if this.x_right > edge.right()
+    edge.left(this.x_left)   if this.x_left  < edge.left()
+    edge.top(this.y_top)     if this.y_top   < edge.top()
+    this.frame.set this.x_left, this.y_top, this.x_right, this.y_bot
+    this.x_right # return end point of island
 
   draw: ->
     text.draw() for text in this.texts
 
 
 class Session
-  units   : []
+  units   : null
   measure : {}
   data    : {}
   container = null
@@ -222,6 +234,7 @@ class Session
     this.data = session
     this.session = session
     this.measure = measure
+    this.units = []
     container = $('div#canvas_container')
     this.create_unit(unit) for unit in this.data.units
     this.current = this.find(selected_unit_id) if selected_unit_id
@@ -300,6 +313,9 @@ class Canvas
     this.s3.bucket = canvas.attr 's3bucket'
     this.s3.fname = canvas.attr 's3fname'
 
+  img : (image, x, y) ->
+    this.context.drawImage(image, x, y)
+
   store: () ->
     canvas_data = this.el.toDataURL "image/png"
     base64 = canvas_data.replace /^data:image\/(png|jpg);base64,/, ""
@@ -309,9 +325,29 @@ class Canvas
   clear: ->
     this.el.width = this.el.width
 
+
+class MapGatherer
+  canvas  : null
+  session : null
+  constructor : (session, canvas) ->
+    this.session = session
+    this.canvas = canvas
+    this.gather()
+
+  gather : ->
+    mg = this
+    place = (unit) ->
+      img = new Image()
+      img.src = "https://s3.amazonaws.com/elamap-islands/units/" + unit.id + ".png"
+      mg.canvas.img img, unit.x_left, unit.y_top
+
+    place unit for unit in this.session.units
+
+
+
 $ ->
 
-  measure =
+  scheme_measure =
     x           : 5
     y           : 7
     w           : 1170
@@ -321,40 +357,62 @@ $ ->
     map         : new Square(this.w, this.h)
     max_lexiles : 0
 
-  TRACE.measure = measure
+  full_measure =
+    x           : 20
+    y           : 28
+    w           : 5100
+    h           : 3300
+    unit_space  : 100
+    unit        : null
+    map         : new Square(this.w, this.h)
+    max_lexiles : 0
+
+  TRACE.measure = scheme_measure
 
   # initial objects and settings
   container = $('div#canvas_container')
 
   canvas_scheme = new Canvas( $('canvas#island') ) if $('canvas#island')[0]
   canvas_render = new Canvas( $('canvas#c') )      if $('canvas#c')[0]
+  canvas_gather = new Canvas( $('canvas#gather') ) if $('canvas#gather')[0]
+  canvas_gather.el.width = full_measure.w
+  canvas_gather.el.height = full_measure.h
+
+  current_unit  = parseInt( canvas_scheme.$.attr "unit" )
 
   btn_unit = $('button#draw_unit')
   btn_upload = $ '#upload_session_scheme'
 
   init = (data) ->
-    session = new Session data, measure, parseInt( canvas_scheme.$.attr("unit") )
-    session.zoom 2, canvas_scheme if session.current
-    session.draw()
+    scheme_size_session = new Session data, scheme_measure, current_unit
+    scheme_size_session.zoom 2, canvas_scheme if scheme_size_session.current
+    scheme_size_session.draw()
 
-    if measure.h < measure.map.height()
-      measure.h = canvas.height = measure.map.height()
-      TRACE.session data
+    full_size_session = new Session data, full_measure, current_unit
+
+    if scheme_measure.h < scheme_measure.map.height()
+      scheme_measure.h = canvas_scheme.height = scheme_measure.map.height()
+      #TRACE.session data
+
+
 
     btn_upload.click ->
       $('#map_tab').addClass('hidden')
-      session.upload(btn_upload.attr 'href')
+      scheme_size_session.upload(btn_upload.attr 'href')
+
+    $('.nav-tabs #map_gatherer_tab a').click (e) ->
+      mapGatherer = new MapGatherer(full_size_session, canvas_gather)
 
     $('#render_island').click (e) ->
       factory = new IslandFactory "c",
         cells       : 1000,
         naturalize  : 10,
-        width       : session.current.w + 200,
-        height      : session.current.h + 200,
-        max_lexile  : measure.max_lexiles,
+        width       : full_size_session.current.w + 200,
+        height      : full_size_session.current.h + 200,
+        max_lexile  : full_measure.max_lexiles,
         hypsometry  : data.hypsometry
 
-      unit = session.current
+      unit = full_size_session.current
       island = (text) ->
         factory.add(
           x: text.x - unit.x + 100,
@@ -368,13 +426,15 @@ $ ->
 
 
   if canvas_scheme
-    canvas_scheme.el.width = measure.w
-    canvas_scheme.el.height = measure.h
+    canvas_scheme.el.width = scheme_measure.w
+    canvas_scheme.el.height = scheme_measure.h
     canvas_scheme.$.draggable({cursor: 'move'})
-    measure.unit = parseInt( canvas_scheme.$.attr("unit") )
+    scheme_measure.unit = parseInt( canvas_scheme.$.attr("unit") )
     TRACE.c = canvas_scheme.el.getContext('2d')
     json.url = canvas_scheme.$.attr "src"
     json.get ( (data) -> init (data) )
+
+
 
 
 
