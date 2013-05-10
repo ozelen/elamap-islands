@@ -20,7 +20,7 @@ $ ->
 
     $('<img src="' + url + '">')
     .load  ->
-      initMap('session-map', url, this.width, this.height)
+      initMap('scheme-map', url, this.width, this.height)
     .error ->
       $('session-map').html('Image not found')
       $(this).remove();

@@ -122,6 +122,12 @@ TRACE =
     color += letters[Math.round(Math.random() * 15)] for i in [0..5]
     color
 
+  log : (msg) ->
+    log = $('textarea#log')
+    d = new Date()
+    time = d.getHours() + ':' + ':' + currentdate.getMinutes() + ':' + currentdate.getSeconds()
+    log.val(log.val() + '[' + time + '] ' + msg)
+
 json =
   url : null
   data : null
@@ -225,12 +231,14 @@ class Session
   units   : null
   measure : {}
   data    : {}
+  id      : null
   container = null
   current: null
   selected_unit: null
   selected_unit_id : null
 
   constructor: (session, measure, selected_unit_id = null) ->
+    this.id = session.id
     this.data = session
     this.session = session
     this.measure = measure
@@ -339,12 +347,31 @@ class MapGatherer
 
   gather : ->
     mg = this
+    handledImages = 0
     place = (unit) ->
       img = new Image()
-      img.src = "https://s3.amazonaws.com/elamap-islands/units/" + unit.id + ".png"
-      $(img).load  ->
-        mg.canvas.img img, unit.x_left, unit.y_top
-        mg.images.push img
+      s3url = 'https://s3.amazonaws.com/elamap-islands'
+      final_url = s3url + '/maps/' + mg.session.id + '.png'
+      $(img).attr('crossOrigin','use-credentials')
+      img.src = s3url + "/units/" + unit.id + ".png"
+      storeIfDone = ->
+        if ++handledImages==mg.session.units.length
+          mg.canvas.store()
+          $('<img src="' + final_url + '">')
+            .load   ->
+              console.log final_url
+              initMap('session-map', final_url, this.width, this.height)
+            .error  -> alert 'Could not load image ' + final_url
+
+      $(img)
+        .load  ->
+          mg.canvas.img img, unit.x_left, unit.y_top
+          mg.images.push img
+          console.log 'Unit ' + unit.id + ' ok'
+          storeIfDone()
+        .error ->
+          console.log 'Unit ' + unit.id + ' image not found'
+          storeIfDone()
 
     place unit for unit in this.session.units
 
@@ -379,9 +406,11 @@ $ ->
 
   canvas_scheme = new Canvas( $('canvas#island') ) if $('canvas#island')[0]
   canvas_render = new Canvas( $('canvas#c') )      if $('canvas#c')[0]
-  canvas_gather = new Canvas( $('canvas#gather') ) if $('canvas#gather')[0]
-  canvas_gather.el.width = full_measure.w
-  canvas_gather.el.height = full_measure.h
+
+  if $('canvas#gather')[0]
+    canvas_gather = new Canvas( $('canvas#gather') )
+    canvas_gather.el.width = full_measure.w
+    canvas_gather.el.height = full_measure.h
 
   current_unit  = parseInt( canvas_scheme.$.attr "unit" )
 
