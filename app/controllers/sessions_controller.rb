@@ -127,7 +127,7 @@ class SessionsController < ApplicationController
 
     # First, a place to contain the glorious details
     directory = connection.directories.create(
-        :key    => "elamap-islands/" + dir , # globally unique name
+        :key    => "elamap-islands-" + dir , # globally unique name
         :public => true
     )
 

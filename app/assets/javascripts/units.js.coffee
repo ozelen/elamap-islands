@@ -322,9 +322,11 @@ class Canvas
     this.s3.fname = canvas.attr 's3fname'
 
   img : (image, x, y) ->
+    console.log 'draw image', image, x, y
     this.context.drawImage(image, x, y)
 
   store: () ->
+    console.log 'Store map'
     canvas_data = this.el.toDataURL "image/png"
     base64 = canvas_data.replace /^data:image\/(png|jpg);base64,/, ""
     s3 = this.s3
@@ -351,9 +353,9 @@ class MapGatherer
     place = (unit) ->
       img = new Image()
       s3url = 'https://s3.amazonaws.com/elamap-islands'
-      final_url = s3url + '/maps/' + mg.session.id + '.png'
+      final_url = s3url + '-maps/' + mg.session.id + '.png'
       $(img).attr('crossOrigin','use-credentials')
-      img.src = s3url + "/units/" + unit.id + ".png"
+      img.src = s3url + "-units/" + unit.id + ".png"
       storeIfDone = ->
         if ++handledImages==mg.session.units.length
           mg.canvas.store()
