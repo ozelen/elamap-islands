@@ -87,7 +87,11 @@ icons = {
 }
 
 initMap = (id, image_url, width, height, points = null) ->
-  map = L.map(id, {maxZoom:13, crs: L.CRS.Simple}).setView([0,0], 13)
+  timestamp = new Date().getTime()
+  divid = 'map' + timestamp
+  image_url += '?' + timestamp
+  $('#' + id).html('<div id="' + divid + '" class="session-map"></div>')
+  map = new L.Map(divid, {maxZoom:13, crs: L.CRS.Simple}).setView([0,0], 13)
   s1 = map.unproject(new L.Point(0, 0))
   s2 = map.unproject(new L.Point(width, height))
 
