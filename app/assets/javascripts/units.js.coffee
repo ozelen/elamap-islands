@@ -125,8 +125,9 @@ TRACE =
   log : (msg) ->
     log = $('textarea#log')
     d = new Date()
-    time = d.getHours() + ':' + ':' + currentdate.getMinutes() + ':' + currentdate.getSeconds()
+    time = d.getHours() + ':' + ':' + d.getMinutes() + ':' + d.getSeconds()
     log.val(log.val() + '[' + time + '] ' + msg)
+    console.log msg
 
 json =
   url : null
@@ -322,7 +323,7 @@ class Canvas
     this.s3.fname = canvas.attr 's3fname'
 
   img : (image, x, y) ->
-    console.log 'draw image', image, x, y
+    console.log 'Place image on canvas: ', image, x, y
     this.context.drawImage(image, x, y)
 
   store: () ->
@@ -340,12 +341,14 @@ class MapGatherer
   canvas  : null
   session : null
   images  : null
+  width   : null
   constructor : (session, canvas) ->
     this.session = session
     this.canvas = canvas
     this.images = []
     this.gather()
     console.log this.images
+    this.canvas.el.width += 300 # magic number, add additional pixels to canvas due to temporary circles enlargment
 
   gather : ->
     mg = this
@@ -353,7 +356,7 @@ class MapGatherer
     place = (unit) ->
       img = new Image()
       s3url = 'https://s3.amazonaws.com/elamap-islands'
-      final_url = s3url + '-maps/' + mg.session.id + '.png'
+      final_url = s3url + '-maps/' + mg.session.id + '.png?uid=' + (+new Date())
       $(img).attr('crossOrigin','use-credentials')
       img.src = s3url + "-units/" + unit.id + ".png"
       storeIfDone = ->
@@ -361,18 +364,21 @@ class MapGatherer
           mg.canvas.store()
           $('<img src="' + final_url + '">')
             .load   ->
-              console.log final_url
-              initMap('session-map', final_url, this.width, this.height)
-            .error  -> alert 'Could not load image ' + final_url
+              TRACE.log 'loading ' + final_url
+              #initMap('session-map', final_url, this.width, this.height)
+            .error  -> TRACE.log 'Could not load image ' + final_url
+            .ready  -> TRACE.log 'Done'
+
+
 
       $(img)
         .load  ->
           mg.canvas.img img, unit.x_left, unit.y_top
           mg.images.push img
-          console.log 'Unit ' + unit.id + ' ok'
+          TRACE.log 'Unit ' + unit.id + ' ok ' + img.width
           storeIfDone()
         .error ->
-          console.log 'Unit ' + unit.id + ' image not found'
+          TRACE.log 'Unit ' + unit.id + ' image not found'
           storeIfDone()
 
     place unit for unit in this.session.units
@@ -395,7 +401,7 @@ $ ->
     x           : 5
     y           : 7
     w           : 5100
-    h           : 3300
+    h           : 4000
     unit_space  : 100
     unit        : null
     map         : new Square(this.w, this.h)
@@ -436,7 +442,7 @@ $ ->
       $('#map_tab').addClass('hidden')
       scheme_size_session.upload(btn_upload.attr 'href')
 
-    $('.nav-tabs #map_gatherer_tab a').click (e) ->
+    $('#render_map').click (e) ->
       mapGatherer = new MapGatherer(full_size_session, canvas_gather)
 
     $('#render_island').click (e) ->
