@@ -326,12 +326,12 @@ class Canvas
     console.log 'Place image on canvas: ', image, x, y
     this.context.drawImage(image, x, y)
 
-  store: () ->
+  store: ( callback = -> ) ->
     console.log 'Store map'
     canvas_data = this.el.toDataURL "image/png"
     base64 = canvas_data.replace /^data:image\/(png|jpg);base64,/, ""
     s3 = this.s3
-    $.post s3.url, {dir: s3.bucket, fname: s3.fname, data:base64}
+    $.post s3.url, {dir: s3.bucket, fname: s3.fname, data:base64}, callback
 
   clear: ->
     this.el.width = this.el.width
@@ -342,6 +342,9 @@ class MapGatherer
   session : null
   images  : null
   width   : null
+  units   :
+    present : []
+    absent  : []
   constructor : (session, canvas) ->
     this.session = session
     this.canvas = canvas
@@ -353,6 +356,7 @@ class MapGatherer
   gather : ->
     mg = this
     handledImages = 0
+
     place = (unit) ->
       img = new Image()
       s3url = 'https://s3.amazonaws.com/elamap-islands'
@@ -360,15 +364,23 @@ class MapGatherer
       $(img).attr('crossOrigin','use-credentials')
       img.src = s3url + "-units/" + unit.id + ".png"
       storeIfDone = ->
-        if ++handledImages==mg.session.units.length
-          mg.canvas.store()
-          $('<img src="' + final_url + '">')
-            .load   ->
-              TRACE.log 'loading ' + final_url
-              #initMap('session-map', final_url, this.width, this.height)
-            .error  -> TRACE.log 'Could not load image ' + final_url
-            .ready  -> TRACE.log 'Done'
+        if ++handledImages == mg.session.units.length
 
+          unit_list = (units) ->
+            res = (unit.data.letter + ' - ' +unit.data.name for unit in units)
+            res.join("\n")
+
+          found     = ''
+          not_found = ''
+          found     = unit_list mg.units.present
+          not_found = unit_list mg.units.absent
+
+          mg.canvas.store ->
+            TRACE.log 'Loaded ' + final_url
+            alert "Done!" +
+                  "\nFound images:\n" + (found || 'none') +
+                  (("\nNot found:\n" + not_found if not_found) || '')
+            #initMap('session-map', final_url, this.width, this.height)
 
 
       $(img)
@@ -376,9 +388,11 @@ class MapGatherer
           mg.canvas.img img, unit.x_left, unit.y_top
           mg.images.push img
           TRACE.log 'Unit ' + unit.id + ' ok ' + img.width
+          mg.units.present.push unit
           storeIfDone()
         .error ->
           TRACE.log 'Unit ' + unit.id + ' image not found'
+          mg.units.absent.push unit
           storeIfDone()
 
     place unit for unit in this.session.units
@@ -420,12 +434,13 @@ $ ->
     canvas_gather.el.width = full_measure.w
     canvas_gather.el.height = full_measure.h
 
-  current_unit  = parseInt( canvas_scheme.$.attr "unit" )
+
 
   btn_unit = $('button#draw_unit')
   btn_upload = $ '#upload_session_scheme'
 
   init = (data) ->
+    current_unit  = parseInt( canvas_scheme.$.attr "unit" )
     scheme_size_session = new Session data, scheme_measure, current_unit
     scheme_size_session.zoom 2, canvas_scheme if scheme_size_session.current
     scheme_size_session.draw()
