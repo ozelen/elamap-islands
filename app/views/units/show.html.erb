@@ -6,6 +6,7 @@
 <ul class="nav nav-tabs">
   <li><a href="#canvas_container" data-toggle="tab">Scheme</a></li>
   <li><a href="#rendered_island" data-toggle="tab" id="island_tab">Island</a></li>
+  <li><a href="#trace_voronoi_pane" data-toggle="tab" id="island_tab">Trace Voronoi</a></li>
 </ul>
 
 <div class="tab-content">
@@ -23,6 +24,17 @@
 
       <canvas id="c" s3url="<%= session_upload_path(@session) %>" s3bucket="units" s3fname="<%= @unit.id %>"></canvas>
     </div>
+
+      <div id="trace_voronoi_pane" class="tab-pane">
+        <div class="form-actions">
+          <button id="trace_voronoi_next" class="btn btn-success">Next step</button>
+          <div class="status" style="display: inline-block">Click for next step</div>
+        </div>
+        <div>
+          <canvas id="trace_voronoi_canvas"></canvas>
+        </div>
+      </div>
+
 </div>
 
     <div class="form-actions">

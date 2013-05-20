@@ -7,11 +7,12 @@ $ ->
 
   map_image = $('.nav-tabs #map_tab a').attr('url')
 
-  $('<img src="' + map_image + '">')
-  .load ->
-    $('#map_tab').show()
-  .error ->
-    false
+  if map_image
+    $('<img src="' + map_image + '">')
+    .load ->
+      $('#map_tab').show()
+    .error ->
+      false
 
 
   $('.nav-tabs #map_tab a').click (e) ->

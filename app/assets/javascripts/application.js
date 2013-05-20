@@ -13,8 +13,8 @@
 //= require jquery
 //= require jquery_ujs
 //= require twitter/bootstrap
+//= require_tree ./ELA
 //= require_tree .
-
 //=require leaflet
 
 //= require jquery.ui.core
