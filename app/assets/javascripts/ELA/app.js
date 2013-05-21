@@ -1,1 +1,3 @@
-var ELA = {}
+var ELA = {
+    DATA: {}
+}

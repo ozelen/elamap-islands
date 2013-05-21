@@ -440,12 +440,14 @@ $ ->
   btn_upload = $ '#upload_session_scheme'
 
   init = (data) ->
+    ELA.SessionData = data
     current_unit  = parseInt( canvas_scheme.$.attr "unit" )
     scheme_size_session = new Session data, scheme_measure, current_unit
     scheme_size_session.zoom 2, canvas_scheme if scheme_size_session.current
     scheme_size_session.draw()
 
     full_size_session = new Session data, full_measure, current_unit
+    ELA.DATA.session = full_size_session
 
     if scheme_measure.h < scheme_measure.map.height()
       scheme_measure.h = canvas_scheme.height = scheme_measure.map.height()
