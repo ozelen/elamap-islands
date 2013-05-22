@@ -4,22 +4,35 @@ class ELA.Island
   width: null
   height: null
   peaks: []
-  constructor: (bounds) ->
+  SPREADS : []
+  constructor: (bounds, layers) ->
     this.width = bounds[0]
     this.height = bounds[1]
-    this.addLayers [50,100,500]
+    this.addLayers layers
 
   addLayers: (levels) ->
-    this.layers.push new Layer(this.width, this.height, l) for l in levels
+    this.add_layer new Layer(this.width, this.height, l) for l in levels
 
-  select_cells : (layer = null, size = 100) ->
-    if layer
-      layer.select_cells points, size
-      points = layer.get_selected_vertices()
-    else
-      points = this.peaks
-    this.select_cells points, size/3
+  add_layer: (layer) ->
+    this.layers.push layer
+    layer.prev = this.layers[this.layers.length-2]
 
+  make : (spread, layer_id = 0) ->
+    this.SPREADS.push spread
+    layer = this.layers[layer_id]
+    cells = layer.select_cells spread
+    new_spread = new Spread(layer.get_selected_vertices(cells), spread.radius / (this.layers.length * 1.4))
+    #console.log 'Spread: - ', new_spread, spread.radius, this.layers.length, spread.radius / this.layers.length
+    if this.layers[layer_id+1]
+      this.make new_spread, layer_id+1
+    else cells
+
+class Spread
+  points : []
+  radius : null
+  constructor : (points, radius) ->
+    this.points = points
+    this.radius = radius
 
 class Layer
   points: []
@@ -41,6 +54,18 @@ class Layer
     this.cells = []
     this.selected = []
     this.compute()
+    this.improve_points()
+
+  # Lloyd Relaxation: move each point to the centroid of the
+  # generated Voronoi polygon, then generate Voronoi again
+  improve_points : () ->
+    layer = this
+
+    improve = () ->
+      layer.compute()
+      layer.points[i] = layer.cells[i].centroid for cell, i in layer.cells
+
+    improve() for i in [1..3]
 
   compute: ->
     this.voronoi.Compute(this.points, this.width, this.height);
@@ -50,18 +75,22 @@ class Layer
   seed_points: ->
     new Point(Math.random() * this.width, Math.random() * this.height) for i in [1..this.number]
 
-  select_cells : (points, size) ->
+  select_cells : (spread) ->
+    console.log spread
     layer = this
-    distance_to = ->
+    selected_cells = []
 
     select_by_point = (point) ->
-      (layer.selected.push cell if cell.centroid.distanceTo(point) <= size) for cell in layer.cells
+      for cell in layer.cells
+        selected_cells.push cell if cell.centroid.distanceTo(point) <= spread.radius
 
-    select_by_point point for point in points
+    select_by_point point for point in spread.points
 
-  get_selected_vertices : () ->
+    selected_cells
+
+  get_selected_vertices : (cells) ->
     res = []
-    res = res.concat cell.vertices for cell in this.selected
+    res = res.concat cell.vertices for cell in cells
     res
 
 
@@ -132,32 +161,64 @@ class Trace
     c.fillText(text, x, y)
     this
 
+  spread : (spread) ->
+    c = this.canvas.context
+    spread_point = (p) ->
+      c.lineWidth = 0.5;
+      c.strokeStyle = "#000";
+      c.beginPath()
+      c.arc(p.x, p.y, spread.radius, 0, Math.PI*2, true)
+      c.closePath()
+      c.stroke()
+
+    spread_point point for point in spread.points
+
+    this
+
 $ ->
   size    = [500, 500]
-  igen    = new ELA.Island(size)
+  igen    = new ELA.Island(size, [50,20,1000])
   canvas  = new ELA.Canvas($('#trace_voronoi_canvas'), size)
+
   layer1  = igen.layers[0]
   layer2  = igen.layers[1]
-  trace   = new Trace(layer1, canvas)
-  layer1.select_cells [new Point(250, 250)], 100
-  sel = layer1.selected
-  sel_vertices = layer1.get_selected_vertices()
-  layer2.select_cells sel_vertices, 50
-  l2_selected_cells = layer2.selected
+  last_layer  = igen.layers[igen.layers.length-1]
+
+  trace1   = new Trace(layer1, canvas)
+  trace2   = new Trace(layer2, canvas)
+  trace    = new Trace(last_layer, canvas)
+
+  all_cells = []
+#  layer1.select_cells [new Point(250, 250)], 100
+#  sel = layer1.selected
+#  sel_vertices = layer1.get_selected_vertices()
+#  layer2.select_cells sel_vertices, 50
+#  l2_selected_cells = layer2.selected
 
   steps = [
     -> trace.edges()
     -> trace.cells sel
     -> trace.points sel_vertices
     ->
-      trace.set_layer(layer2).edges().cells(l2_selected_cells)
+      trace.set_layer(last_layer).edges().cells(l2_selected_cells)
   ]
 
   i=0
   $('#trace_voronoi_next').click ->
-    console.log ELA.DATA.session
-    steps[i++]() if steps[i]
+    spread = new Spread [new Point 250, 250], 100
+    #console.log ELA.DATA.session
+    #steps[i++]() if steps[i]
+    isl = igen.make spread
+    iss = last_layer.select_cells spread
+#    trace.cells isl
+#    trace.cells iss
 
+    trace.cells last_layer.select_cells(s)  for s in igen.SPREADS
+
+    trace.spread spread
+    trace.edges()
+    trace1.edges()
+    #trace2.edges()
     #trace.points()
     #trace.cell(igen.layers[0].cells[10])
     #console.log igen.layers[0]
