@@ -132,7 +132,9 @@ TRACE =
 json =
   url : null
   data : null
-  get : (callback) ->
+  callbacks : []
+  get : (cb) ->
+    self = this
     jQuery.ajax this.url,
               type="post",
               dataType: 'json'
@@ -140,9 +142,15 @@ json =
       alert "AJAX Error: #{textStatus}"
     .done (data, textStatus, jqXHR) ->
       json.data = data
-      callback(data)
+      cb(data)
+      callback(data) for callback in self.callbacks
     json.data
 
+  onLoad : (func) ->
+    this.callbacks.push func
+    func() if this.data
+
+ELA.DATA.json = json
 
 class Text
   data    : {}
