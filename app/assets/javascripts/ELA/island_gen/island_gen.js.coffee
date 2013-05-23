@@ -1,11 +1,11 @@
 
 class ELA.Island
-  layers: []
   width: null
   height: null
   peaks: []
-  SPREADS : []
   constructor: (bounds, layers) ->
+    this.SPREADS = []
+    this.layers = []
     this.width = bounds[0]
     this.height = bounds[1]
     this.addLayers layers
@@ -177,6 +177,9 @@ class Trace
 
     this
 
+  spreads : (spreads) ->
+    this.spread spread for spread in spreads
+
 $ ->
 
   init = (session) ->
@@ -185,6 +188,8 @@ $ ->
 
     size    = [elaUnit.w+300, elaUnit.h+300]
     igen    = new ELA.Island(size, [100,200,1500])
+    igen.SPREADS = []
+    console.log igen.layers.length
     canvas  = new ELA.Canvas($('#trace_voronoi_canvas'), size)
 
     layer1  = igen.layers[0]
@@ -197,8 +202,10 @@ $ ->
 
     all_cells = []
 
+    cond_spreads = []
     add_area = (text) ->
       spread = new Spread [new Point text.x - elaUnit.x + 150, text.y - elaUnit.y + 150], text.r
+      cond_spreads.push spread
       isl = igen.make spread
       iss = last_layer.select_cells spread
       trace.cells last_layer.select_cells(s)  for s in igen.SPREADS
@@ -209,8 +216,11 @@ $ ->
       trace.edges()
       trace1.edges()
 
+    $('#trace_scheme').click ->
+      trace.spreads cond_spreads
+
     $('#trace_spread').click ->
-      trace.spread s for s in igen.SPREADS
+      trace.spreads igen.SPREADS
 
     #trace2.edges()
     #trace.points()
