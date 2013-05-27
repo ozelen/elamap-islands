@@ -4,9 +4,9 @@
 </div>
 
 <ul class="nav nav-tabs">
+  <li><a href="#trace_voronoi_pane" data-toggle="tab" id="island_tab">Voronoi factory</a></li>
   <li><a href="#canvas_container" data-toggle="tab">Scheme</a></li>
   <li><a href="#rendered_island" data-toggle="tab" id="island_tab">Island</a></li>
-  <li><a href="#trace_voronoi_pane" data-toggle="tab" id="island_tab">Voronoi factory</a></li>
 </ul>
 
 <div class="tab-content">
@@ -27,6 +27,9 @@
 
       <div id="trace_voronoi_pane" class="tab-pane">
         <div class="form-actions">
+
+          <button id="trace_noisy_line" class="btn btn-primary">Trace Noisy Line</button>
+
           <button id="trace_voronoi_next" class="btn btn-success">Render out</button>
           <div id="trace_voronoi_controls" style="display: none; float: right">
               <button id="trace_cells" class="btn btn-primary">Trace Voronoi cells</button>

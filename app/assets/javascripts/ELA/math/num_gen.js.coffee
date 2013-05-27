@@ -37,7 +37,7 @@ class ELA.math.NumGen
   next_int_range : (min, max) ->
     min -= 0.4999
     max += 0.4999
-    Math.round(min + ((max - min) * nextDouble()))
+    Math.round(min + ((max - min) * this.next_double()))
 
   # provides the next pseudorandom number
   # as an unsigned integer (31 bits) betweeen
@@ -45,12 +45,12 @@ class ELA.math.NumGen
   next_int_range : (min, max) ->
     min -= 0.4999;
     max += 0.4999;
-    Math.round(min + ((max - min) * this.nextDouble()));
+    Math.round(min + ((max - min) * this.next_double()));
 
   # provides the next pseudorandom number
   # as a float between a given range.
   next_double_range : (min, max) ->
-    min + ((max - min) * this.nextDouble());
+    min + ((max - min) * this.next_double());
 
   # generator:
   # new-value = (old-value * 16807) mod (2^31 - 1)

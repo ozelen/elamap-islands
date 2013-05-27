@@ -222,6 +222,7 @@ $ ->
     $('#trace_spread').click ->
       trace.spreads igen.SPREADS
 
+
     #trace2.edges()
     #trace.points()
     #trace.cell(igen.layers[0].cells[10])

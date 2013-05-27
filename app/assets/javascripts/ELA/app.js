@@ -1,3 +1,5 @@
 var ELA = {
-    DATA: {}
+    DATA: {},
+    graph: {},
+    math: {}
 }

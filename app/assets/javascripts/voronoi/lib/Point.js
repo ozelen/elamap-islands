@@ -30,7 +30,11 @@ Point.prototype.interpolate = function(pt1, pt2, f){
     return new Point(x, y);
 }
 
-Point.prototype.subtract = new function(v){
+Point.prototype.subtract = function(v){
     if(v)
     return new Point(this.x - v.x, this.y - v.y);
+}
+
+Point.prototype.length = function(){
+    return this.distanceTo(new Point(0,0))
 }
