@@ -53,19 +53,16 @@ class Layer
     this.cells = []
     this.selected = []
     this.compute()
-    this.improve_points()
+    this.improve_points() if this.number >= 200
 
   # Lloyd Relaxation: move each point to the centroid of the
   # generated Voronoi polygon, then generate Voronoi again
   improve_points : () ->
     layer = this
 
-    improve = () ->
+    for i in [1..3]
+      layer.points[j] = layer.cells[j].centroid for cell, j in layer.cells
       layer.compute()
-      layer.points[i] = layer.cells[i].centroid for cell, i in layer.cells
-
-    if this.number >= 200
-      improve() for i in [1..3]
 
   compute: ->
     this.voronoi.Compute(this.points, this.width, this.height);
@@ -82,11 +79,18 @@ class Layer
     not_overflow = (cell) ->
       layer.width-50 >= cell.centroid.x >= 50 || layer.height-50 >= cell.centroid.y >= 50
 
-    select_by_point = (point) ->
+    for point in spread.points
       for cell in layer.cells
         selected_cells.push cell if cell.centroid.distanceTo(point) <= spread.radius and not_overflow cell
 
-    select_by_point point for point in spread.points
+
+    for edge in this.edges
+      for cell, i in this.cells
+        if this.points[i] == edge.left or this.points[i] == edge.right
+          unique = true
+          for existent in cell.edges
+            unique = false if existent == edge
+          cell.edges.push edge if unique
 
     selected_cells
 
@@ -155,6 +159,10 @@ class Trace
     c.fill()
     this
 
+  tc: (i) ->
+    this.cell(this.layer.cells[i], 'black')
+    this.point(this.layer.points[i], 'red', i+'')
+
   text : (text, x, y, color) ->
     c = this.canvas.context
     c.textBaseline="middle"
@@ -187,9 +195,12 @@ $ ->
     elaUnit = elaSession.current
 
     size    = [elaUnit.w+300, elaUnit.h+300]
-    igen    = new ELA.Island(size, [100,200,1500])
+    igen    = new ELA.Island(size, [100,200,1000])
+    ELA.DATA.VoronoiStack = igen
+
+    #console.log igen.layers[0].points[0]
+
     igen.SPREADS = []
-    console.log igen.layers.length
     canvas  = new ELA.Canvas($('#trace_voronoi_canvas'), size)
 
     layer1  = igen.layers[0]
@@ -199,8 +210,10 @@ $ ->
     trace1   = new Trace(layer1, canvas)
     trace2   = new Trace(layer2, canvas)
     trace    = new Trace(last_layer, canvas)
+    ELA.trace = trace
 
     all_cells = []
+
 
     cond_spreads = []
     add_area = (text) ->
@@ -211,6 +224,10 @@ $ ->
       trace.cells last_layer.select_cells(s)  for s in igen.SPREADS
 
     add_area text for text in elaUnit.texts
+
+    for cell in igen.layers[2].cells
+      for edge in cell.edges
+        trace.edge edge
 
     $('#trace_cells').click ->
       trace.edges()
