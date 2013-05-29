@@ -238,7 +238,6 @@ $ ->
 
     for cell in igen.layers[2].cells
       if cell.surface == 'land'
-        console.log cell
         for edge in cell.edges
           #trace.edge edge
 
