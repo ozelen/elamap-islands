@@ -63,7 +63,7 @@ TRACE =
     c = this.c
     c.fillStyle = color
     c.lineWidth = 2
-    c.strokeStyle = "#fff"
+    c.strokeStyle = "#000"
     c.beginPath()
     c.arc(x, y, r, 0, Math.PI*2, true)
     c.closePath()
@@ -212,7 +212,7 @@ class Unit
       x += r + prev_r
       prev_r = r
 
-      text.set(x,y,r,color)
+      text.set x, y, r, color
 
     push text for text in this.texts
 
