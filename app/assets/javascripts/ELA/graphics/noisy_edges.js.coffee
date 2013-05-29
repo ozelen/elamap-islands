@@ -10,7 +10,7 @@ class ELA.graph.NoisyEdges
   canvas : null
 
   constructor : () ->
-
+    this.random = new ELA.math.NumGen
 
   build_noisy_edges : (map, lava, random) ->
     point = new Point 0,0
@@ -34,9 +34,25 @@ class ELA.graph.NoisyEdges
           this.path0[edge.index] = this.build_noisy_segments(random, edge.v0.point, t, edge.midpoint, q, min_length)
           this.path1[edge.index] = this.build_noisy_segments(random, edge.v1.point, s, edge.midpoint, r, min_length)
 
+  build : (edge) ->
+    point = new Point 0,0 # helper object
+    f = NOISY_LINE_TRADEOFF
+    midpoint = point.interpolate edge.start, edge.end, f
+    t = point.interpolate(edge.start, edge.left, f)
+    q = point.interpolate(edge.start, edge.right, f)
+    r = point.interpolate(edge.end, edge.left, f)
+    s = point.interpolate(edge.end, edge.right, f)
+    min_length = 5
+    result = [
+      this.build_noisy_segments(this.random, edge.start, t, midpoint, q, min_length)
+      this.build_noisy_segments(this.random, edge.end, s, midpoint, r, min_length)
+    ]
+
+
   # Helper function: build a single noisy line in a quadrilateral A-B-C-D,
   # and store the output points in a Vector.
   build_noisy_segments : (random, A, B, C, D, min_length) ->
+    #console.log arguments
     self = this
     points = []
     point = new Point 0,0

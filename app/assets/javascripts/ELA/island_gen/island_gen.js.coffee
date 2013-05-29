@@ -54,6 +54,7 @@ class Layer
     this.selected = []
     this.compute()
     this.improve_points() if this.number >= 200
+    this.noisy_edges = new ELA.graph.NoisyEdges()
 
   # Lloyd Relaxation: move each point to the centroid of the
   # generated Voronoi polygon, then generate Voronoi again
@@ -81,16 +82,26 @@ class Layer
 
     for point in spread.points
       for cell in layer.cells
-        selected_cells.push cell if cell.centroid.distanceTo(point) <= spread.radius and not_overflow cell
+        if cell.centroid.distanceTo(point) <= spread.radius and not_overflow cell
+          selected_cells.push cell
+          cell.surface = 'land' # define selected cells as land
 
-
+    # modifying voronoi diagram data
+    # adding related edges and points into cells
     for edge in this.edges
       for cell, i in this.cells
-        if this.points[i] == edge.left or this.points[i] == edge.right
-          unique = true
-          for existent in cell.edges
-            unique = false if existent == edge
-          cell.edges.push edge if unique
+        if cell.surface # do it only for cells with defined surface, not to lose extra performance on unused cells
+          cell.point = this.points[i] # cell -> point relation
+          if this.points[i] == edge.left or this.points[i] == edge.right
+            unique = true
+            for existent in cell.edges
+              if existent == edge
+                unique = false
+                break
+
+            if unique
+              cell.edges.push edge
+              edge.path = this.noisy_edges.build edge
 
     selected_cells
 
@@ -221,13 +232,19 @@ $ ->
       cond_spreads.push spread
       isl = igen.make spread
       iss = last_layer.select_cells spread
-      trace.cells last_layer.select_cells(s)  for s in igen.SPREADS
+      last_layer.select_cells(s)  for s in igen.SPREADS
 
     add_area text for text in elaUnit.texts
 
     for cell in igen.layers[2].cells
-      for edge in cell.edges
-        trace.edge edge
+      if cell.surface == 'land'
+        console.log cell
+        for edge in cell.edges
+          #trace.edge edge
+
+          for path in edge.path
+            canvas.stroke(0.5, 'black').vector path
+#            console.log path
 
     $('#trace_cells').click ->
       trace.edges()
