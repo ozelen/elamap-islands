@@ -103,6 +103,10 @@ class Layer
               cell.edges.push edge
               edge.path = this.noisy_edges.build edge
 
+    for cell in this.cells
+      if cell.surface
+        cell.path = this.sew_cell cell
+
     selected_cells
 
   get_selected_vertices : (cells) ->
@@ -110,11 +114,39 @@ class Layer
     res = res.concat cell.vertices for cell in cells
     res
 
+  sew_cell : (cell) ->
+    cell.path = []
 
+    reverse = (arr) ->
+      arr.slice(0).reverse()
+
+    sew = (edges, path = []) ->
+      for edge, i in edges
+        if path.length == 0
+          a = edges.shift()
+          #console.log 'first', a
+          return sew(edges, edge.path)
+        else
+          new_path = null
+          if path[path.length-1] == edge.start
+            new_path = path.concat edge.path
+          else if path[path.length-1] == edge.end
+            new_path = path.concat reverse(edge.path)
+          else if path[0] == edge.end
+            new_path = edge.path.concat path
+          else if path[0] == edge.start
+            #console.log path == path.reverse()
+            new_path = reverse(edge.path).concat path
+          if new_path
+            a = edges.splice(i, 1)
+            #console.log 'add', a
+            return sew edges, new_path
+      #console.log 'done', path, edges
+      path
+
+    sew(cell.edges.slice(0))
 
 class Trace
-  layer: {}
-  canvas: {}
   constructor: (layer, canvas) ->
     this.layer = layer
     this.canvas = canvas
@@ -169,6 +201,25 @@ class Trace
     c.closePath()
     c.fill()
     this
+
+  cell_shred : (cell, fill, stroke) ->
+    c = this.canvas.context
+    c.fillStyle = fill
+    c.strokeStyle = stroke
+    c.lineWidth = 2;
+    c.beginPath()
+    c.moveTo(cell.path[0].x, cell.path[0].y);
+    c.lineTo(point.x, point.y) for point in cell.path
+    c.closePath()
+    fill = red if !fill and !stroke
+    c.fill() if fill
+    c.stroke() if stroke
+    this
+
+  shred : (fill, stroke) ->
+    for cell, i in this.layer.cells
+      if cell.surface == 'land'
+        this.cell_shred(cell, fill, stroke)
 
   tc: (i) ->
     this.cell(this.layer.cells[i], 'black')
@@ -236,14 +287,16 @@ $ ->
 
     add_area text for text in elaUnit.texts
 
-    for cell in igen.layers[2].cells
+    for cell, i in igen.layers[2].cells
       if cell.surface == 'land'
-        for edge in cell.edges
-          #trace.edge edge
+        trace.cell_shred cell, '#333', '#333'
+        #trace.point cell.point, 'red', i
+#        for edge in cell.edges
+#          #trace.edge edge
+#          canvas.stroke(0.5, 'black').vector edge.path
 
-          for path in edge.path
-            canvas.stroke(0.5, 'black').vector path
-#            console.log path
+    $('#trace_shred').click ->
+      trace.shred null, '#ccc'
 
     $('#trace_cells').click ->
       trace.edges()

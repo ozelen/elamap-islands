@@ -52,6 +52,7 @@ class ELA.Canvas
   fill : (color) ->
     this.context.fillStyle = color
     this.style.fill = color
+    this
 
   text : (text, point) ->
     c = this.context

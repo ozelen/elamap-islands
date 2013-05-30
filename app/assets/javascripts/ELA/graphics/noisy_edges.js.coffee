@@ -43,11 +43,10 @@ class ELA.graph.NoisyEdges
     r = point.interpolate(edge.end, edge.left, f)
     s = point.interpolate(edge.end, edge.right, f)
     min_length = 5
-    result = [
-      this.build_noisy_segments(this.random, edge.start, t, midpoint, q, min_length)
-      this.build_noisy_segments(this.random, edge.end, s, midpoint, r, min_length)
-    ]
+    start_to_mid  = this.build_noisy_segments(this.random, edge.start,  t, midpoint, q, min_length)
+    end_to_mid    = this.build_noisy_segments(this.random, edge.end,    s, midpoint, r, min_length)
 
+    start_to_mid.concat(end_to_mid.reverse())
 
   # Helper function: build a single noisy line in a quadrilateral A-B-C-D,
   # and store the output points in a Vector.
