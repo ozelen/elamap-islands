@@ -24,7 +24,47 @@ class ELA.Island
     new_spread = new Spread(layer.get_selected_vertices(cells), spread.radius / (this.layers.length * 1.4))
     if this.layers[layer_id+1]
       this.make new_spread, layer_id+1
-    else cells
+    else
+      this.link_data layer
+      cells
+
+  link_data: (layer) ->
+    # modifying voronoi diagram data
+    # adding related edges and points into cells
+    for edge in layer.edges
+      edge.cells = []
+      for cell, i in layer.cells
+        if cell.surface # do it only for cells with defined surface, not to lose extra performance on unused cells
+          cell.point = layer.points[i] # cell -> point relation
+          layer.points[i].cell = cell
+          if layer.points[i] == edge.left or layer.points[i] == edge.right
+            unique = true
+            edge.cells.push cell
+            for existent in cell.edges
+              if existent == edge
+                unique = false
+                break
+
+            if unique
+              cell.edges.push edge
+              edge.path = layer.noisy_edges.build edge
+
+    for cell in layer.cells
+      if cell.surface
+        cell.path = layer.sew_cell cell
+        #console.log cell.path
+
+    # define course edges
+    course_edges = []
+    for edge in layer.edges
+      if edge.cells.length == 1
+        course_edges.push edge
+
+    console.log 'aaa'
+
+#    pieces = []
+#    layer.sew_cell {edges: course_edges}, pieces
+#    console.log pieces
 
 class Spread
   points : []
@@ -43,6 +83,7 @@ class Layer
   width: null
   height: null
   level: null
+  course: null
   constructor: (w, h, num) ->
     this.width    = w
     this.height   = h
@@ -86,27 +127,6 @@ class Layer
           selected_cells.push cell
           cell.surface = 'land' # define selected cells as land
 
-    # modifying voronoi diagram data
-    # adding related edges and points into cells
-    for edge in this.edges
-      for cell, i in this.cells
-        if cell.surface # do it only for cells with defined surface, not to lose extra performance on unused cells
-          cell.point = this.points[i] # cell -> point relation
-          if this.points[i] == edge.left or this.points[i] == edge.right
-            unique = true
-            for existent in cell.edges
-              if existent == edge
-                unique = false
-                break
-
-            if unique
-              cell.edges.push edge
-              edge.path = this.noisy_edges.build edge
-
-    for cell in this.cells
-      if cell.surface
-        cell.path = this.sew_cell cell
-
     selected_cells
 
   get_selected_vertices : (cells) ->
@@ -114,8 +134,12 @@ class Layer
     res = res.concat cell.vertices for cell in cells
     res
 
-  sew_cell : (cell) ->
+  sew_cells : (cells) ->
+
+
+  sew_cell : (cell, pieces) ->
     cell.path = []
+    pieces = []
 
     reverse = (arr) ->
       arr.slice(0).reverse()
@@ -142,9 +166,14 @@ class Layer
             #console.log 'add', a
             return sew edges, new_path
       #console.log 'done', path, edges
+
+#      if edges.length
+#        pieces.push path
+#        sew edges, []
       path
 
-    sew(cell.edges.slice(0))
+    r = sew(cell.edges.slice(0))
+    r
 
 class Trace
   constructor: (layer, canvas) ->
@@ -289,11 +318,10 @@ $ ->
 
     for cell, i in igen.layers[2].cells
       if cell.surface == 'land'
-        trace.cell_shred cell, '#333', '#333'
-        #trace.point cell.point, 'red', i
-#        for edge in cell.edges
-#          #trace.edge edge
-#          canvas.stroke(0.5, 'black').vector edge.path
+        trace.cell_shred cell, '#fff', '#fff'
+
+#    for edge in igen.layers[2].edges
+#      canvas.stroke(5,'black').vector edge.path if edge.cells.length == 1
 
     $('#trace_shred').click ->
       trace.shred null, '#ccc'
