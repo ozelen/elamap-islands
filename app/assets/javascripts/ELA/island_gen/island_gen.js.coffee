@@ -3,7 +3,9 @@ class ELA.Island
   width: null
   height: null
   peaks: []
+  coastline: []
   constructor: (bounds, layers) ->
+    this.coastline = []
     this.SPREADS = []
     this.layers = []
     this.width = bounds[0]
@@ -17,16 +19,33 @@ class ELA.Island
     this.layers.push layer
     layer.prev = this.layers[this.layers.length-2]
 
-  make : (spread, layer_id = 0) ->
-    this.SPREADS.push spread
-    layer = this.layers[layer_id]
-    cells = layer.select_cells spread
-    new_spread = new Spread(layer.get_selected_vertices(cells), spread.radius / (this.layers.length * 1.4))
-    if this.layers[layer_id+1]
-      this.make new_spread, layer_id+1
-    else
-      this.link_data layer
-      cells
+
+
+  create : (unit) ->
+    igen = this
+    cond_spreads = []
+    last_layer = this.layers[this.layers.length-1]
+
+    make_area = (spread, layer_id = 0) ->
+      igen.SPREADS.push spread
+      layer = igen.layers[layer_id]
+      cells = layer.select_cells spread
+      new_spread = new Spread(layer.get_selected_vertices(cells), spread.radius / (igen.layers.length * 1.4))
+      if igen.layers[layer_id+1]
+        make_area new_spread, layer_id+1
+      else
+        cells
+
+    add_area = (text) ->
+      spread = new Spread [new Point text.x - unit.x + 200, text.y - unit.y + 200], text.r
+      cond_spreads.push spread
+      isl = make_area spread
+      iss = last_layer.select_cells spread
+      last_layer.select_cells(s)  for s in igen.SPREADS
+
+    add_area text for text in unit.texts
+    this.link_data last_layer
+
 
   link_data: (layer) ->
     # modifying voronoi diagram data
@@ -54,17 +73,15 @@ class ELA.Island
         cell.path = layer.sew_cell cell
         #console.log cell.path
 
-    # define course edges
-    course_edges = []
+    # define coastline edges
+    coastline_edges = []
     for edge in layer.edges
       if edge.cells.length == 1
-        course_edges.push edge
+        coastline_edges.push edge
+        edge.cells[0].surface = 'beach'
 
-    console.log 'aaa'
-
-#    pieces = []
-#    layer.sew_cell {edges: course_edges}, pieces
-#    console.log pieces
+    a = layer.sew_cell {edges: coastline_edges}, this.coastline
+    this.coastline.push a
 
 class Spread
   points : []
@@ -83,7 +100,7 @@ class Layer
   width: null
   height: null
   level: null
-  course: null
+  coastline: null
   constructor: (w, h, num) ->
     this.width    = w
     this.height   = h
@@ -137,9 +154,8 @@ class Layer
   sew_cells : (cells) ->
 
 
-  sew_cell : (cell, pieces) ->
+  sew_cell : (cell, pieces = []) ->
     cell.path = []
-    pieces = []
 
     reverse = (arr) ->
       arr.slice(0).reverse()
@@ -166,18 +182,19 @@ class Layer
             #console.log 'add', a
             return sew edges, new_path
       #console.log 'done', path, edges
+      pieces.push path
 
-#      if edges.length
-#        pieces.push path
-#        sew edges, []
+      sew edges, [] if edges.length
+
       path
 
     r = sew(cell.edges.slice(0))
     r
 
 class Trace
-  constructor: (layer, canvas) ->
+  constructor: (gen, layer, canvas) ->
     this.layer = layer
+    this.gen = gen
     this.canvas = canvas
 
   set_layer : (layer) ->
@@ -231,19 +248,31 @@ class Trace
     c.fill()
     this
 
+  coastline : () ->
+
+
+    for cell in this.layer.cells
+      this.cell_shred cell, '#ccc', '#eee' if cell.surface == 'beach'
+
+    # stroke coastline
+    this.path path, null, 'black' for path in this.gen.coastline
+
   cell_shred : (cell, fill, stroke) ->
+    this.path cell.path, fill, stroke
+    this
+
+  path : (path, fill, stroke) ->
     c = this.canvas.context
     c.fillStyle = fill
     c.strokeStyle = stroke
     c.lineWidth = 2;
     c.beginPath()
-    c.moveTo(cell.path[0].x, cell.path[0].y);
-    c.lineTo(point.x, point.y) for point in cell.path
+    c.moveTo(path[0].x, path[0].y);
+    c.lineTo(point.x, point.y) for point in path
     c.closePath()
-    fill = red if !fill and !stroke
+    fill = 'red' if !fill and !stroke
     c.fill() if fill
     c.stroke() if stroke
-    this
 
   shred : (fill, stroke) ->
     for cell, i in this.layer.cells
@@ -285,7 +314,7 @@ $ ->
     elaSession = session
     elaUnit = elaSession.current
 
-    size    = [elaUnit.w+300, elaUnit.h+300]
+    size    = [elaUnit.w+400, elaUnit.h+400]
     igen    = new ELA.Island(size, [100,200,1000])
     ELA.DATA.VoronoiStack = igen
 
@@ -298,33 +327,25 @@ $ ->
     layer2  = igen.layers[1]
     last_layer  = igen.layers[igen.layers.length-1]
 
-    trace1   = new Trace(layer1, canvas)
-    trace2   = new Trace(layer2, canvas)
-    trace    = new Trace(last_layer, canvas)
+    trace1   = new Trace(igen, layer1, canvas)
+    trace2   = new Trace(igen, layer2, canvas)
+    trace    = new Trace(igen, last_layer, canvas)
+    igen.trace = trace
     ELA.trace = trace
 
-    all_cells = []
+    igen.create elaUnit
 
+    trace.shred "#fff", "#ccc"
+    trace.coastline()
 
-    cond_spreads = []
-    add_area = (text) ->
-      spread = new Spread [new Point text.x - elaUnit.x + 150, text.y - elaUnit.y + 150], text.r
-      cond_spreads.push spread
-      isl = igen.make spread
-      iss = last_layer.select_cells spread
-      last_layer.select_cells(s)  for s in igen.SPREADS
-
-    add_area text for text in elaUnit.texts
-
-    for cell, i in igen.layers[2].cells
-      if cell.surface == 'land'
-        trace.cell_shred cell, '#fff', '#fff'
 
 #    for edge in igen.layers[2].edges
 #      canvas.stroke(5,'black').vector edge.path if edge.cells.length == 1
 
     $('#trace_shred').click ->
-      trace.shred null, '#ccc'
+      #trace.shred null, 'black'
+      trace.coastline()
+      #canvas.stroke(1, 'black').vector igen.pieces[1]
 
     $('#trace_cells').click ->
       trace.edges()
