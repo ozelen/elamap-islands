@@ -13,13 +13,12 @@ class ELA.Island
     this.addLayers layers
 
   addLayers: (levels) ->
-    this.add_layer new Layer(this.width, this.height, l) for l in levels
+    this.add_layer new Layer(this.width, this.height, l), i for l, i in levels
 
-  add_layer: (layer) ->
+  add_layer: (layer, id) ->
     this.layers.push layer
     layer.prev = this.layers[this.layers.length-2]
-
-
+    layer.id = id
 
   create : (unit) ->
     igen = this
@@ -30,14 +29,14 @@ class ELA.Island
       igen.SPREADS.push spread
       layer = igen.layers[layer_id]
       cells = layer.select_cells spread
-      new_spread = new Spread(layer.get_selected_vertices(cells), spread.radius / (igen.layers.length * 1.4))
+      new_spread = new Spread(layer.get_selected_vertices(cells), spread.radius / (igen.layers.length * 1))
       if igen.layers[layer_id+1]
         make_area new_spread, layer_id+1
       else
         cells
 
     add_area = (text) ->
-      spread = new Spread [new Point text.x - unit.x + 200, text.y - unit.y + 200], text.r
+      spread = new Spread [new Point text.x - unit.x + 200, text.y - unit.y + 200, text.lexiles], text.r
       cond_spreads.push spread
       isl = make_area spread
       iss = last_layer.select_cells spread
@@ -45,6 +44,8 @@ class ELA.Island
 
     add_area text for text in unit.texts
     this.link_data last_layer
+
+  altitude: ->
 
 
   link_data: (layer) ->
@@ -138,11 +139,26 @@ class Layer
     not_overflow = (cell) ->
       layer.width-50 >= cell.centroid.x >= 50 || layer.height-50 >= cell.centroid.y >= 50
 
-    for point in spread.points
-      for cell in layer.cells
-        if cell.centroid.distanceTo(point) <= spread.radius and not_overflow cell
+    for spread_point in spread.points
+      for cell, i in layer.cells
+        if cell.centroid.distanceTo(spread_point) <= spread.radius and not_overflow cell
           selected_cells.push cell
           cell.surface = 'land' # define selected cells as land
+
+          alt_sum = 0
+          for v in cell.vertices
+
+            rand = Math.floor((Math.random()*3)+1) # random from 1 to 3
+            spread_altitude = spread_point.z
+            linear_fall_value = spread_altitude / spread.radius
+            #linear_fall_value *= linear_fall_value
+            distance_to_spread_point = spread_point.distanceTo(v)
+            altitude = spread_altitude - linear_fall_value * distance_to_spread_point * (this.id+1) / rand
+
+            v.z = Math.round(altitude) if v.z < altitude
+            alt_sum += v.z
+          this.points[i].z = Math.round(alt_sum / cell.vertices.length)
+
 
     selected_cells
 
@@ -235,9 +251,29 @@ class Trace
     this.text text, point.x, point.y, '#fff' if text
     this
 
+  peaks : ->
+    for cell in this.layer.cells
+      #console.log cell.point.z if cell.point
+      this.text cell.point.z+'', cell.point.x, cell.point.y, '#000' if cell.point
+      #this.text v.z+'', v.x, v.y, '#000' for v in cell.vertices
+
   cells : (cells) ->
     this.cell cell for cell in cells
     this
+
+  cell_style : (altitude) ->
+    hypso = ELA.DATA.session.data.hypsometry
+    # ELA.DATA.session.measure.max_lexiles
+    max_lexile = 1100
+    m = max_lexile/hypso.length
+    p = Math.round altitude/m
+    p = if p < hypso.length then p else hypso.length - 1
+    h = hypso[p]
+    res =
+      name        : h.name
+      lineWidth   : 4
+      strokeStyle : '#' + h.color
+      fillStyle   : '#' + h.color
 
   cell : (cell, color = 'red') ->
     c = this.canvas.context
@@ -252,7 +288,7 @@ class Trace
 
 
     for cell in this.layer.cells
-      this.cell_shred cell, '#ccc', '#eee' if cell.surface == 'beach'
+      this.cell_shred cell, '#f0cd9f', '#eee' if cell.surface == 'beach'
 
     # stroke coastline
     this.path path, null, 'black' for path in this.gen.coastline
@@ -273,6 +309,12 @@ class Trace
     fill = 'red' if !fill and !stroke
     c.fill() if fill
     c.stroke() if stroke
+
+  draw : (fill, stroke) ->
+    for cell, i in this.layer.cells
+      if cell.surface
+        style = this.cell_style cell.point.z
+        this.cell_shred cell, style.fillStyle, 'white'
 
   shred : (fill, stroke) ->
     for cell, i in this.layer.cells
@@ -335,9 +377,11 @@ $ ->
 
     igen.create elaUnit
 
-    trace.shred "#fff", "#ccc"
+    #trace.shred "#fff", "#ccc"
+    #console.log cell.point for cell in last_layer.cells
+    #trace.peaks()
+    trace.draw()
     trace.coastline()
-
 
 #    for edge in igen.layers[2].edges
 #      canvas.stroke(5,'black').vector edge.path if edge.cells.length == 1
@@ -363,11 +407,10 @@ $ ->
     #trace.cell(igen.layers[0].cells[10])
     #steps[i++]() if steps[i]
 
-  ELA.DATA.json.onLoad ->
-
+  ELA.DATA.json.onLoad((data) ->
     $('#trace_voronoi_next').click ->
       init(ELA.DATA.session)
       $('#trace_voronoi_controls').show()
-
+  )
 
 
