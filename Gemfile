@@ -30,12 +30,12 @@ group :assets do
   # gem 'therubyracer', :platforms => :ruby
 
   gem 'uglifier', '>= 1.0.3'
-  gem 'jquery-ui-rails'
 end
 
 gem 'yaml_db' # back up db
 
 gem 'jquery-rails'
+gem 'jquery-ui-rails'
 gem "therubyracer"
 gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
 gem "twitter-bootstrap-rails"
