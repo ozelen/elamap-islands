@@ -26,3 +26,15 @@ $ ->
       $('session-map').html('Image not found')
       $(this).remove();
 
+
+  fullScreenMap = $('#fullscreen-map')
+
+  if fullScreenMap[0]
+
+    url = fullScreenMap.attr('url')
+    $('<img src="' + url + '">')
+      .load  ->
+        initMap('fullscreen-map', url, this.width, this.height)
+      .error ->
+        $('fullscreen-map').html('Image not found')
+        $(this).remove();

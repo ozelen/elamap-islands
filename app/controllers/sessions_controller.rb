@@ -15,8 +15,9 @@ class SessionsController < ApplicationController
   end
 
   def map
+    @session = Session.find(params[:session_id])
     respond_to do |format|
-      format.html # index.html.erb
+      format.html {render :layout => false} # index.html.erb
       format.json { render json: @units }
     end
   end

@@ -1,0 +1,14 @@
+<html>
+<head><title>Map</title></head>
+<%= stylesheet_link_tag    "application", :media => "all" %>
+<%= javascript_include_tag "application" %>
+<%= csrf_meta_tags %>
+<body>
+
+
+
+<canvas id="gather" s3url="<%= session_upload_path(@session) %>" s3bucket="maps" s3fname="<%= @session.id %>" style="display: none"></canvas>
+<div id="fullscreen-map" style="height: 100%" s3url="<%= session_upload_path(@session) %>" s3bucket="schemes" s3fname="<%= @session.id %>" url="https://s3.amazonaws.com/elamap-islands-maps/<%= @session.id %>.png"></div>
+
+</body>
+</html>
