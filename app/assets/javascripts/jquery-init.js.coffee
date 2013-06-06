@@ -29,14 +29,10 @@ $ ->
   fullScreenMap = $('#fullscreen-map')
 
   if fullScreenMap[0]
-    alert 'full'
     url = fullScreenMap.attr('url')
-    alert url
     $('<img src="' + url + '">')
       .load  ->
-        alert 'load'
         initMap('fullscreen-map', url, this.width, this.height)
       .error ->
-        alert 'error loading'
         $('fullscreen-map').html('Image not found')
         $(this).remove();
