@@ -14,6 +14,13 @@ class SessionsController < ApplicationController
     end
   end
 
+  def map
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @units }
+    end
+  end
+
   # GET /sessions/1
   # GET /sessions/1.json
   def show

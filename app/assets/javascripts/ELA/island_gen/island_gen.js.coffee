@@ -357,7 +357,7 @@ $ ->
     elaUnit = elaSession.current
 
     size    = [elaUnit.w+400, elaUnit.h+400]
-    igen    = new ELA.Island(size, [100,200,1000])
+    igen    = new ELA.Island(size, [100,200,2000])
     ELA.DATA.VoronoiStack = igen
 
     #console.log igen.layers[0].points[0]
@@ -377,8 +377,6 @@ $ ->
 
     igen.create elaUnit
 
-    #trace.shred "#fff", "#ccc"
-    #console.log cell.point for cell in last_layer.cells
     #trace.peaks()
     trace.draw()
     trace.coastline()
