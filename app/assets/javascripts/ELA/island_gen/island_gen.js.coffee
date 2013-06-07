@@ -12,6 +12,8 @@ class ELA.Island
     this.height = bounds[1]
     this.addLayers layers
 
+    this.junction_points = []
+
   addLayers: (levels) ->
     this.add_layer new Layer(this.width, this.height, l), i for l, i in levels
 
@@ -22,7 +24,6 @@ class ELA.Island
 
   create : (unit) ->
     igen = this
-    cond_spreads = []
     last_layer = this.layers[this.layers.length-1]
 
     make_area = (spread, layer_id = 0) ->
@@ -35,14 +36,47 @@ class ELA.Island
       else
         cells
 
-    add_area = (text) ->
-      spread = new Spread [new Point text.x - unit.x + 200, text.y - unit.y + 200, text.lexiles], text.r
-      cond_spreads.push spread
+    add_area = (spread) ->
       isl = make_area spread
       iss = last_layer.select_cells spread
-      last_layer.select_cells(s)  for s in igen.SPREADS
+      last_layer.select_cells(s) for s in igen.SPREADS
 
-    add_area text for text in unit.texts
+    process = ->
+      spreads = []
+      # convert text into spread
+      spreads.push new Spread [new Point text.x - unit.x + 200, text.y - unit.y + 200, text.lexiles], text.r for text in unit.texts
+
+      # make noisy junction between points
+      noisy = new ELA.graph.NoisyEdges()
+      for spread, i in spreads
+        if spreads[i+1]
+          start = spreads[i].points[0]
+          end = spreads[i+1].points[0]
+          z = start.z
+
+          # create an edge
+          edge =
+            start : start
+            end   : end
+            # reflect the line segment between points
+            right : new Point start.x, end.y, z
+            left  : new Point end.x, start.y, z
+
+          # make it noisy
+          junction_path = noisy.build edge, 100
+          igen.junction_points = igen.junction_points.concat junction_path
+
+
+      # create spread array
+      for junc_point in igen.junction_points
+        add_area new Spread [junc_point], 100
+
+#      for spread in spreads
+#        add_area spread
+
+    process()
+
+
     this.link_data last_layer
 
   altitude: ->
@@ -72,7 +106,7 @@ class ELA.Island
     for cell in layer.cells
       if cell.surface
         cell.path = layer.sew_cell cell
-        #console.log cell.path
+    #console.log cell.path
 
     # define coastline edges
     coastline_edges = []
@@ -255,7 +289,7 @@ class Trace
     for cell in this.layer.cells
       #console.log cell.point.z if cell.point
       this.text cell.point.z+'', cell.point.x, cell.point.y, '#000' if cell.point
-      #this.text v.z+'', v.x, v.y, '#000' for v in cell.vertices
+  #this.text v.z+'', v.x, v.y, '#000' for v in cell.vertices
 
   cells : (cells) ->
     this.cell cell for cell in cells
@@ -357,13 +391,14 @@ $ ->
     elaUnit = elaSession.current
 
     size    = [elaUnit.w+400, elaUnit.h+400]
-    igen    = new ELA.Island(size, [100,200,2000])
+    igen    = new ELA.Island(size, [100,200,1000])
     ELA.DATA.VoronoiStack = igen
 
     #console.log igen.layers[0].points[0]
 
     igen.SPREADS = []
     canvas  = new ELA.Canvas($('#trace_voronoi_canvas'), size)
+    igen.canvas = canvas # for debug
 
     layer1  = igen.layers[0]
     layer2  = igen.layers[1]
@@ -377,17 +412,20 @@ $ ->
 
     igen.create elaUnit
 
+    #trace.shred "#fff", "#ccc"
+    #console.log cell.point for cell in last_layer.cells
     #trace.peaks()
     trace.draw()
-    trace.coastline()
+    canvas.points igen.junction_points
+    #trace.coastline()
 
-#    for edge in igen.layers[2].edges
-#      canvas.stroke(5,'black').vector edge.path if edge.cells.length == 1
+    #    for edge in igen.layers[2].edges
+    #      canvas.stroke(5,'black').vector edge.path if edge.cells.length == 1
 
     $('#trace_shred').click ->
       #trace.shred null, 'black'
       trace.coastline()
-      #canvas.stroke(1, 'black').vector igen.pieces[1]
+    #canvas.stroke(1, 'black').vector igen.pieces[1]
 
     $('#trace_cells').click ->
       trace.edges()
@@ -400,10 +438,10 @@ $ ->
       trace.spreads igen.SPREADS
 
 
-    #trace2.edges()
-    #trace.points()
-    #trace.cell(igen.layers[0].cells[10])
-    #steps[i++]() if steps[i]
+  #trace2.edges()
+  #trace.points()
+  #trace.cell(igen.layers[0].cells[10])
+  #steps[i++]() if steps[i]
 
   ELA.DATA.json.onLoad((data) ->
     $('#trace_voronoi_next').click ->

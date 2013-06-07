@@ -26,15 +26,15 @@ class ELA.graph.NoisyEdges
 
           min_length = 10
 
-#          min_length = 3    if edge.d0.biome != edge.d1.biome
-#          min_length = 100  if edge.d0.ocean and edge.d1.ocean
-#          min_length = 1    if edge.d0.coast and edge.d1.coast
-#          min_length = 1    if edge.river or lava.lava[edge.index]
+          #          min_length = 3    if edge.d0.biome != edge.d1.biome
+          #          min_length = 100  if edge.d0.ocean and edge.d1.ocean
+          #          min_length = 1    if edge.d0.coast and edge.d1.coast
+          #          min_length = 1    if edge.river or lava.lava[edge.index]
 
           this.path0[edge.index] = this.build_noisy_segments(random, edge.v0.point, t, edge.midpoint, q, min_length)
           this.path1[edge.index] = this.build_noisy_segments(random, edge.v1.point, s, edge.midpoint, r, min_length)
 
-  build : (edge) ->
+  build : (edge, min_length = 5) ->
     point = new Point 0,0 # helper object
     f = NOISY_LINE_TRADEOFF
     midpoint = point.interpolate edge.start, edge.end, f
@@ -42,7 +42,6 @@ class ELA.graph.NoisyEdges
     q = point.interpolate(edge.start, edge.right, f)
     r = point.interpolate(edge.end, edge.left, f)
     s = point.interpolate(edge.end, edge.right, f)
-    min_length = 5
     start_to_mid  = this.build_noisy_segments(this.random, edge.start,  t, midpoint, q, min_length)
     end_to_mid    = this.build_noisy_segments(this.random, edge.end,    s, midpoint, r, min_length)
 
@@ -108,4 +107,4 @@ $ ->
 
     canvas.stroke(2, 'blue').vector points
 
-    #canvas.points points
+#canvas.points points
