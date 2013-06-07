@@ -29,7 +29,7 @@ Point.prototype.interpolate = function(pt1, pt2, f){
     var x = f * pt1.x + (1 - f) * pt2.x;
     var y = f * pt1.y + (1 - f) * pt2.y;
     var z = f * pt1.z + (1 - f) * pt2.z;
-    return new Point(x, y);
+    return new Point(x, y, z);
 }
 
 Point.prototype.subtract = function(v){

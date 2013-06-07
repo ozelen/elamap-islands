@@ -52,6 +52,7 @@ class ELA.Island
         if spreads[i+1]
           start = spreads[i].points[0]
           end = spreads[i+1].points[0]
+
           z = start.z
 
           # create an edge
@@ -64,6 +65,12 @@ class ELA.Island
 
           # make it noisy
           junction_path = noisy.build edge, 100
+
+          # set z value depending on the distance
+          for point in junction_path
+            #nearest = if point.distanceTo start < point.distanceTo end then start else end
+            point.z*= 0.7 if point!=start and point!=end
+
           igen.junction_points = igen.junction_points.concat junction_path
 
 
@@ -71,8 +78,8 @@ class ELA.Island
       for junc_point in igen.junction_points
         add_area new Spread [junc_point], 100
 
-#      for spread in spreads
-#        add_area spread
+      for spread in spreads
+        add_area spread
 
     process()
 
@@ -322,7 +329,7 @@ class Trace
 
 
     for cell in this.layer.cells
-      this.cell_shred cell, '#f0cd9f', '#eee' if cell.surface == 'beach'
+      this.cell_shred cell, '#f0cd9f', '#f0cd9f' if cell.surface == 'beach'
 
     # stroke coastline
     this.path path, null, 'black' for path in this.gen.coastline
@@ -348,7 +355,7 @@ class Trace
     for cell, i in this.layer.cells
       if cell.surface
         style = this.cell_style cell.point.z
-        this.cell_shred cell, style.fillStyle, 'white'
+        this.cell_shred cell, style.fillStyle, style.fillStyle
 
   shred : (fill, stroke) ->
     for cell, i in this.layer.cells
@@ -391,7 +398,7 @@ $ ->
     elaUnit = elaSession.current
 
     size    = [elaUnit.w+400, elaUnit.h+400]
-    igen    = new ELA.Island(size, [100,200,1000])
+    igen    = new ELA.Island(size, [100,200,1500])
     ELA.DATA.VoronoiStack = igen
 
     #console.log igen.layers[0].points[0]
@@ -416,8 +423,8 @@ $ ->
     #console.log cell.point for cell in last_layer.cells
     #trace.peaks()
     trace.draw()
-    canvas.points igen.junction_points
-    #trace.coastline()
+    #canvas.point point, point.z + '' for point in igen.junction_points
+    trace.coastline()
 
     #    for edge in igen.layers[2].edges
     #      canvas.stroke(5,'black').vector edge.path if edge.cells.length == 1
