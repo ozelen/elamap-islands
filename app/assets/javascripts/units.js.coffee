@@ -2,12 +2,12 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
-COLORS = [
+ELA.fixtures.scheme_colors = [
   '#1560BD', '#89CFF0', '#40E0D0', '#DE3163', '#702963', '#29AB87', '#8C92AC', '#6699CC', '#FACA16', '#CD5700'
   '#DF73FF', '#1E90FF', '#7DF9FF', '#003153', '#C9A0DC', '#00FF7F', '#228B22', '#3EB489', '#E4D00A', '#8A3324'
 ]
 
-class Point
+class ELA.Processing.Point
   x: 0
   y: 0
   constructor: (x, y) ->
@@ -17,15 +17,15 @@ class Point
     this.x = x
     this.y = y
 
-class Square
+class ELA.Processing.Square
   sq = this
   vertices:
     top:
-      left   : new Point(0,0)
-      right  : new Point(0,0)
+      left   : new ELA.Processing.Point(0,0)
+      right  : new ELA.Processing.Point(0,0)
     bottom   :
-      left   : new Point(0,0)
-      right  : new Point(0,0)
+      left   : new ELA.Processing.Point(0,0)
+      right  : new ELA.Processing.Point(0,0)
 
   edges      :
     top      : null
@@ -54,7 +54,7 @@ class Square
     v.bottom.left.y  = v.bottom.right.y = y_bottom
 
 
-TRACE =
+ELA.Processing.TRACE =
   c       : null  # canvas context - must be defined before using object
   measure : null
   # trace circle (x, y, radius, inner text)
@@ -129,7 +129,7 @@ TRACE =
     log.val(log.val() + '[' + time + '] ' + msg)
     console.log msg
 
-json =
+ELA.Processing.json =
   url : null
   data : null
   callbacks : []
@@ -141,18 +141,18 @@ json =
     .fail (jqXHR, textStatus, errorThrown) ->
       alert "AJAX Error: #{textStatus}"
     .done (data, textStatus, jqXHR) ->
-      json.data = data
+      ELA.Processing.json.data = data
       cb(data)
       callback(data) for callback in self.callbacks
-    json.data
+    ELA.Processing.json.data
 
   onLoad : (func) ->
     this.callbacks.push func
     func() if this.data
 
-ELA.DATA.json = json
+ELA.DATA.json = ELA.Processing.json
 
-class Text
+class ELA.Processing.Text
   data    : {}
   x       : null
   y       : null
@@ -164,8 +164,8 @@ class Text
     this.measure = measure
 
   draw : ->
-    TRACE.circle(this.x, this.y, this.r, this.color)
-    TRACE.lexiles(this.x, this.y, this.data.lexiles)
+    ELA.Processing.TRACE.circle(this.x, this.y, this.r, this.color)
+    ELA.Processing.TRACE.lexiles(this.x, this.y, this.data.lexiles)
 
   set : (x,y,r,color) ->
     this.x = this.data.x = x
@@ -175,7 +175,7 @@ class Text
     this.measure.max_lexiles = this.data.lexiles if this.data.lexiles > this.measure.max_lexiles
 
 
-class Unit
+class ELA.Processing.Unit
   texts   : []
   data    : []
   measure : {}
@@ -186,9 +186,9 @@ class Unit
     this.id = unit.id
     this.measure = measure
     texts = []
-    texts.push(new Text(text, this.measure)) for text in unit.texts
+    texts.push(new ELA.Processing.Text(text, this.measure)) for text in unit.texts
     this.texts = texts
-    this.frame = new Square(0,0)
+    this.frame = new ELA.Processing.Square(0,0)
 
   set: (x) ->
     this.x_left  = x
@@ -202,7 +202,7 @@ class Unit
     if measure.unit
       color = if this.data.id == measure.unit then '#095' else '#ccc'
     else
-      color = COLORS.shift() || TRACE.rnd_color()
+      color = ELA.fixtures.scheme_colors.shift() || ELA.Processing.TRACE.rnd_color()
 
     push = (text) ->
       r = text.data.lessons * measure.x / 2
@@ -218,7 +218,7 @@ class Unit
 
     this.x_right = x+prev_r
     x_mid = this.x_left + (this.x_right - this.x_left) / 2
-    TRACE.label(this.data.name, x_mid, this.y_bot + 10)
+    ELA.Processing.TRACE.label(this.data.name, x_mid, this.y_bot + 10)
     # TRACE.frame(x_left, y_top, x_right, y_bot)
     this.data.x = this.x_left
     this.data.y = this.y_top
@@ -236,7 +236,7 @@ class Unit
     text.draw() for text in this.texts
 
 
-class Session
+class ELA.Processing.Session
   units   : null
   measure : {}
   data    : {}
@@ -258,7 +258,7 @@ class Session
     this.set_units()
 
   create_unit : (unit_data) ->
-    unit = new Unit(unit_data, this.measure)
+    unit = new ELA.Processing.Unit(unit_data, this.measure)
     this.units.push unit
     sel_id = this.selected_unit_id
     this.selected_unit = unit if sel_id and unit_data.id == sel_id
@@ -280,7 +280,7 @@ class Session
 
 
   draw: ->
-    TRACE.scale()
+    ELA.Processing.TRACE.scale()
     unit.draw() for unit in this.units
 
   zoom: (p, canvas) ->
@@ -294,7 +294,7 @@ class Session
     canvas.el.width = m.w
     canvas.el.height = m.h
     this.set_units()
-    TRACE.clear()
+    ELA.Processing.TRACE.clear()
     this.draw()
     unit = this.current
     if unit
@@ -314,7 +314,7 @@ class Session
     $.post url, {data:base64, dir: 'sessions'}
     false
 
-class Canvas
+class ELA.Processing.Canvas
   $       : null # jQuery object
   el      : null # canvas html element
   s3      :
@@ -358,7 +358,7 @@ $ ->
     h           : 400
     unit_space  : 20
     unit        : null
-    map         : new Square(this.w, this.h)
+    map         : new ELA.Processing.Square(this.w, this.h)
     max_lexiles : 0
 
   full_measure =
@@ -368,19 +368,19 @@ $ ->
     h           : 4000
     unit_space  : 100
     unit        : null
-    map         : new Square(this.w, this.h)
+    map         : new ELA.Processing.Square(this.w, this.h)
     max_lexiles : 0
 
-  TRACE.measure = scheme_measure
+  ELA.Processing.TRACE.measure = scheme_measure
 
   # initial objects and settings
   container = $('div#canvas_container')
 
-  canvas_scheme = new Canvas( $('canvas#island') ) if $('canvas#island')[0]
-  canvas_render = new Canvas( $('canvas#c') )      if $('canvas#c')[0]
+  canvas_scheme = new ELA.Processing.Canvas( $('canvas#island') ) if $('canvas#island')[0]
+  canvas_render = new ELA.Processing.Canvas( $('canvas#c') )      if $('canvas#c')[0]
 
   if $('canvas#gather')[0]
-    canvas_gather = new Canvas( $('canvas#gather') )
+    canvas_gather = new ELA.Processing.Canvas( $('canvas#gather') )
     canvas_gather.el.width = full_measure.w
     canvas_gather.el.height = full_measure.h
 
@@ -392,11 +392,11 @@ $ ->
   init = (data) ->
     ELA.SessionData = data
     current_unit  = parseInt( canvas_scheme.$.attr "unit" )
-    scheme_size_session = new Session data, scheme_measure, current_unit
+    scheme_size_session = new ELA.Processing.Session data, scheme_measure, current_unit
     scheme_size_session.zoom 2, canvas_scheme if scheme_size_session.current
     scheme_size_session.draw()
 
-    full_size_session = new Session data, full_measure, current_unit
+    full_size_session = new ELA.Processing.Session data, full_measure, current_unit
     ELA.DATA.session = full_size_session
 
     if scheme_measure.h < scheme_measure.map.height()
@@ -439,9 +439,9 @@ $ ->
     canvas_scheme.el.height = scheme_measure.h
     canvas_scheme.$.draggable({cursor: 'move'})
     scheme_measure.unit = parseInt( canvas_scheme.$.attr("unit") )
-    TRACE.c = canvas_scheme.el.getContext('2d')
-    json.url = canvas_scheme.$.attr "src"
-    json.get ( (data) -> init (data) )
+    ELA.Processing.TRACE.c = canvas_scheme.el.getContext('2d')
+    ELA.Processing.json.url = canvas_scheme.$.attr "src"
+    ELA.Processing.json.get ( (data) -> init (data) )
 
 
 
