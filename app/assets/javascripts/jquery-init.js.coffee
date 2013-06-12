@@ -21,7 +21,21 @@ $ ->
 
     $('<img src="' + url + '">')
     .load  ->
-      initMap('scheme-map', url, this.width, this.height)
+      map = initMap('scheme-map', url, this.width, this.height, ELA.DATA.labels)
+
+      points = []
+      for unit in ELA.DATA.session.units
+        for text in unit.texts
+          points.push
+            name: text.data.name
+            author: text.data.author
+            val: text.data.lexiles
+            color: 'red'
+            latlng: map.unproject [text.x+200, text.y+200]
+          #map.marker [text.x+200, text.y+200], text.data.name
+
+      map.path points
+
     .error ->
       $('session-map').html('Image not found')
       $(this).remove();

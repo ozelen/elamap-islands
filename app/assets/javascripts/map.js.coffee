@@ -1,6 +1,4 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
+# Hardcoded fixtures for sample map
 
 SamplePoints = [
   {name: "Boy", author: "Roald Dahl", val: "1090", color: "green", latlng: [-0.1949462890625, 0.05712890625]      },
@@ -86,44 +84,71 @@ icons = {
               }
 }
 
-initMap = (id, image_url, width, height, points = null) ->
-  timestamp = new Date().getTime()
-  divid = 'map' + timestamp
-  #image_url += '?' + timestamp
-  $('#' + id).html('<div id="' + divid + '" class="session-map"></div>')
-  map = new L.Map(divid, {maxZoom:13, crs: L.CRS.Simple}).setView([0,0], 13)
-  s1 = map.unproject(new L.Point(0, 0))
-  s2 = map.unproject(new L.Point(width, height))
+# Leaflet set up class
+class ELA.Leaflet
+  el    : null
+  size  : [0,0]
+  map   : {}
+  constructor: ->
 
-  imageUrl = image_url
-  imageBounds = [[s1.lat, s1.lng],[s2.lat, s2.lng]]
-  map
-    .setMaxBounds(imageBounds)
-    .fitBounds(imageBounds)
+  unproject : (coords) ->
+    this.map.unproject(new L.Point(coords[0], coords[1]))
 
-  popup = L.popup()
-  arr = []
-  i = 0
+  marker : (coords, msg = 'marker') ->
+    latlng = this.unproject coords
+    L.marker(latlng, icon: new L.icon(icons['red'])).addTo(this.map).bindPopup(msg)
 
-  checkPoints = (e) ->
-    #point = L.CRS.latLngToPoint( e.latlng, e.zoom )
-    arr[i++] = "[" + e.latlng.lat + ", " + e.latlng.lng + "]\n";
-    popup
-      .setLatLng(e.latlng)
-      .setContent(arr.join(",<br>\n"))
-      .openOn(map)
+  init: (el_id, image_url, size, points = null) ->
+    this.size = size
+    this.el = $('#' + el_id)
+    timestamp = new Date().getTime()
+    divid = 'map' + timestamp
+    #image_url += '?' + timestamp
+    this.el.html('<div id="' + divid + '" class="session-map"></div>')
+    this.map = new L.Map(divid, {maxZoom:13, crs: L.CRS.Simple}).setView([0,0], 13)
+    s1 = this.map.unproject(new L.Point(0, 0))
+    s2 = this.map.unproject(new L.Point(this.size[0], this.size[1]))
+    imageUrl = image_url
+    imageBounds = [[s1.lat, s1.lng],[s2.lat, s2.lng]]
+    this.map
+      .setMaxBounds(imageBounds)
+      .fitBounds(imageBounds)
 
-  markerPopupMessage = (marker) -> "<b>" + marker.name + "</b><br><i>" + marker.author + "</i> <br>[" +marker.val+ "]"
+    popup = L.popup()
+    arr = []
+    i = 0
 
-  L.imageOverlay(imageUrl, imageBounds).addTo(map);
+    checkPoints = (e) ->
+      #point = L.CRS.latLngToPoint( e.latlng, e.zoom )
+      arr[i++] = "[" + e.latlng.lat + ", " + e.latlng.lng + "]\n";
+      popup
+        .setLatLng(e.latlng)
+        .setContent(arr.join(",<br>\n"))
+        .openOn(this.map)
 
-  if points
+    L.imageOverlay(imageUrl, imageBounds).addTo(this.map);
+
+    if points
+      this.path points
+
+    this
+
+  path : (points) ->
+
+    markerPopupMessage = (marker) -> "<b>" + marker.name + "</b><br><i>" + marker.author + "</i> <br>[" +marker.val+ "]"
+
     L.marker(marker.latlng,
-      icon: new L.icon(icons[marker.color])
-    ).addTo(map).bindPopup(markerPopupMessage marker) for marker in points
+             icon: new L.icon(icons[marker.color])
+    ).addTo(this.map).bindPopup(markerPopupMessage marker) for marker in points
 
     for marker, i in points
-      L.polyline([marker.latlng, points[i+1].latlng], {color: '#000', opacity: 0.3}).addTo(map) if points[i+1]
+      L.polyline([marker.latlng, points[i+1].latlng], {color: '#000', opacity: 0.3}).addTo(this.map) if points[i+1]
+
+
+leaflet = new ELA.Leaflet
+initMap = (id, image_url, width, height, points = null) ->
+  leaflet.init id, image_url, [width,height], points
+
 
 jQuery ->
   window.initMap = initMap

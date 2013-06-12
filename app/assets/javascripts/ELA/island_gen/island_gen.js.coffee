@@ -425,6 +425,7 @@ $ ->
     trace.draw()
     #canvas.point point, point.z + '' for point in igen.junction_points
     trace.coastline()
+    canvas.store()
 
     #    for edge in igen.layers[2].edges
     #      canvas.stroke(5,'black').vector edge.path if edge.cells.length == 1
