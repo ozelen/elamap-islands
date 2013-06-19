@@ -1,6 +1,6 @@
 ElamapIslands::Application.routes.draw do
   resources :hypsometries
-
+  get 'tilemap' => 'map#tiles'
 
   root :to => 'map#index'
 
