@@ -24,10 +24,15 @@
           <li><a href="/map">Map Mock-up</a></li>
           <li><a href="/hypsometries">Hypsometry</a></li>
         </ul>
+        <% if current_user %>
+            <%= link_to "Edit Profile", edit_user_path(:current_user) %>
+            <%= link_to "Log out", logout_path %>
+        <% else %>
         <ul class="nav" style="float: riht">
           <ul><%= link_to "Register", new_user_path %></ul>
           <ul><%= link_to "Login", new_user_session_path %></ul>
         </ul>
+        <% end %>
       </div>
     </div>
   </div><!-- /navbar-inner -->
@@ -36,9 +41,9 @@
 </div>
 
 <div class="container" style="padding-top: 50px">
-  <% flash.each do |name, msg| -%>
-      <%= content_tag :div, msg, class: name %>
-  <% end -%>
+  <% flash.each do |name, msg| %>
+      <%= content_tag :p, msg, :class => name %>
+  <% end %>
 <%= yield %>
 </div>
 

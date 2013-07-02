@@ -14,7 +14,7 @@ class UserSessionsController < ApplicationController
   def create
     @user_session = UserSession.new(params[:user_session])
     if @user_session.save
-      redirect_to @user_session, :notice => "Successfully logged in."
+      redirect_to root_url, :notice => "Successfully logged in."
     else
       render :action => 'new', :notice => "Icorrect password"
     end
