@@ -9,6 +9,8 @@
 <body>
 
 <div class="navbar navbar-fixed-top">
+
+
   <div class="navbar-inner">
     <div class="container">
       <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse">
@@ -20,23 +22,58 @@
       <div class="nav-collapse collapse navbar-inverse-collapse">
         <ul class="nav">
           <li><a href="/sessions">Sessions</a></li>
-          <li><a href="/tilemap">Tile map sample</a></li>
-          <li><a href="/map">Map Mock-up</a></li>
-          <li><a href="/hypsometries">Hypsometry</a></li>
+
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li><a href="/hypsometries">Hypsometry</a></li>
+            </ul>
+          </li>
+
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Prototypes <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li><a href="/tilemap">Tile map sample</a></li>
+              <li><a href="/map">Map Mock-up</a></li>
+            </ul>
+          </li>
+
         </ul>
+
         <% if current_user %>
-            <%= link_to "Edit Profile", edit_user_path(:current_user) %>
-            <%= link_to "Log out", logout_path %>
+            <ul class="nav pull-right">
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= current_user.username %> <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><%= link_to "Sign out", logout_path %></li>
+                  <li><%= link_to "Edit Profile", edit_user_path(:current_user) %></li>
+                </ul>
+              </li>
+            </ul>
         <% else %>
-        <ul class="nav" style="float: riht">
-          <ul><%= link_to "Register", new_user_path %></ul>
-          <ul><%= link_to "Login", new_user_session_path %></ul>
-        </ul>
+            <ul class="nav pull-right">
+              <li class="dropdown open">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Unlogged User <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><%= link_to "Register", new_user_path %></li>
+                  <li><%= link_to "Login", new_user_session_path %></li>
+                </ul>
+              </li>
+            </ul>
+
+            <!--
+            <form class="navbar-form pull-right">
+              <input class="span2" type="text" placeholder="Email">
+              <input class="span2" type="password" placeholder="Password">
+              <button type="submit" class="btn">Sign in</button>
+            </form>
+            -->
         <% end %>
+
+
       </div>
     </div>
   </div><!-- /navbar-inner -->
-
 
 </div>
 

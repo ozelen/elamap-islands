@@ -21,7 +21,7 @@ class UserSessionsController < ApplicationController
   end
 
   def destroy
-    @user_session = UserSession.find(params[:id])
+    @user_session = UserSession.find
     @user_session.destroy
     redirect_to root_url, :notice => "Successfully logged out."
   end
