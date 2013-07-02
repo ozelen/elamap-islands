@@ -23,7 +23,10 @@
           <li><a href="/tilemap">Tile map sample</a></li>
           <li><a href="/map">Map Mock-up</a></li>
           <li><a href="/hypsometries">Hypsometry</a></li>
-          <li><a href="http://23.20.177.14/island-gen/" target="_blank">Voronoi generator</a></li>
+        </ul>
+        <ul class="nav" style="float: riht">
+          <ul><%= link_to "Register", new_user_path %></ul>
+          <ul><%= link_to "Login", new_user_session_path %></ul>
         </ul>
       </div>
     </div>
@@ -33,6 +36,9 @@
 </div>
 
 <div class="container" style="padding-top: 50px">
+  <% flash.each do |name, msg| -%>
+      <%= content_tag :div, msg, class: name %>
+  <% end -%>
 <%= yield %>
 </div>
 

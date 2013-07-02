@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'rails', '3.2.13'
-
+gem "rails3-generators"
 gem 'thin'
 
 # Bundle edge Rails instead:
@@ -13,6 +13,7 @@ group :development, :test do
   gem 'rvm'
   gem 'pg'
   gem 'activerecord-postgresql-adapter'
+  gem "nifty-generators"
 end
 
 group :production do
@@ -44,6 +45,8 @@ gem "paperclip", "~> 3.0"
 
 gem 'fog'
 
+gem "authlogic", :git => "git://github.com/binarylogic/authlogic.git"
+
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
@@ -58,3 +61,6 @@ gem 'fog'
 
 # To use debugger
 # gem 'debugger'
+
+gem "mocha", :group => :test
+

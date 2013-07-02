@@ -1,4 +1,13 @@
 ElamapIslands::Application.routes.draw do
+  resources :user_sessions
+  match 'login' => "user_sessions#new",      :as => :login
+  match 'logout' => "user_sessions#destroy", :as => :logout
+
+  resources :users
+  resource :user, :as => 'account'  # a convenience route
+  match 'signup' => 'users#new', :as => :signup
+
+
   resources :hypsometries
   get 'tilemap' => 'map#tiles'
 

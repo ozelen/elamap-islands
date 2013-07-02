@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130425114217) do
+ActiveRecord::Schema.define(:version => 20130702134330) do
 
   create_table "children", :force => true do |t|
     t.string    "name"
@@ -20,11 +20,11 @@ ActiveRecord::Schema.define(:version => 20130425114217) do
   end
 
   create_table "hypsometries", :force => true do |t|
-    t.string   "name"
-    t.string   "color"
-    t.integer  "position"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.string    "name"
+    t.string    "color"
+    t.integer   "position"
+    t.timestamp "created_at", :null => false
+    t.timestamp "updated_at", :null => false
   end
 
   create_table "islands", :force => true do |t|
@@ -53,7 +53,7 @@ ActiveRecord::Schema.define(:version => 20130425114217) do
     t.string    "image_file_name"
     t.string    "image_content_type"
     t.integer   "image_file_size"
-    t.datetime  "image_updated_at"
+    t.timestamp "image_updated_at"
   end
 
   create_table "students", :force => true do |t|
@@ -85,6 +85,22 @@ ActiveRecord::Schema.define(:version => 20130425114217) do
     t.string    "letter"
     t.timestamp "created_at", :null => false
     t.timestamp "updated_at", :null => false
+  end
+
+  create_table "user_sessions", :force => true do |t|
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "users", :force => true do |t|
+    t.string   "username"
+    t.string   "email"
+    t.string   "crypted_password"
+    t.string   "password_salt"
+    t.string   "persistence_token"
+    t.integer  "role"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
   end
 
 end
