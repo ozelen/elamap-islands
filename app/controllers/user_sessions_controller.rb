@@ -1,4 +1,5 @@
 class UserSessionsController < ApplicationController
+  skip_before_filter :require_user
   def index
     @user_sessions = UserSession.all
   end

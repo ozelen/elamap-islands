@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  before_filter :require_user#, :only => :private
   protect_from_forgery
   helper_method :current_user_session, :current_user
 
