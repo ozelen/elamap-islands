@@ -1,11 +1,12 @@
 <% title "Users" %>
 
-<table>
+<table class="table table-striped">
   <tr>
     <th>Username</th>
     <th>Email</th>
     <th>Password</th>
     <th>Role</th>
+    <th>Action</th>
   </tr>
   <% for user in @users %>
     <tr>
@@ -13,9 +14,17 @@
       <td><%= user.email %></td>
       <td><%= user.password %></td>
       <td><%= user.role %></td>
-      <td><%= link_to "Edit", edit_user_path(user) %></td>
+      <td>
+        <%= link_to "Edit", edit_user_path(user), :class => 'btn btn-mini' %>
+        <%= link_to "Delete",
+                    user_path(user),
+                    :class => 'btn btn-mini btn-danger',
+                    :method => :delete,
+                    :data => { :confirm => 'Are you sure?' }
+        %>
+      </td>
     </tr>
   <% end %>
 </table>
 
-<p><%= link_to "New User", new_user_path %></p>
+<p><%= link_to "New User", new_user_path, :class => 'btn btn-primary' %></p>
