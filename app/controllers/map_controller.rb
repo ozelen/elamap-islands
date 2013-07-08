@@ -4,4 +4,7 @@ class MapController < ApplicationController
 
   def tiles
   end
+
+  def mockup
+  end
 end

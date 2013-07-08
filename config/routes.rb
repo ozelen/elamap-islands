@@ -10,6 +10,7 @@ ElamapIslands::Application.routes.draw do
 
   resources :hypsometries
   get 'tilemap' => 'map#tiles'
+  get 'tilemockup' => 'map#mockup'
 
   root :to => 'map#index'
 
