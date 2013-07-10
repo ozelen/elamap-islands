@@ -12,18 +12,15 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require bootstrap
-//= require_tree ./ELA
-//= require_tree .
-//=require leaflet
-
+//= require twitter/bootstrap
 //= require jquery.ui.core
 //= require jquery.ui.widget
 //= require jquery.ui.mouse
 //= require jquery.ui.position
-
 //= require jquery.ui.draggable
 //= require jquery.ui.droppable
 //= require jquery.ui.slider
 //= require jquery.ui.tabs
-
+//= require leaflet
+//= require_tree ./ELA
+//= require_tree .

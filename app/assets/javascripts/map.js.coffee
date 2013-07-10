@@ -22,7 +22,7 @@ jQuery ->
 
     tm = L.map('mockup_tile_map').setView [0, 0], 2
 
-    L.tileLayer('/map_mockup/{z}/{x}/{y}.png',
+    L.tileLayer('/assets/map_mockup/{z}/{x}/{y}.png',
                 minZoom: 1
                 maxZoom: 5
                 tms: true
