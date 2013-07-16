@@ -19,7 +19,7 @@ class UsersController < ApplicationController
   end
 
   def edit
-    @user = current_user
+    @user = User.find(params[:id]) || current_user
     @roles = Role.all
   end
 
