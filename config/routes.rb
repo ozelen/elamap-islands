@@ -9,6 +9,7 @@ ElamapIslands::Application.routes.draw do
   resources :users
   resource :user, :as => 'account'  # a convenience route
   match 'signup' => 'users#new', :as => :signup
+  match 'signup' => 'users#new', :as => :signup
 
 
   resources :hypsometries
