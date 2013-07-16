@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130702134330) do
+ActiveRecord::Schema.define(:version => 20130716091903) do
 
   create_table "children", :force => true do |t|
     t.string    "name"
@@ -41,6 +41,12 @@ ActiveRecord::Schema.define(:version => 20130702134330) do
     t.string    "name"
     t.timestamp "created_at", :null => false
     t.timestamp "updated_at", :null => false
+  end
+
+  create_table "roles", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "sessions", :force => true do |t|
@@ -88,8 +94,8 @@ ActiveRecord::Schema.define(:version => 20130702134330) do
   end
 
   create_table "user_sessions", :force => true do |t|
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.timestamp "created_at", :null => false
+    t.timestamp "updated_at", :null => false
   end
 
   create_table "users", :force => true do |t|
@@ -98,9 +104,9 @@ ActiveRecord::Schema.define(:version => 20130702134330) do
     t.string   "crypted_password"
     t.string   "password_salt"
     t.string   "persistence_token"
-    t.integer  "role"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
+    t.integer  "roles_mask"
   end
 
 end

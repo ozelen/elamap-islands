@@ -33,7 +33,7 @@
 
 </div>
 
-
+<%= current_user.roles.find_by_name :admin %>
 <div class="form-actions">
   <button href="<%= session_upload_path(@session) %>" id="render_map" class="btn btn-success">Render Map</button>
 
@@ -46,6 +46,9 @@
 
     <%= link_to 'Session list',
                 sessions_path, :class => 'btn'  %>
+
+  <% if can? :update, :session %>
+
     <%= link_to 'Edit Session',
                 edit_session_path(@session), :class => 'btn' %>
     <%= link_to 'Delete Session',
@@ -53,6 +56,7 @@
                 :method => 'delete',
                 :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
                 :class => 'btn btn-danger' %>
+  <% end %>
 
 </div>
 
@@ -70,10 +74,5 @@
   <%= render @session.units %>
   </tbody>
 </table>
-
-<fieldset>
-  <legend>Log</legend>
-  <textarea style="width: 100%; height: 300px"></textarea>
-</fieldset>
 
 

@@ -3,6 +3,7 @@ require 'rubygems'
 require 'fog'
 
 class SessionsController < ApplicationController
+  load_and_authorize_resource
   # GET /sessions
   # GET /sessions.json
   def index

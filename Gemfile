@@ -34,7 +34,7 @@ group :assets do
 end
 
 gem 'yaml_db' # back up db
-
+gem 'cancan'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem "therubyracer"
