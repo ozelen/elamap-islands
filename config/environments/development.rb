@@ -36,4 +36,6 @@ ElamapIslands::Application.configure do
   config.assets.debug = true
 
   config.serve_static_assets = false
+
+  config.log_level = :debug
 end

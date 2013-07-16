@@ -1,29 +1,29 @@
 <%= form_for @user do |f| %>
     <%= f.error_messages %>
-    <p>
-      <%= f.label :username %><br />
+      <%= f.label :username %>
       <%= f.text_field :username %>
-    </p>
-    <p>
-      <%= f.label :email %><br />
-      <%= f.text_field :email %>
-    </p>
-    <p>
-      <%= f.label :password %><br />
-      <%= f.password_field :password %>
-    </p>
-    <p>
-      <%= f.label :password_confirmation %><br />
-      <%= f.password_field :password_confirmation %>
-    </p>
-    <p>
-      <%= f.label :roles %><br />
-      <% for role in User::ROLES %>
-          <%= check_box_tag "user[roles][]", role.id, @user.roles.include?(role), {:id => "role_#{role.id}"} %>
-          <%= f.label role.name.humanize, :for => "role_#{role.id}" %><br />
-      <% end %>
-      <%= hidden_field_tag "user[roles][]", "" %>
-    </p>
 
-    <p><%= f.submit %></p>
+      <%= f.label :email %>
+      <%= f.text_field :email %>
+
+      <%= f.label :password %>
+      <%= f.password_field :password %>
+
+      <%= f.label :password_confirmation %>
+      <%= f.password_field :password_confirmation %>
+
+      <%= f.label :roles %>
+      <ul>
+      <% for role in User::ROLES %>
+            <li>
+              <label class="checkbox">
+                <%= check_box_tag "user[roles][]", role, @user.roles.include?(role) %>
+                <%=h role.humanize %>
+              </label>
+            </li>
+      <% end %>
+      </ul>
+      <%= hidden_field_tag "user[roles][]", "" %>
+
+    <p><%= f.submit :class => :btn %></p>
 <% end %>

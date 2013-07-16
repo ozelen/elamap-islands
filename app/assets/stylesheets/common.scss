@@ -21,7 +21,10 @@ div#canvas_container {
 }
 
 form.edit_user {
+  li {
+    list-style: none;
+  }
   label {
-    display: inline;
+    padding-left: 0px;
   }
 }
