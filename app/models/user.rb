@@ -23,7 +23,8 @@ class User < ActiveRecord::Base
   end
 
   def role?(role)
-    ROLES.include?(role)
+    rol = self.roles.map { |r| r.name}
+    rol.include?(role.to_s)
   end
 
   private
