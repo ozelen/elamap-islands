@@ -1,4 +1,7 @@
 ElamapIslands::Application.routes.draw do
+  resources :teachers
+
+
   resources :roles
 
 

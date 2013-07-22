@@ -3,7 +3,8 @@ class User < ActiveRecord::Base
   acts_as_authentic do |c|
     c.login_field = 'username'
   end
-  attr_accessible :username, :email, :password, :password_confirmation, :roles
+  has_one :teacher
+  attr_accessible :username, :email, :password, :password_confirmation, :roles, :first_name, :last_name
 
   has_many :users_roles
   has_many :roles, :through => :users_roles

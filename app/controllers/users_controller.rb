@@ -19,7 +19,7 @@ class UsersController < ApplicationController
   end
 
   def edit
-    @user = User.find(params[:id]) || current_user
+    @user = params[:id] ? User.find(params[:id]) : current_user
     @roles = Role.all
   end
 
@@ -40,6 +40,10 @@ class UsersController < ApplicationController
       format.html { redirect_to users_url }
       format.json { head :no_content }
     end
+  end
+
+  def list
+    #@users = User.find_all_by_roles_mask
   end
 
 end
