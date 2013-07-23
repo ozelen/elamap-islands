@@ -28,21 +28,30 @@ class ScoresController < ApplicationController
     @score.student_id ||= params[:student_id]
     teacher = Teacher.find_by_user_id(current_user.id)
     @score.teacher_id = teacher.id if teacher
+    @score.text_id = params[:text_id]
+
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @score }
+      format.js
     end
   end
 
   # GET /scores/1/edit
   def edit
     @score = Score.find(params[:id])
+    respond_to do |format|
+      format.html
+      format.json {render json: @score}
+      format.js
+    end
   end
 
   # POST /scores
   # POST /scores.json
   def create
     @score = Score.new(params[:score])
+    @student = @score.student
 
     respond_to do |format|
       if @score.save
@@ -52,6 +61,8 @@ class ScoresController < ApplicationController
         format.html { render action: "new" }
         format.json { render json: @score.errors, status: :unprocessable_entity }
       end
+      format.js
+
     end
   end
 
@@ -59,6 +70,7 @@ class ScoresController < ApplicationController
   # PUT /scores/1.json
   def update
     @score = Score.find(params[:id])
+    @student = @score.student
 
     respond_to do |format|
       if @score.update_attributes(params[:score])
@@ -68,6 +80,7 @@ class ScoresController < ApplicationController
         format.html { render action: "edit" }
         format.json { render json: @score.errors, status: :unprocessable_entity }
       end
+      format.js
     end
   end
 

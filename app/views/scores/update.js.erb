@@ -1,0 +1,1 @@
+$("#score_for_text_<%= @score.text_id %>").html('<%= render :partial => 'students/text_score', :score => @score.id, :controller => 'students', :locals => {:score => @score} %>');

@@ -21,6 +21,7 @@
 //= require jquery.ui.droppable
 //= require jquery.ui.slider
 //= require jquery.ui.tabs
+//= require jquery.ui.dialog
 //= require leaflet
 //= require_tree ./ELA
 //= require_tree .

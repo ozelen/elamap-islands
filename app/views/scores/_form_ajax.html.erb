@@ -1,0 +1,13 @@
+<%= form_for @score, :remote => true, :html => { :class => 'form-horizontal' } do |f| %>
+    <%= f.number_field :value, :class => 'number_field', :style => 'width:50px' %>
+
+    <%= f.hidden_field :text_id %>
+    <%= f.hidden_field :student_id %>
+    <%= f.hidden_field :teacher_id %>
+    <%= f.submit 'Save', :class => 'btn btn-primary' %>
+
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+              scores_path, :class => 'btn' %>
+
+
+<% end %>

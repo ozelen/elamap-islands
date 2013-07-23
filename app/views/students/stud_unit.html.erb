@@ -12,12 +12,12 @@
   <% @unit.texts.each do |text| %>
       <tr>
         <td><%= link_to text.name, [@student, text] %></td>
-        <td>
+        <td id="score_for_text_<%= text.id %>" style="width:300px">
           <% score = @student.score_by text %>
           <% if score %>
-            <%= link_to score.value, edit_student_score_path(@student, score) %>
+            <%= render :partial => 'text_score', :locals => {:score => score} %>
           <% else %>
-            <%= link_to 'Set', new_student_score_path %>
+            <%= link_to 'Set', new_student_score_path(:text_id => text.id), :remote => true %>
           <% end %>
         </td>
       </tr>
