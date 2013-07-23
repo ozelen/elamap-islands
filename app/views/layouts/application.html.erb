@@ -24,10 +24,19 @@
           <li><a href="/sessions">Sessions</a></li>
 
           <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Users <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li><a href="/teachers">Teachers</a></li>
+              <li><a href="/students">Students</a></li>
+              <li class="divider"></li>
+              <li><a href="<%= users_path %>">Users and permissions</a></li>
+            </ul>
+          </li>
+
+          <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings <b class="caret"></b></a>
             <ul class="dropdown-menu">
               <li><a href="/hypsometries">Hypsometry</a></li>
-              <li><a href="<%= users_path %>">Users</a></li>
             </ul>
           </li>
 

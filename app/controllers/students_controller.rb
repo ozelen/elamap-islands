@@ -14,7 +14,7 @@ class StudentsController < ApplicationController
   # GET /students/1.json
   def show
     @student = Student.find(params[:id])
-
+    @sessions = Session.all
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @student }
@@ -80,4 +80,16 @@ class StudentsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def stud_session
+    #@id = params[:student_id] ? params[:student_id] : params[:id]
+    @student = Student.find(params[:student_id])
+    @session = Session.find(params[:session_id])
+  end
+
+  def stud_unit
+    @student = Student.find(params[:student_id])
+    @unit = Unit.find(params[:unit_id])
+  end
+
 end

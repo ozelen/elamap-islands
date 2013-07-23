@@ -21,7 +21,14 @@ ElamapIslands::Application.routes.draw do
 
   root :to => 'map#index'
 
-  resources :students
+  resources :students do
+    #resources :sessions
+  end
+
+  get '/students/:student_id/sessions' => 'student#sessions'
+  get '/students/:student_id/sessions/:session_id' => 'students#stud_session', as: :student_session
+  get '/students/:student_id/units/:unit_id' => 'students#stud_unit', as: :student_unit
+  get '/students/:student_id/texts/:text_id' => 'students#stud_text', as: :student_text
 
 
   resources :sessions do

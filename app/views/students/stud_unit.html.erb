@@ -1,0 +1,19 @@
+<div class="page-header">
+  <h1><%= @unit.letter %>. <%= @unit.name %> for <%= @student.name %></h1>
+</div>
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th>Unit</th>
+    <th>Score</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @unit.texts.each do |text| %>
+      <tr>
+        <td><%= link_to text.name, [@student, text] %></td>
+        <td></td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
