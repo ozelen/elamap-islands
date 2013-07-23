@@ -1,4 +1,7 @@
 ElamapIslands::Application.routes.draw do
+  resources :scores
+
+
   resources :teachers
 
 
@@ -22,6 +25,7 @@ ElamapIslands::Application.routes.draw do
   root :to => 'map#index'
 
   resources :students do
+    resources :scores
     #resources :sessions
   end
 

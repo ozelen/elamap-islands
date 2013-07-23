@@ -4,7 +4,7 @@
 <table class="table table-striped">
   <thead>
   <tr>
-    <th>Unit</th>
+    <th>Text</th>
     <th>Score</th>
   </tr>
   </thead>
@@ -12,7 +12,14 @@
   <% @unit.texts.each do |text| %>
       <tr>
         <td><%= link_to text.name, [@student, text] %></td>
-        <td></td>
+        <td>
+          <% score = @student.score_by text %>
+          <% if score %>
+            <%= link_to score.value, edit_student_score_path(@student, score) %>
+          <% else %>
+            <%= link_to 'Set', new_student_score_path %>
+          <% end %>
+        </td>
       </tr>
   <% end %>
   </tbody>
