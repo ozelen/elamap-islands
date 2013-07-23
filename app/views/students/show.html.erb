@@ -32,7 +32,8 @@
 <table class="table table-striped">
   <thead>
   <tr>
-    <th><%= model_class.human_attribute_name(:name) %></th>
+    <th>Session</th>
+    <th>Units</th>
     <th>Composite score</th>
   </tr>
   </thead>
@@ -40,6 +41,7 @@
   <% @sessions.each do |session| %>
       <tr>
         <td><%= link_to session.name, [@student, session] %></td>
+        <td><%= session.units.count %></td>
         <td></td>
       </tr>
   <% end %>

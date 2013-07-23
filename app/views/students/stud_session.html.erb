@@ -5,6 +5,7 @@
   <thead>
   <tr>
     <th>Unit</th>
+    <th>Texts</th>
     <th>Composite score</th>
   </tr>
   </thead>
@@ -12,7 +13,8 @@
   <% @session.units.each do |unit| %>
       <tr>
         <td><%= link_to unit.name, [@student, unit] %></td>
-        <td></td>
+        <td><%= unit.texts.count %></td>
+        <td>N/A</td>
       </tr>
   <% end %>
   </tbody>
