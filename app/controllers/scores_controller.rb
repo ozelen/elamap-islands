@@ -14,10 +14,12 @@ class ScoresController < ApplicationController
   # GET /scores/1.json
   def show
     @score = Score.find(params[:id])
+    @student = @score.student
 
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @score }
+      format.js
     end
   end
 
@@ -61,7 +63,7 @@ class ScoresController < ApplicationController
         format.html { render action: "new" }
         format.json { render json: @score.errors, status: :unprocessable_entity }
       end
-      format.js
+      format.js {render action: 'show'}
 
     end
   end
@@ -80,7 +82,7 @@ class ScoresController < ApplicationController
         format.html { render action: "edit" }
         format.json { render json: @score.errors, status: :unprocessable_entity }
       end
-      format.js
+      format.js {render action: 'show'}
     end
   end
 
