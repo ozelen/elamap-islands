@@ -87,6 +87,7 @@
 </div>
 
 <div class="container" style="padding-top: 50px">
+  <%= render_breadcrumbs %>
   <% flash.each do |name, msg| %>
       <%= content_tag :p, msg, :class => name %>
   <% end %>

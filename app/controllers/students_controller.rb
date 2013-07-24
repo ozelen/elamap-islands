@@ -1,4 +1,5 @@
 class StudentsController < ApplicationController
+  add_breadcrumb :index, :students_path
   # GET /students
   # GET /students.json
   def index
@@ -15,6 +16,7 @@ class StudentsController < ApplicationController
   def show
     @student = Student.find(params[:id])
     @sessions = Session.all
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @student }

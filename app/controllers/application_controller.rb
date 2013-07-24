@@ -3,6 +3,8 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   helper_method :current_user_session, :current_user
 
+  add_breadcrumb :index, :root_path
+
   private
   def current_user_session
     return @current_user_session if defined?(@current_user_session)
