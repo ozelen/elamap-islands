@@ -45,7 +45,7 @@ gem "paperclip", "~> 3.0"
 
 gem 'fog'
 
-gem "authlogic", :git => "git://github.com/binarylogic/authlogic.git"
+gem "authlogic"#, :git => "git://github.com/binarylogic/authlogic.git"
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
