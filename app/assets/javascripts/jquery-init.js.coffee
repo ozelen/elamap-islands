@@ -1,6 +1,6 @@
 
 LeafletMap = (element, url, width, height) ->
-  map = initMap(element, url, width, height, ELA.DATA.labels)
+  map = ELA.initMap(element, url, width, height, ELA.DATA.labels)
   points = []
   for unit in ELA.DATA.session.units
     for text in unit.texts

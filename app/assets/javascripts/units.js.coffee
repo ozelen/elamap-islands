@@ -52,7 +52,12 @@ $ ->
       scheme_measure.h = canvas_scheme.height = scheme_measure.map.height()
 
     $('#render_map').click (e) ->
-      mapGatherer = new ELA.graph.MapGatherer(full_size_session, canvas_gather)
+      button = $(this)
+      options =
+        start   : -> button.attr('disabled', 'disabled').html('Pending...')
+        success : -> button.removeAttr('disabled').html('Render Map')
+
+      mapGatherer = new ELA.graph.MapGatherer(full_size_session, canvas_gather, options)
 
   if canvas_scheme
     canvas_scheme.el.width = scheme_measure.w

@@ -110,8 +110,8 @@ ActiveRecord::Schema.define(:version => 20130723160837) do
   end
 
   create_table "user_sessions", :force => true do |t|
-    t.timestamp "created_at", :null => false
-    t.timestamp "updated_at", :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "users", :force => true do |t|

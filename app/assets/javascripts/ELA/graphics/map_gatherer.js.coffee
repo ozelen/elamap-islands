@@ -3,13 +3,16 @@ class ELA.graph.MapGatherer
   session : null
   images  : null
   width   : null
+  options : {}
   units   :
     present : []
     absent  : []
-  constructor : (session, canvas) ->
+  constructor : (session, canvas, options) ->
+    this.options = options
     this.session = session
     this.canvas = canvas
     this.images = []
+    this.options.start() if this.options.start
     this.gather()
     console.log this.images
     this.canvas.el.width += 300 # magic number, add additional pixels to canvas due to temporary circles enlargment
@@ -18,6 +21,8 @@ class ELA.graph.MapGatherer
     mg = this
     handledImages = 0
     uid = (+new Date())
+    success_callback = this.options.success || ->
+
     place = (unit) ->
       img = new Image()
       s3url = 'https://s3.amazonaws.com/elamap-islands'
@@ -27,6 +32,7 @@ class ELA.graph.MapGatherer
 
       # save onto cloud if all images are loaded
       storeIfDone = ->
+
         if ++handledImages == mg.session.units.length
           unit_list = (units) ->
             res = (unit.data.letter + ' - ' +unit.data.name for unit in units)
@@ -39,6 +45,7 @@ class ELA.graph.MapGatherer
 
           mg.canvas.store ->
             console.log 'Loaded ' + final_url
+            success_callback()
             alert "Done!" +
                   "\nFound images:\n" + (found || 'none') +
                   (("\nNot found:\n" + not_found if not_found) || '')

@@ -1,6 +1,6 @@
 
 leaflet = new ELA.Leaflet
-initMap = (id, image_url, width, height, points = null) ->
+ELA.initMap = (id, image_url, width, height, points = null) ->
   leaflet.init id, image_url, [width,height], points
 
 jQuery ->
