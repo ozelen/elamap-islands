@@ -25,10 +25,10 @@ class ELA.graph.MapGatherer
 
     place = (unit) ->
       img = new Image()
-      s3url = 'https://s3.amazonaws.com/elamap-islands'
-      final_url = s3url + '-maps/' + mg.session.id + '.png?uid=' + uid
+      s3url = 'http://elamapping.s3.amazonaws.com'
+      final_url = s3url + '/assembly/maps/' + mg.session.id + '.png?uid=' + uid
       $(img).attr('crossOrigin','use-credentials')
-      img.src = s3url + "-units/" + unit.id + ".png?uid=" + uid
+      img.src = s3url + "/assembly/units/" + unit.id + ".png?uid=" + uid
 
       # save onto cloud if all images are loaded
       storeIfDone = ->

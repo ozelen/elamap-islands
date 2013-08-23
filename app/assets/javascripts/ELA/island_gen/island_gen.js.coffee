@@ -1,4 +1,6 @@
 ELA.Island.create = (session) ->
+  button = $('#trace_voronoi_next')
+  button.attr('disabled', 'disabled').html('Rendering...')
   elaSession = session
   elaUnit = elaSession.current
 
@@ -30,7 +32,8 @@ ELA.Island.create = (session) ->
   trace.draw()
   #canvas.point point, point.z + '' for point in igen.junction_points
   trace.coastline()
-  canvas.store()
+  button.attr('disabled', 'disabled').html('Storing...')
+  canvas.store( -> button.removeAttr('disabled').html('Re-render') )
 
   #    for edge in igen.layers[2].edges
   #      canvas.stroke(5,'black').vector edge.path if edge.cells.length == 1

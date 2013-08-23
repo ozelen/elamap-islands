@@ -13,7 +13,7 @@ jQuery ->
   if $('#sample_tile_map')[0]
     tile_map = L.map('sample_tile_map').setView [0, 0], 1
 
-    L.tileLayer('/sample_tiles/{z}/{x}/{y}.png',
+    L.tileLayer('http://elamapping.s3.amazonaws.com/mockups/tiled/ancient/ancient_looking_map/{z}/{x}/{y}.png',
       minZoom: 1
       maxZoom: 5
       tms: true
@@ -24,7 +24,7 @@ jQuery ->
 
     tm = L.map('mockup_tile_map').setView [0, 0], 2
 
-    L.tileLayer('/assets/map_mockup/{z}/{x}/{y}.png',
+    L.tileLayer('http://elamapping.s3.amazonaws.com/mockups/tiled/ancient/ancient_looking_map/{z}/{x}/{y}.png',
                 minZoom: 1
                 maxZoom: 5
                 tms: true

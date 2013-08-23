@@ -130,14 +130,14 @@ class SessionsController < ApplicationController
     # create a connection
     connection = Fog::Storage.new({
                                       :provider                 => 'AWS',
-                                      :aws_access_key_id        => 'AKIAJ6ESJRHGRTWVBXJQ',
-                                      :aws_secret_access_key    => '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'
+                                      :aws_access_key_id        => 'AKIAJNAPLLINAKK4UB4Q',
+                                      :aws_secret_access_key    => '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'
                                   })
 
     # First, a place to contain the glorious details
-    directory = connection.directories.create(
-        :key    => "elamap-islands-" + dir , # globally unique name
-        :public => true
+    directory = connection.directories.new(
+        key:     "elamapping",
+        public:  true
     )
 
     # list directories
@@ -145,9 +145,9 @@ class SessionsController < ApplicationController
 
     # upload that resume
     file = directory.files.create(
-        :key    => fname,
-        :body   => Base64.decode64(@image),
-        :public => true
+        key:    "assembly/#{dir}/" + fname,
+        body:   Base64.decode64(@image),
+        public: true
     )
     file.save
 
