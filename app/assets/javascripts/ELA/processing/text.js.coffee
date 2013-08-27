@@ -1,9 +1,10 @@
 class ELA.Processing.Text
   data    : {}
-  x       : null
-  y       : null
-  r       : null
-  color   : null
+  x       : undefined
+  y       : undefined
+  r       : undefined
+  color   : undefined
+  score   : undefined
   measure : {}
   constructor: (text, measure) ->
     this.data = text
@@ -19,3 +20,9 @@ class ELA.Processing.Text
     this.r = this.data.r = r
     this.color = color
     this.measure.max_lexiles = this.data.lexiles if this.data.lexiles > this.measure.max_lexiles
+
+  get_score : (student_id) ->
+    result = 0
+    for score in this.data.scores
+      result = score.value if score && score.student_id == student_id
+    result

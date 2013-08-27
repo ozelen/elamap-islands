@@ -40,7 +40,11 @@ class SessionsController < ApplicationController
         render json: @session.to_json(
             :include => {
               :units => {
-                  :include => :texts
+                  :include => {
+                      :texts => {
+                          :include => :scores
+                      }
+                  }
               }
             }
         )

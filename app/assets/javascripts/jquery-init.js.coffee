@@ -2,13 +2,16 @@
 LeafletMap = (element, url, width, height) ->
   map = ELA.initMap(element, url, width, height, ELA.DATA.labels)
   points = []
+  student_id = parseInt($("#student_id").val()) || undefined
   for unit in ELA.DATA.session.units
     for text in unit.texts
+      score = text.get_score(student_id)
+      colors = ['white', 'green', 'yellow', 'red']
       points.push
         name: text.data.name
         author: text.data.author
         val: text.data.lexiles
-        color: 'red'
+        color: colors[score]
         latlng: map.unproject [text.x+200, text.y+200]
   map.path points
 

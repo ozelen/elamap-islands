@@ -1,6 +1,7 @@
 class Student < ActiveRecord::Base
   has_many :sessions, :dependent => :destroy
   has_many :scores
+  has_many :texts, through: :scores
   attr_accessible :email, :first_name, :group_id, :last_name, :username
 
   def name

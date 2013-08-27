@@ -1,3 +1,26 @@
+
+<ul class="nav nav-tabs">
+  <li><a href="#canvas_container" data-toggle="tab">Scheme</a></li>
+  <!--<li id="map_gatherer_tab"><a href="#map_gatherer" data-toggle="tab">Render</a></li>-->
+  <li id="map_tab" style="display: none"><a href="#rendered_map" data-toggle="tab" url="http://elamapping.s3.amazonaws.com/assembly/maps/<%= @session.id %>.png">Rendered Map</a></li>
+</ul>
+
+<div class="tab-content">
+  <%= hidden_field_tag "student_id", params[:student_id] %>
+  <div class="tab-pane" id="canvas_container">
+    <div>
+      <canvas id="island" src="<%= session_path(@session, :format => 'json') %>"></canvas>
+    </div>
+  </div>
+
+  <div class="tab-pane" id="rendered_map">
+    <canvas id="gather" s3url="<%= session_upload_path(@session) %>" s3bucket="maps" s3fname="<%= @session.id %>" style="display: none"></canvas>
+    <div id="scheme-map" style="height: 800px" s3url="<%= session_upload_path(@session) %>" s3bucket="schemes" s3fname="<%= @session.id %>"></div>
+    <%= link_to 'Full Screen map', session_map_path(@session), target: 'blank' %>
+  </div>
+
+</div>
+
 <div class="page-header">
   <h1><%= @session.name %> for <%= @student.name %></h1>
 </div>
