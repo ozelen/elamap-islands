@@ -2,7 +2,7 @@
 LeafletMap = (element, url, width, height) ->
   map = ELA.initMap(element, url, width, height, ELA.DATA.labels)
   points = []
-  student_id = parseInt($("#student_id").val()) || undefined
+  student_id = ELA.DATA.student_id || undefined
   for unit in ELA.DATA.session.units
     for text in unit.texts
       score = text.get_score(student_id)

@@ -40,6 +40,7 @@ $ ->
 
   init = (data) ->
     ELA.SessionData = data
+    ELA.DATA.student_id = parseInt($("#student_id").val())
     current_unit  = parseInt( canvas_scheme.$.attr "unit" )
     scheme_size_session = new ELA.Processing.Session data, scheme_measure, current_unit
     scheme_size_session.zoom 2, canvas_scheme if scheme_size_session.current

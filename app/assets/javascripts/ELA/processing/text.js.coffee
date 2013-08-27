@@ -10,8 +10,10 @@ class ELA.Processing.Text
     this.data = text
     this.measure = measure
 
-  draw : ->
+  draw : () ->
+    student_id = ELA.DATA.student_id
     ELA.Processing.TRACE.circle(this.x, this.y, this.r, this.color)
+    ELA.Processing.TRACE.circle(this.x, this.y, 5, this.score_color( this.get_score( student_id ) ) ) if student_id
     ELA.Processing.TRACE.lexiles(this.x, this.y, this.data.lexiles)
 
   set : (x,y,r,color) ->
@@ -26,3 +28,6 @@ class ELA.Processing.Text
     for score in this.data.scores
       result = score.value if score && score.student_id == student_id
     result
+
+  score_color : (score) ->
+    ['white', 'green', 'yellow', 'red'][score]

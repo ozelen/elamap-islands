@@ -38,11 +38,12 @@ class SessionsController < ApplicationController
       format.html # show.html.erb
       format.json {
         render json: @session.to_json(
-            :include => {
-              :units => {
-                  :include => {
-                      :texts => {
-                          :include => :scores
+            include: {
+              units: {
+                  include: {
+                      texts: {
+                          include: :scores
+                          #include: params[:student_id]
                       }
                   }
               }
