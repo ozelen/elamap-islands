@@ -41,9 +41,17 @@ class ELA.Leaflet
 
   path : (points) ->
     markerPopupMessage = (marker) -> "<b>" + marker.name + "</b><br><i>" + marker.author + "</i> <br>[" +marker.val+ "]"
-    L.marker(marker.latlng,
-             icon: new L.icon(this.icons[marker.color])
-    ).addTo(this.map).bindPopup(markerPopupMessage marker) for marker in points
+    markers = []
+    ths = this
+    create_marker = (point) ->
+      marker = L.marker( point.latlng, icon: new L.icon(ths.icons[point.color]) )
+        .bindPopup(markerPopupMessage point)
+        .addTo(ths.map)
+        .bindLabel(point.name, {noHide: true, direction: 'auto'}).showLabel()
+      marker
+
+    create_marker point for point in points
+
 
     for marker, i in points
       L.polyline([marker.latlng, points[i+1].latlng], {color: '#000', opacity: 0.3}).addTo(this.map) if points[i+1]

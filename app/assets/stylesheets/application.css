@@ -16,4 +16,5 @@
  *= require_self
  *= require_tree .
  *= require leaflet
+ *= require leaflet.label
  */

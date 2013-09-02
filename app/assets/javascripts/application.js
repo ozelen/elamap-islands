@@ -23,5 +23,6 @@
 //= require jquery.ui.tabs
 //= require jquery.ui.dialog
 //= require leaflet
+//= require leaflet.label
 //= require_tree ./ELA
 //= require_tree .
