@@ -47,7 +47,7 @@ class ELA.Leaflet
       marker = L.marker( point.latlng, icon: new L.icon(ths.icons[point.color]) )
         .bindPopup(markerPopupMessage point)
         .addTo(ths.map)
-        .bindLabel(point.name, {noHide: true, direction: 'auto'}).showLabel()
+        .bindLabel(point.name + ', ' + point.author, {noHide: true, direction: 'auto'}).showLabel()
       marker
 
     create_marker point for point in points
