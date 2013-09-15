@@ -12,7 +12,7 @@ LeafletMap = (element, url, width, height) ->
         author: text.data.author
         val: text.data.lexiles
         color: colors[score]
-        latlng: map.unproject [text.x+200, text.y+200]
+        latlng: map.unproj( text.x+200, text.y+200 )
   map.path points
 
 

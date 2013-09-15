@@ -1,6 +1,7 @@
 # Adapter for Leaflet plugin
 class ELA.Leaflet
   el    : null
+  zoom  : 13
   size  : [0,0]
   map   : {}
   icons : null
@@ -21,7 +22,7 @@ class ELA.Leaflet
     timestamp = new Date().getTime()
     divid = 'map' + timestamp
     this.el.html('<div id="' + divid + '" class="session-map"></div>')
-    this.map = new L.Map(divid, {maxZoom:13, crs: L.CRS.Simple}).setView([0,0], 13)
+    this.map = new L.Map(divid, {maxZoom:this.zoom, crs: L.CRS.Simple}).setView([0,0], this.zoom)
 
     top_left      = this.map.unproject(new L.Point(0, 0))
     bottom_right  = this.map.unproject(new L.Point(this.size[0], this.size[1]))
@@ -39,12 +40,18 @@ class ELA.Leaflet
 
     this
 
+  unproj : (x,y) ->
+    this.map.unproject( new L.Point(x,y), this.zoom )
+
   path : (points) ->
     markerPopupMessage = (marker) -> "<b>" + marker.name + "</b><br><i>" + marker.author + "</i> <br>[" +marker.val+ "]"
     markers = []
     ths = this
     create_marker = (point, index) ->
-      marker = L.marker( point.latlng, icon: new L.icon(ths.icons[point.color]) )
+      latlng = point.latlng
+
+      console.log latlng
+      marker = L.marker( latlng, icon: new L.icon(ths.icons[point.color]) )
       marker
         .bindPopup(markerPopupMessage point)
         .addTo(ths.map)
