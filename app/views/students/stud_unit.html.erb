@@ -1,26 +1,4 @@
 <div class="page-header">
   <h1><%= @unit.letter %>. <%= @unit.name %> for <%= @student.name %></h1>
 </div>
-<table class="table table-striped">
-  <thead>
-  <tr>
-    <th>Text</th>
-    <th>Score</th>
-  </tr>
-  </thead>
-  <tbody>
-  <% @unit.texts.each do |text| %>
-      <tr>
-        <td><%= link_to text.name, [@student, text] %></td>
-        <td id="score_for_text_<%= text.id %>" style="width:50%">
-          <% score = @student.score_by text %>
-          <% if score %>
-            <%= render :partial => 'text_score', :locals => {:score => score} %>
-          <% else %>
-            <%= link_to 'Set', new_student_score_path(:text_id => text.id), :remote => true %>
-          <% end %>
-        </td>
-      </tr>
-  <% end %>
-  </tbody>
-</table>
+<%= render 'stud_texts_table', unit: @unit %>
