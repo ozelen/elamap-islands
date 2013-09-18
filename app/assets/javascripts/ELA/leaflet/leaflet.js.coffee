@@ -43,14 +43,20 @@ class ELA.Leaflet
     markerPopupMessage = (marker) -> "<b>" + marker.name + "</b><br><i>" + marker.author + "</i> <br>[" +marker.val+ "]"
     markers = []
     ths = this
-    create_marker = (point) ->
+    create_marker = (point, index) ->
       marker = L.marker( point.latlng, icon: new L.icon(ths.icons[point.color]) )
+      marker
         .bindPopup(markerPopupMessage point)
         .addTo(ths.map)
-        .bindLabel(point.name + ', ' + point.author, {noHide: true, direction: 'auto'}).showLabel()
+        .bindLabel(point.name, {noHide: true, direction: 'auto', className: "map_label_#{index}"}).showLabel()
+
+      #marker.on 'click',   -> marker.fire 'popupopen'
+      marker.on 'popupopen',   -> $(".map_label_" + index).hide()
+      marker.on 'popupclose',  -> $(".map_label_" + index).show()
+
       marker
 
-    create_marker point for point in points
+    create_marker point, index for point, index in points
 
 
     for marker, i in points
