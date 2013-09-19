@@ -28,7 +28,13 @@ class ELA.Processing.Unit
       color = ELA.fixtures.scheme_colors.shift() || ELA.Processing.TRACE.rnd_color()
 
     push = (text) ->
-      r = text.data.lessons * measure.x / 2
+      complexity = text.data.lexiles / ELA.DATA.json.data.minmax_lexile[1]    # calculate complexity value depending on most complex text
+      size_value = text.data.lessons                                          #
+      size_value+= complexity*10 if text.data.lessons < 5 and complexity > 0.5 #
+      r = size_value * measure.x / 4.5
+
+      console.log "#{text.data.name}, complexity: #{complexity}"
+
       y = measure.h - text.data.genre * measure.h / measure.y
       un.y_bot  = y + r if un.y_bot < y + r
       un.y_top  = y - r if un.y_top > y - r

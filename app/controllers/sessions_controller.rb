@@ -28,9 +28,12 @@ class SessionsController < ApplicationController
   def show
     @session = Session.find(params[:id])
     @hypsometry = Hypsometry.all
+    texts = @session.texts
     lessons = 0
     @session.units.each { |unit| unit.texts.each { |text| lessons+=text.lessons if text.lessons } if unit.texts } if @session.units
     @session['lessons'] = lessons
+    @session['minmax_lexile']   = texts.map{|t|t.lexiles}.minmax
+    @session['minmax_lessons']  = texts.map{|t|t.lessons}.minmax
     filename = 'public/images/upload/session_' + @session.id.to_s + '.png'
     @session['img'] = File.exist?(filename) ? filename : nil
     @session['hypsometry'] = @hypsometry
