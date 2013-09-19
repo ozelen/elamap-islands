@@ -7,4 +7,7 @@ class MapController < ApplicationController
 
   def mockup
   end
+
+  def ancient
+  end
 end

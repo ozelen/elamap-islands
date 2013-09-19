@@ -16,7 +16,8 @@ class ELA.Leaflet
     L.marker(latlng, icon: new L.icon(this.icons['red'])).addTo(this.map).bindPopup(msg)
     this
 
-  init: (el_id, image_url, size, points = null) ->
+  init: (el_id, image_url, size, points = null, zoom = null) ->
+    #this.zoom = zoom if zoom
     this.size = size
     this.el = $('#' + el_id)
     timestamp = new Date().getTime()
@@ -50,7 +51,6 @@ class ELA.Leaflet
     create_marker = (point, index) ->
       latlng = point.latlng
 
-      console.log latlng
       marker = L.marker( latlng, icon: new L.icon(ths.icons[point.color]) )
       marker
         .bindPopup(markerPopupMessage point)

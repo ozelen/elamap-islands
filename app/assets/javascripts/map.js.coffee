@@ -1,14 +1,16 @@
 
 leaflet = new ELA.Leaflet
-initMap = (id, image_url, width, height, points = null) ->
-  leaflet.init id, image_url, [width,height], points
+initMap = (id, image_url, width, height, points = null, zoom=null) ->
+  leaflet.init id, image_url, [width,height], points, zoom
 
 ELA.initMap = initMap
 
 jQuery ->
   if $('#map')[0]
     window.initMap = initMap
-    initMap('map', '/assets/island-geomap.jpg', 5100, 3300, ELA.fixtures.leaflet.SamplePoints) if $("div#map").length
+    if $("div#map").length
+      points = ELA.fixtures.leaflet.SamplePoints unless $('#map').attr('overlay-markers') == 'no'
+      initMap('map', $('#map').attr('overlay-image'), $('#map').attr('overlay-width'), $('#map').attr('overlay-height'), points)
 
   if $('#sample_tile_map')[0]
     tile_map = L.map('sample_tile_map').setView [0, 0], 1
