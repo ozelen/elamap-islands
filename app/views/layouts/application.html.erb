@@ -43,7 +43,7 @@
             <ul class="dropdown-menu">
               <li><a href="/ancient">Single image, Ancient looking mock-up</a></li>
               <li><a href="/tilemockup">Tiled image, Ancient looking mock-up</a></li>
-              <li><a href="/tilemap">Voronoi generated tiled map</a></li>
+              <!--<li><a href="/tilemap">Voronoi generated tiled map</a></li>-->
               <li><a href="/map">Single image mockup map</a></li>
             </ul>
           </li>
@@ -88,7 +88,7 @@
 </div>
 
 <div class="container" style="padding-top: 50px">
-  <%= render_breadcrumbs %>
+  <%# render_breadcrumbs %>
   <% flash.each do |name, msg| %>
       <%= content_tag :p, msg, :class => name %>
   <% end %>

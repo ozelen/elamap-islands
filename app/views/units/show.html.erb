@@ -6,7 +6,6 @@
 <ul class="nav nav-tabs">
   <li><a href="#trace_voronoi_pane" data-toggle="tab" id="island_tab">Voronoi factory</a></li>
   <li><a href="#canvas_container" data-toggle="tab">Scheme</a></li>
-  <li><a href="#rendered_island" data-toggle="tab" id="island_tab">Former Generator</a></li>
 </ul>
 
 <div class="tab-content">
@@ -14,15 +13,6 @@
         <div>
             <canvas id="island" src="<%= session_path(@session, :format => 'json') %>" unit="<%= @unit.id %>"></canvas>
         </div>
-    </div>
-    <div class="tab-pane" id="rendered_island">
-
-      <div class="form-actions">
-        <button id="render_island" class="btn btn-success">Render Island</button>
-        <!--<button href="#" id="upload_session_scheme" class="btn btn-primary">Upload</button>-->
-      </div>
-
-      <canvas id="c" s3url="<%= session_upload_path(@session) %>" s3bucket="units" s3fname="<%= @unit.id %>"></canvas>
     </div>
 
       <div id="trace_voronoi_pane" class="tab-pane">
