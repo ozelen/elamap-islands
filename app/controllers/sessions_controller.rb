@@ -136,6 +136,7 @@ class SessionsController < ApplicationController
     dir = params[:dir]
 
     # create a connection
+    #Excon.defaults[:write_timeout] = 500
     connection = Fog::Storage.new({
                                       :provider                 => 'AWS',
                                       :aws_access_key_id        => 'AKIAJNAPLLINAKK4UB4Q',
