@@ -31,7 +31,7 @@ class ELA.Leaflet
     imageBounds = [[top_left.lat, top_left.lng],[bottom_right.lat, bottom_right.lng]]
 
     this.map
-      .setMaxBounds(imageBounds)
+#      .setMaxBounds(imageBounds)
       .fitBounds(imageBounds)
 
     L.imageOverlay(imageUrl, imageBounds).addTo(this.map);

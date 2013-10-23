@@ -8,3 +8,7 @@ html, body { height: 100%}
 .fullscreen-map .session-map {height: 100% !important;}
 
 .session-map {height: 400px}
+
+.ela-map .leaflet-container {
+  background: #4581b7;
+}

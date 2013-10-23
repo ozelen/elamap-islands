@@ -2,10 +2,9 @@
 <div class="page-header">
   <h1>Unit <%= @unit.letter %> - <%= @unit.name %></h1>
 </div>
-
 <ul class="nav nav-tabs">
-  <li><a href="#trace_voronoi_pane" data-toggle="tab" id="island_tab">Voronoi factory</a></li>
   <li><a href="#canvas_container" data-toggle="tab">Scheme</a></li>
+  <li><a href="#trace_voronoi_pane" data-toggle="tab" id="island_tab">Voronoi factory</a></li>
 </ul>
 
 <div class="tab-content">
@@ -28,7 +27,8 @@
               <button id="trace_spread" class="btn btn-primary">Trace random spread</button>
           </div>
         </div>
-        <div style="background: #4581b7">
+        <div id="trace_voronoi_canvas_container" style="background: #4581b7">
+          <img id="previously_rendered_island" src="http://elamapping.s3.amazonaws.com/assembly/units/9.png" alt=""/>
           <canvas id="trace_voronoi_canvas" s3url="<%= session_upload_path(@session) %>" s3bucket="units" s3fname="<%= @unit.id %>"></canvas>
         </div>
       </div>
