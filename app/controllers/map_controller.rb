@@ -8,6 +8,6 @@ class MapController < ApplicationController
   def mockup
   end
 
-  def ancient
+  def hypsometric_mockup
   end
 end

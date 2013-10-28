@@ -21,7 +21,7 @@ ElamapIslands::Application.routes.draw do
   resources :hypsometries
   get 'tilemap' => 'map#tiles'
   get 'tilemockup' => 'map#mockup'
-  get 'ancient' => 'map#ancient'
+  get 'hypsometric-mockup' => 'map#hypsometric_mockup'
 
   root :to => 'map#index'
 
